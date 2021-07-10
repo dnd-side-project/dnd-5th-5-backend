@@ -1,45 +1,130 @@
 {
-  "requiresCompatibilities": [
-    "EC2"
-  ],
-  "inferenceAccelerators": [],
+  "ipcMode": null,
+  "executionRoleArn": "arn:aws:iam::510958154396:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "ala-container1",
-      "image": "510958154396.dkr.ecr.ap-northeast-2.amazonaws.com/ala",
-      "memory": "300",
-      "resourceRequirements": null,
-      "essential": true,
+      "dnsSearchDomains": null,
+      "environmentFiles": null,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/ala-task-def",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "entryPoint": null,
       "portMappings": [
         {
-          "hostPort": "8080",
-          "containerPort": "8080",
-          "protocol": "tcp"
+          "hostPort": 3000,
+          "protocol": "tcp",
+          "containerPort": 3000
         }
       ],
-      "environment": null,
-      "environmentFiles": [],
-      "secrets": null,
-      "mountPoints": null,
-      "volumesFrom": null,
-      "hostname": null,
-      "user": null,
-      "workingDirectory": null,
-      "extraHosts": null,
-      "logConfiguration": null,
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [],
+      "resourceRequirements": null,
       "ulimits": null,
-      "dockerLabels": null,
+      "dnsServers": null,
+      "mountPoints": [],
+      "workingDirectory": null,
+      "secrets": null,
+      "dockerSecurityOptions": null,
+      "memory": 512,
+      "memoryReservation": 256,
+      "volumesFrom": [],
+      "stopTimeout": null,
+      "image": "510958154396.dkr.ecr.ap-northeast-2.amazonaws.com/ala",
+      "startTimeout": null,
+      "firelensConfiguration": null,
       "dependsOn": null,
-      "repositoryCredentials": null
+      "disableNetworking": null,
+      "interactive": null,
+      "healthCheck": null,
+      "essential": true,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "pseudoTerminal": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "systemControls": null,
+      "privileged": null,
+      "name": "ala-container1"
     }
   ],
-  "volumes": [],
-  "networkMode": null,
-  "memory": null,
-  "cpu": null,
   "placementConstraints": [],
-  "family": "ala-task-definition",
-  "taskRoleArn": "",
-  "executionRoleArn": null,
-  "tags": []
+  "memory": "512",
+  "taskRoleArn": null,
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:510958154396:task-definition/ala-task-def:1",
+  "family": "ala-task-def",
+  "requiresAttributes": [
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.task-eni"
+    }
+  ],
+  "pidMode": null,
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "revision": 1,
+  "status": "ACTIVE",
+  "inferenceAccelerators": null,
+  "proxyConfiguration": null,
+  "volumes": []
 }
