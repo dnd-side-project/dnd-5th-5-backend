@@ -1,119 +1,45 @@
 {
-  "ipcMode": null,
-  "executionRoleArn": null,
-  "containerDefinitions": [
-    {
-      "dnsSearchDomains": null,
-      "environmentFiles": null,
-      "logConfiguration": null,
-      "entryPoint": null,
-      "portMappings": [
-        {
-          "hostPort": 8081,
-          "protocol": "tcp",
-          "containerPort": 8080
-        }
-      ],
-      "command": null,
-      "linuxParameters": null,
-      "cpu": 0,
-      "environment": [],
-      "resourceRequirements": null,
-      "ulimits": null,
-      "dnsServers": null,
-      "mountPoints": [],
-      "workingDirectory": null,
-      "secrets": null,
-      "dockerSecurityOptions": null,
-      "memory": 300,
-      "memoryReservation": null,
-      "volumesFrom": [],
-      "stopTimeout": null,
-      "image": "public.ecr.aws/g2v8n7l2/ala/ala-app:0.1",
-      "startTimeout": null,
-      "firelensConfiguration": null,
-      "dependsOn": null,
-      "disableNetworking": null,
-      "interactive": null,
-      "healthCheck": null,
-      "essential": true,
-      "links": null,
-      "hostname": null,
-      "extraHosts": null,
-      "pseudoTerminal": null,
-      "user": null,
-      "readonlyRootFilesystem": null,
-      "dockerLabels": null,
-      "systemControls": null,
-      "privileged": null,
-      "name": "ala-app-container1"
-    },
-    {
-      "dnsSearchDomains": null,
-      "environmentFiles": null,
-      "logConfiguration": null,
-      "entryPoint": null,
-      "portMappings": [
-        {
-          "hostPort": 8082,
-          "protocol": "tcp",
-          "containerPort": 8080
-        }
-      ],
-      "command": null,
-      "linuxParameters": null,
-      "cpu": 0,
-      "environment": [],
-      "resourceRequirements": null,
-      "ulimits": null,
-      "dnsServers": null,
-      "mountPoints": [],
-      "workingDirectory": null,
-      "secrets": null,
-      "dockerSecurityOptions": null,
-      "memory": 300,
-      "memoryReservation": null,
-      "volumesFrom": [],
-      "stopTimeout": null,
-      "image": "public.ecr.aws/g2v8n7l2/ala/ala-app:0.1",
-      "startTimeout": null,
-      "firelensConfiguration": null,
-      "dependsOn": null,
-      "disableNetworking": null,
-      "interactive": null,
-      "healthCheck": null,
-      "essential": true,
-      "links": null,
-      "hostname": null,
-      "extraHosts": null,
-      "pseudoTerminal": null,
-      "user": null,
-      "readonlyRootFilesystem": null,
-      "dockerLabels": null,
-      "systemControls": null,
-      "privileged": null,
-      "name": "ala-app-container2"
-    }
-  ],
-  "placementConstraints": [],
-  "memory": null,
-  "taskRoleArn": null,
-  "compatibilities": [
-    "EXTERNAL",
-    "EC2"
-  ],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:510958154396:task-definition/ala-task-definition:1",
-  "family": "ala-task-definition",
-  "requiresAttributes": [],
-  "pidMode": null,
   "requiresCompatibilities": [
     "EC2"
   ],
+  "inferenceAccelerators": [],
+  "containerDefinitions": [
+    {
+      "name": "ala-container1",
+      "image": "510958154396.dkr.ecr.ap-northeast-2.amazonaws.com/ala:a5764b0345f48020edf1a2a57cec1221a7eed1d4",
+      "memory": "300",
+      "resourceRequirements": null,
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": "8080",
+          "containerPort": "8080",
+          "protocol": "tcp"
+        }
+      ],
+      "environment": null,
+      "environmentFiles": [],
+      "secrets": null,
+      "mountPoints": null,
+      "volumesFrom": null,
+      "hostname": null,
+      "user": null,
+      "workingDirectory": null,
+      "extraHosts": null,
+      "logConfiguration": null,
+      "ulimits": null,
+      "dockerLabels": null,
+      "dependsOn": null,
+      "repositoryCredentials": null
+    }
+  ],
+  "volumes": [],
   "networkMode": null,
+  "memory": null,
   "cpu": null,
-  "revision": 1,
-  "status": "ACTIVE",
-  "inferenceAccelerators": null,
-  "proxyConfiguration": null,
-  "volumes": []
+  "placementConstraints": [],
+  "family": "ala-task-definition",
+  "taskRoleArn": "",
+  "executionRoleArn": null,
+  "tags": []
 }
