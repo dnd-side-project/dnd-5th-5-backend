@@ -1,7 +1,12 @@
-# dnd-5th-5-backend
+# [ALA] dnd-5th-5-backend
 
-## 프로젝트 소개
+## "ALA" 프로젝트 소개
 ```내가 모르던 나를 알아가는, 나를 표현하는 한 줄 SNS```
+
+## 아키텍처
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/46064193/125152173-e42d3500-e185-11eb-9161-4c8dc69f53ac.png" alt="architecture"/>
+</p>
 
 ## Git 브랜치 전략
 <details>
