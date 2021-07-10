@@ -6,7 +6,7 @@
   "containerDefinitions": [
     {
       "name": "ala-container1",
-      "image": "510958154396.dkr.ecr.ap-northeast-2.amazonaws.com/ala:a5764b0345f48020edf1a2a57cec1221a7eed1d4",
+      "image": "510958154396.dkr.ecr.ap-northeast-2.amazonaws.com/ala",
       "memory": "300",
       "resourceRequirements": null,
       "essential": true,
