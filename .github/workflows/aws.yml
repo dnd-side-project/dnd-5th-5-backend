@@ -34,8 +34,8 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: check dir
-        run: ls
+      - name: Run pwd
+        run: pwd
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
       - name: Build with Gradle test
