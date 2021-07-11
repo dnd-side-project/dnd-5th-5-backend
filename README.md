@@ -34,11 +34,13 @@
         <li><code>main</code> : 배포시 사용하는 브랜치</li>
         <li><code>develop</code> : 다음 출시 버전을 개발하는 브랜치<ul>
                 <li>다음 릴리즈를 위해 언제든 배포될 수 있는 상태</li>
+                <li>하나의 기능 구현이 끝나면, develop 브랜치로 병합할 것</li>
             </ul>
         </li>
         <li><code>feature</code> : 기능을 개발하는 브랜치<ul>
                 <li>기능을 완성할 때 까지 유지하며, 완성시 <code>develop</code>브랜치로 merge</li>
                 <li><code>feature</code>는 이슈번호를 기준으로 생성</li>
+                <li>Ex) <code>feature-2/example</code></li>
             </ul>
         </li>
         <li><code>release</code> : 릴리즈를 준비하는 브랜치(QA)</li>
@@ -48,6 +50,7 @@
         <img src="https://user-images.githubusercontent.com/46064193/124911385-a74b2c00-e027-11eb-982d-a96e6c40d5b3.png" alt="Branch Strategy" width="500">
     </p>
 </div>
+
 </details>
 
 ## Commit Message 컨벤션
