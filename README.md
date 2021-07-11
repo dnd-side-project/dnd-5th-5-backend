@@ -11,16 +11,16 @@
 ## 기술스택
 |기술|버전|
 |:---:|:---:|
-|K8S||
+|ECS||
+|ECR||
+|Application Load Balancer||
 |Docker||
 |SpringBoot|2.5.2|
 |Spring Rest Docs||
-|Gradle||
+|Gradle|7.1.1|
 |JPA||
 |Junit5||
-|MongoDB||
-|Nginx||
-|ECS||
+|Dynamo DB||
 
 
 
