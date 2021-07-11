@@ -8,6 +8,22 @@
 	<img src="https://user-images.githubusercontent.com/46064193/125180311-7d665500-e233-11eb-98c2-fb8ef78b8356.png" alt="architecture"/>
 </p>
 
+## 기술스택
+|기술|버전|
+|:------:|:---:|
+|K8S||
+|Docker||
+|SpringBoot|2.5.2|
+|Spring Rest Docs||
+|Gradle||
+|JPA||
+|Junit5||
+|MongoDB||
+|Nginx||
+|ECS||
+
+
+
 ## Git 브랜치 전략
 <details>
 <summary>자세히 보기</summary>
