@@ -23,7 +23,5 @@ spec:
       containers:
         - image: gcr.io/universal-stone-319613/ala
           name: ala
-          resources: {}
-            ports:
-              - containerPort: 8080
-status: {}
+          ports:
+            - containerPort: 8080
