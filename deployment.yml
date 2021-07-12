@@ -21,7 +21,7 @@ spec:
         app: ala
     spec:
       containers:
-        - image: gcr.io/universal-stone-319613/ala
+        - image: gcr.io/PROJECT_ID/IMAGE:TAG
           name: ala
           ports:
             - containerPort: 8080
