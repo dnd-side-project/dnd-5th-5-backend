@@ -12,25 +12,14 @@
 
 name: Build and Deploy to GKE
 
-on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-      tags:
-        description: 'Test scenario tags'
-  push:
-    branches:
-      - develop
+on: [push]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: ala-cluster    # TODO: update to cluster name
   GKE_ZONE: asia-northeast3-a   # TODO: update to cluster zone
   DEPLOYMENT_NAME: ala-app-deployment # TODO: update to deployment name
-  IMAGE: static-site
+  IMAGE: ala
 
 jobs:
   setup-build-publish-deploy:

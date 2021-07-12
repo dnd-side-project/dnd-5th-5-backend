@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ala
+  name: ala
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ala
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ala
+    spec:
+      containers:
+        - image: gcr.io/universal-stone-319613/ala
+          name: ala
+          resources: {}
+            ports:
+              - containerPort: 8080
+status: {}
