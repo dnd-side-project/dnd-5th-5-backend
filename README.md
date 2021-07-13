@@ -21,16 +21,16 @@
 ## 기술스택
 |기술|버전|
 |:---:|:---:|
-|ECS||
-|ECR||
-|Application Load Balancer||
+|Google kubernetes Engine||
+|Google Cloud Registry||
+|Google Cloud Load Balancer||
 |Docker||
 |SpringBoot|2.5.2|
 |Spring Rest Docs||
 |Gradle|7.1.1|
 |JPA||
 |Junit5||
-|Dynamo DB||
+|MongoDB||
 
 
 
