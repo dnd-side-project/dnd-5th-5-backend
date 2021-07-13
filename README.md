@@ -5,22 +5,32 @@
 
 ## 아키텍처
 <p align="center">
-	<img src="https://user-images.githubusercontent.com/46064193/125180311-7d665500-e233-11eb-98c2-fb8ef78b8356.png" alt="architecture"/>
+	<img src="https://user-images.githubusercontent.com/46064193/125324764-2bc8e200-e37b-11eb-8d07-9ac29d0d1b1a.png" alt="architecture"/>
 </p>
+<details>
+<summary>[More] AWS DevOps Version</summary>
+<div markdown="1">
+    * 비용문제로 AWS -> GCP로 변경
+    <p>
+    <p align="center">
+        <img src="https://user-images.githubusercontent.com/46064193/125180311-7d665500-e233-11eb-98c2-fb8ef78b8356.png" alt="architecture"/>
+    </p>
+</div>
+</details>
 
 ## 기술스택
 |기술|버전|
 |:---:|:---:|
-|K8S||
+|Google kubernetes Engine||
+|Google Cloud Registry||
+|Google Cloud Load Balancer||
 |Docker||
 |SpringBoot|2.5.2|
 |Spring Rest Docs||
-|Gradle||
+|Gradle|7.1.1|
 |JPA||
 |Junit5||
 |MongoDB||
-|Nginx||
-|ECS||
 
 
 
