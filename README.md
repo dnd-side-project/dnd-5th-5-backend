@@ -73,6 +73,10 @@
         <li><code>Docs</code> : 문서 수정</li>
         <li><code>Test</code> : 테스트 코드 작성</li>
         <li><code>Chore</code> : 기타 변경 사항(빌드 스크립트 수정 등)</li>
+        <li><code>Fix</code> : 올바르지 않은 코드를 고친 경우</li>
+        <li><code>Update</code> : 수정, 추가, 보완(주로 코드가 아닌 버전 업데이트)</li>
+        <li><code>Refactor</code> : 코드의 리팩토링</li>
+        <li><code>Remove</code> : 코드의 삭제</li>
     </ul>
     ex) Feat: jwt 토큰 발행 기능
 </div>
