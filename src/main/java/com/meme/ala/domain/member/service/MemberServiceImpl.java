@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService{
                     .email(googleUser.getEmail())
                     .name(googleUser.getName())
                     .googleId(googleUser.getProviderId())
-                    .imgUrl(googleUser.getImgUrl())
+                    .imgUrl(null) // TODO: 2021.7.15. DEFAULT 이미지 Assign
                     .build();
             memberRepository.save(newMember);
             // TODO: 2021.7.15. 성공 시 JWT 토큰 생성 및 반환하는 기능 추가 - jongmin

@@ -31,6 +31,7 @@ public class GoogleUser implements OAuthUserInfo{
 
     @Override
     public String getImgUrl() {
-        return (String)attribute.get("imageUrl");
+        //TODO: 2021.7.15. DEFAULT 이미지(코알라) 세팅
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package com.meme.ala.domain.member.controller;
 
 import com.meme.ala.common.dto.ResponseDto;
+import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class MemberController {
     public ResponseEntity<ResponseDto<String>> jwtCreate(@RequestBody Map<String, Object> data) {
         String jwtToken = memberService.loginOrJoin(data);
         return new ResponseEntity<ResponseDto<String>>(
-                new ResponseDto<String>(HttpStatus.OK.value(), "success", jwtToken)
+                new ResponseDto<String>(HttpStatus.OK.value(), ResponseMessage.SUCCESS, jwtToken)
                 , HttpStatus.OK);
     }
 }
