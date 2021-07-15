@@ -1,7 +1,11 @@
 package com.meme.ala.domain.member.service;
 
 import com.meme.ala.core.auth.oauth.GoogleUser;
+import com.meme.ala.core.auth.oauth.NaverUser;
+import com.meme.ala.core.auth.oauth.OAuthProvider;
 import com.meme.ala.core.auth.oauth.OAuthUserInfo;
+import com.meme.ala.core.error.ErrorCode;
+import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,20 +22,26 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
 
     @Override
-    public String loginOrJoin(Map<String, Object> data) {
-        OAuthUserInfo googleUser =
-                new GoogleUser((Map<String, Object>)data.get("profileObj"));
+    public String loginOrJoin(Map<String, Object> data, String provider) {
+        OAuthUserInfo authUserInfo;
+        if(provider.equals(OAuthProvider.GOOGLE)){
+            authUserInfo=new GoogleUser((Map<String, Object>)data.get("profileObj"));
+        }else if(provider.equals(OAuthProvider.NAVER)){
+            authUserInfo=new NaverUser((Map<String, Object>)data);
+        }else {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
         Optional<Member> optionalMember =
-                memberRepository.findByEmail(googleUser.getEmail());
+                memberRepository.findByEmail(authUserInfo.getEmail());
         if(optionalMember.isPresent()){
             // TODO: 2021.7.15. 성공 시 JWT 토큰 생성 및 반환하는 기능 추가 - jongmin
             return "dummy token";
         }
         else {
             Member newMember=Member.builder()
-                    .email(googleUser.getEmail())
-                    .name(googleUser.getName())
-                    .googleId(googleUser.getProviderId())
+                    .email(authUserInfo.getEmail())
+                    .name(authUserInfo.getName())
+                    .googleId(authUserInfo.getProviderId())
                     .imgUrl(null) // TODO: 2021.7.15. DEFAULT 이미지 Assign
                     .build();
             memberRepository.save(newMember);
