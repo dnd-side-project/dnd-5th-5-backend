@@ -28,4 +28,9 @@ public class GoogleUser implements OAuthUserInfo{
     public String getName() {
         return (String)attribute.get("name");
     }
+
+    @Override
+    public String getImgUrl() {
+        return (String)attribute.get("imageUrl");
+    }
 }
