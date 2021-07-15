@@ -1,4 +1,4 @@
-package com.meme.ala.core.auth;
+package com.meme.ala.core.auth.jwt;
 
 public class JwtAuthenticationFilter {
 }
