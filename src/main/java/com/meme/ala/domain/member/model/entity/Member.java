@@ -1,30 +1,35 @@
 package com.meme.ala.domain.member.model.entity;
 
+import com.meme.ala.domain.alacard.model.entity.AlaCard;
+import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
+@Builder
 @NoArgsConstructor
-@Document(collection = "member")
+@Document(collection = "MEMBER")
 public class Member{
     @Id
     private ObjectId id;
-    private String name;
+
     private String email;
-    private String imgUrl;
+
     private String googleId;
+
     private String naverId;
 
-    @Builder
-    public Member(String name, String email, String imgUrl, String googleId, String naverId){
-        this.name=name;
-        this.email=email;
-        this.imgUrl=imgUrl;
-        this.googleId=googleId;
-        this.naverId=naverId;
-    }
+    private MemberSetting memberSetting;
+
+    @Builder.Default
+    @DBRef
+    Map<AlaCard, AlaCardSetting> alaCardAlaCardSettingMap=new HashMap<>();
 }
