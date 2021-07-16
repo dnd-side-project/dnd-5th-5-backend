@@ -2,9 +2,7 @@ package com.meme.ala.domain.member.model.entity;
 
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -14,8 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@Setter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "MEMBER")
 public class Member{
     @Id

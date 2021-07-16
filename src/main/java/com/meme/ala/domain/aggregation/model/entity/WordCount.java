@@ -1,15 +1,15 @@
 package com.meme.ala.domain.aggregation.model.entity;
 
 import com.meme.ala.domain.alacard.model.entity.Word;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 public class WordCount {
     private ObjectId cardId;
 
