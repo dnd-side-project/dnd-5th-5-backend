@@ -1,13 +1,13 @@
 package com.meme.ala.domain.member.model.entity.cardSetting;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 public class AlaCardSetting {
     @DBRef
     private Background background;

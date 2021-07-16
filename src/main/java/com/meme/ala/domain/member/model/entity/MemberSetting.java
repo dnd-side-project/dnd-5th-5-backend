@@ -1,14 +1,11 @@
 package com.meme.ala.domain.member.model.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 public class MemberSetting {
     private String nickname;
 

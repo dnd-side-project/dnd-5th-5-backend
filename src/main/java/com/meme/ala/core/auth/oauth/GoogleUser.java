@@ -11,7 +11,7 @@ public class GoogleUser implements OAuthUserInfo{
 
     @Override
     public String getProviderId() {
-        return "goo_"+(String)attribute.get("googleId");
+        return (String)attribute.get("googleId");
     }
 
     @Override

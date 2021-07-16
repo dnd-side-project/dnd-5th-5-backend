@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
 public class SentenceComponent {
     public String josa;
     public String eomi;

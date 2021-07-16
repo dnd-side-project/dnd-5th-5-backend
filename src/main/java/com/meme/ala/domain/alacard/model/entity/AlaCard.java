@@ -1,8 +1,8 @@
 package com.meme.ala.domain.alacard.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "ALA_CARD")
 public class AlaCard {
     @Id

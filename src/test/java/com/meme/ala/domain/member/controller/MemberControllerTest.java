@@ -55,7 +55,6 @@ public class MemberControllerTest {
                         "    \"email\": \"test@gmail.com\",\n" +
                         "    \"name\": \"Jongmin Jung\"}";
 
-        System.out.println(sampleRequestBody);
         when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class),OAuthProvider.NAVER))
                 .thenReturn("dummy token");
 
