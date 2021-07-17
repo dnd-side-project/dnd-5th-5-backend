@@ -2,11 +2,15 @@ package com.meme.ala.domain.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
+import com.meme.ala.core.config.WebSecurityConfig;
 import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import java.util.Map;
 
@@ -16,7 +20,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MemberController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(value = MemberController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfig.class)})
 public class MemberControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -46,6 +51,7 @@ public class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"));
     }
+
     @Test
     public void 네이버_OAuth_로그인_유닛테스트() throws Exception{
         String sampleRequestBody=
