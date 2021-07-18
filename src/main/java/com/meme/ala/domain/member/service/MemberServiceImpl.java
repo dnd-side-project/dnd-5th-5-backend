@@ -12,6 +12,7 @@ import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -63,4 +64,19 @@ public class MemberServiceImpl implements MemberService{
         }
         memberRepository.save(newMember);
     }
+
+    @Override
+    @Transactional
+    public boolean test(){
+        Member newMember=Member.builder()
+                .email("test")
+                .memberSetting(
+                        MemberSetting.builder()
+                                .nickname("test_nickname")
+                                .build())
+                .build();
+        memberRepository.save(newMember);
+        return true;
+    }
+
 }

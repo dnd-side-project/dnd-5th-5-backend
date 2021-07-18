@@ -4,6 +4,7 @@ import com.meme.ala.common.dto.ResponseDto;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
 import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.domain.member.service.MemberService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,10 @@ public class MemberController {
         return new ResponseEntity<ResponseDto<String>>(
                 new ResponseDto<String>(HttpStatus.OK.value(), ResponseMessage.SUCCESS, jwtToken)
                 , HttpStatus.OK);
+    }
+
+    @PostMapping("api/v1/test")
+    public ResponseEntity<ResponseDto<Boolean>> mongotest(){
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(HttpStatus.CREATED, ResponseMessage.SUCCESS, memberService.test()));
     }
 }
