@@ -48,6 +48,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '3.0.0'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
 }
 
 test {
