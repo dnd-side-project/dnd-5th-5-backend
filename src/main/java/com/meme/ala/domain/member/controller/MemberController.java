@@ -20,7 +20,7 @@ public class MemberController {
     private final MemberService memberService;
 
     // TODO: 2021.7.15. 성공 시 JWT 토큰 생성 및 반환하는 기능 추가 - jongmin
-    @PostMapping("api/v1/oauth/jwt/google")
+    @PostMapping("/api/v1/oauth/jwt/google")
     public ResponseEntity<ResponseDto<String>> jwtGoogleCreate(@RequestBody Map<String, Object> data) {
         String jwtToken = memberService.loginOrJoin(data, OAuthProvider.GOOGLE);
         return new ResponseEntity<ResponseDto<String>>(
@@ -29,7 +29,7 @@ public class MemberController {
     }
 
     // TODO: 2021.7.16. 성공 시 JWT 토큰 생성 및 반환하는 기능 추가 - jongmin
-    @PostMapping("api/v1/oauth/jwt/naver")
+    @PostMapping("/api/v1/oauth/jwt/naver")
     public ResponseEntity<ResponseDto<String>> jwtNaverCreate(@RequestBody Map<String, Object> data) {
         String jwtToken = memberService.loginOrJoin(data, OAuthProvider.NAVER);
         return new ResponseEntity<ResponseDto<String>>(
@@ -37,7 +37,7 @@ public class MemberController {
                 , HttpStatus.OK);
     }
 
-    @PostMapping("api/v1/test")
+    @PostMapping("/api/v1/test")
     public ResponseEntity<ResponseDto<Boolean>> mongotest(){
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseDto.of(HttpStatus.CREATED, ResponseMessage.SUCCESS, memberService.test()));
     }
