@@ -30,5 +30,5 @@ spec:
               value: "prod"
             - name: SPRING_DATA_MONGODB_URI
               value: "$SPRING_DATA_MONGODB_URI"
-            - name: SPRING_JWT_SECRET
+            - name: JWT_SECRET
               value: "$SPRING_JWT_SECRET"

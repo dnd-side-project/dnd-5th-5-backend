@@ -1,5 +1,7 @@
 package com.meme.ala.core.auth.jwt;
 
+import com.meme.ala.core.error.ErrorCode;
+import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +16,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //TODO: 21.07.18 orElseThrow로 EntityNotFoundException::new 불가하여 null로 설정함
-        return new UserDetailsImpl(memberRepository.findByEmail(username).orElse(null));
+        return new UserDetailsImpl(memberRepository.findByEmail(username).orElseThrow(()-> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND)));
     }
 }
