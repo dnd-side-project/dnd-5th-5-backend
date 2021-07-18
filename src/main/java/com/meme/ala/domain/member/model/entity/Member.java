@@ -1,5 +1,6 @@
 package com.meme.ala.domain.member.model.entity;
 
+import com.meme.ala.core.auth.jwt.Authority;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
 import lombok.*;
@@ -27,6 +28,9 @@ public class Member{
     private String naverId;
 
     private MemberSetting memberSetting;
+
+    @Builder.Default
+    private String authority=Authority.ROLE_USER;
 
     @Builder.Default
     @DBRef
