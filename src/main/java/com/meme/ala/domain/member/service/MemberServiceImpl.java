@@ -12,6 +12,7 @@ import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -23,12 +24,13 @@ public class MemberServiceImpl implements MemberService{
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
+    @Transactional(readOnly = true)
     public String loginOrJoin(Map<String, Object> data, String provider) {
         OAuthUserInfo authUserInfo;
         if(provider.equals(OAuthProvider.GOOGLE)){
-            authUserInfo=new GoogleUser((Map<String, Object>)data.get("profileObj"));
+            authUserInfo = new GoogleUser((Map<String, Object>)data.get("profileObj"));
         }else if(provider.equals(OAuthProvider.NAVER)){
-            authUserInfo=new NaverUser((Map<String, Object>)data);
+            authUserInfo = new NaverUser((Map<String, Object>)data);
         }else {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
@@ -41,19 +43,20 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
+    @Transactional
     public void join(OAuthUserInfo authUserInfo, String provider) {
-        Member newMember=Member.builder()
+        Member newMember = Member.builder()
                 .email(authUserInfo.getEmail())
                 .memberSetting(
                         MemberSetting.builder()
-                                .nickname("alamonster_"+memberRepository.count())
+                                .nickname("alamonster_" + memberRepository.count())
                                 .build())
                 .build();
-        if(provider.equals(OAuthProvider.GOOGLE)){
+        if (provider.equals(OAuthProvider.GOOGLE)) {
             newMember.setGoogleId(authUserInfo.getProviderId());
-        }else if(provider.equals(OAuthProvider.NAVER)){
+        } else if (provider.equals(OAuthProvider.NAVER)) {
             newMember.setNaverId(authUserInfo.getProviderId());
-        }else {
+        } else {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         memberRepository.save(newMember);

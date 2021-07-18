@@ -18,19 +18,21 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
 
+    // TODO: path variable 로 변경
+
     @PostMapping("api/v1/oauth/jwt/google")
     public ResponseEntity<ResponseDto<String>> jwtGoogleCreate(@RequestBody Map<String, Object> data) {
         String jwtToken = memberService.loginOrJoin(data, OAuthProvider.GOOGLE);
-        return new ResponseEntity<ResponseDto<String>>(
-                new ResponseDto<String>(HttpStatus.OK.value(), ResponseMessage.SUCCESS, jwtToken)
-                , HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, jwtToken));
     }
 
     @PostMapping("api/v1/oauth/jwt/naver")
     public ResponseEntity<ResponseDto<String>> jwtNaverCreate(@RequestBody Map<String, Object> data) {
         String jwtToken = memberService.loginOrJoin(data, OAuthProvider.NAVER);
-        return new ResponseEntity<ResponseDto<String>>(
-                new ResponseDto<String>(HttpStatus.OK.value(), ResponseMessage.SUCCESS, jwtToken)
-                , HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, jwtToken));
     }
 }
