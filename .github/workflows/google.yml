@@ -101,7 +101,7 @@ jobs:
       uses: danielr1996/envsubst-action@1.0.0
       env:
         SPRING_DATA_MONGODB_URI: ${{ secrets.SPRING_DATA_MONGODB_URI }}
-        SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
+#        SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
       with:
         input: deployment.yml
         output: deployment-prod.yml

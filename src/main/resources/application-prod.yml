@@ -1,2 +1,2 @@
 jwt:
-  secret: ${JWT_SECRET}
+  secret: alasecret
