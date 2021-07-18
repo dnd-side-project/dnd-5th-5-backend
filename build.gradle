@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.4.1'
     implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
 
+    testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '3.0.0'
 }
 
 test {
