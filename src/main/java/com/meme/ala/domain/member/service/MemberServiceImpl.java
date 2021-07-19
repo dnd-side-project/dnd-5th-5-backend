@@ -1,6 +1,6 @@
 package com.meme.ala.domain.member.service;
 
-import com.meme.ala.core.auth.jwt.JwtTokenProvider;
+import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.GoogleUser;
 import com.meme.ala.core.auth.oauth.NaverUser;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtTokenProvider;
 
     @Override
     @Transactional(readOnly = true)
