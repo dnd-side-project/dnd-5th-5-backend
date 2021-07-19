@@ -19,10 +19,13 @@ configurations {
     }
 }
 
-
-
 repositories {
     mavenCentral()
+}
+
+ext {
+    //snippets dir
+    snippetsDir = file('build/generated-snippets')
 }
 
 dependencies {
@@ -39,6 +42,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
 
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'com.auth0:java-jwt:3.4.1'
     implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
@@ -48,17 +53,17 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-
-
 }
 
+
 test {
+    outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
 asciidoctor {
-    sourceDir 'src/main/asciidoc'
-    attributes 'snippets': file('build/generated-snippets')
+    inputs.dir snippetsDir
+    dependsOn test
 }
 
 task copyDocument(type: Copy) {

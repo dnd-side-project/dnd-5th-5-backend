@@ -60,9 +60,18 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
             ${{ runner.os }}-gradle-
-    
+
     - name: Build with Gradle test
       run: ./gradlew test
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: build/test-results/**/*.xml
+        check_name: '[unit-test] Results'
+
+    - name: Build with Gradle copyDocument
+      run: ./gradlew copyDocument
     - name: Build with Gradle
       run: ./gradlew build
     # Setup gcloud CLI

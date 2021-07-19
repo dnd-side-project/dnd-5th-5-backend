@@ -1,0 +1,44 @@
+= ALA API Document
+:toc: left
+:toclevels: 3
+:toc-title: ALA API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+
+== 설명
+
+
+=== /api/v1/oauth/jwt/google
+
+.request
+include::{snippets}/api/v1/oauth/jwt/google/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/oauth/jwt/google/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/oauth/jwt/google/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/oauth/jwt/google/response-fields.adoc[]
+
+
+---
+
+
+=== /api/v1/oauth/jwt/naver
+
+.request
+include::{snippets}/api/v1/oauth/jwt/naver/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/oauth/jwt/naver/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/oauth/jwt/naver/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/oauth/jwt/naver/response-fields.adoc[]
+
+
