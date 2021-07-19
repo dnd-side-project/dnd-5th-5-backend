@@ -47,6 +47,11 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1.19
+      if: always()
+        with:
+          files: test-results/**/*.xml
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
