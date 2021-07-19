@@ -27,9 +27,9 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: ala-cluster    # TODO: update to cluster name
-  GKE_ZONE: asia-northeast3-a   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: ala-app-deployment # TODO: update to deployment name
+  GKE_CLUSTER: ala-cluster
+  GKE_ZONE: asia-northeast3-a
+  DEPLOYMENT_NAME: ala-app-deployment
   IMAGE: ala
 
 jobs:
