@@ -2,33 +2,62 @@ package com.meme.ala.core.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
-import com.meme.ala.core.config.WebSecurityConfig;
 import com.meme.ala.domain.member.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import java.util.Map;
 
+import org.springframework.mock.web.MockFilterConfig;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.config.BeanIds;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
+
+import javax.servlet.ServletException;
+
+import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
+import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = MemberAuthController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfig.class)})
+@SpringBootTest
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 public class MemberAuthControllerTest {
     @Autowired
+    private WebApplicationContext context;
+
     private MockMvc mockMvc;
+
+    @BeforeEach
+    public void setUp(RestDocumentationContextProvider restDocumentation) throws ServletException {
+        DelegatingFilterProxy delegateProxyFilter = new DelegatingFilterProxy();
+        delegateProxyFilter.init(new MockFilterConfig(context.getServletContext(), BeanIds.SPRING_SECURITY_FILTER_CHAIN));
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentation))
+                .addFilter(delegateProxyFilter)
+                .build();
+    }
 
     @MockBean
     private MemberService memberService;
 
+    @DisplayName("구글 OAuth 로그인/가입 테스트")
     @Test
     public void 구글_OAuth_로그인_유닛테스트() throws Exception{
         String sampleRequestBody=
@@ -49,13 +78,32 @@ public class MemberAuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(sampleRequestBody))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"))
+                .andDo(print())
+                .andDo(document("/api/v1/oauth/jwt/google",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("profileObj.googleId").description("Identifier"),
+                                fieldWithPath("profileObj.imageUrl").description("사용자 프로필 링크"),
+                                fieldWithPath("profileObj.email").description("사용자 이메일"),
+                                fieldWithPath("profileObj.name").description("사용자 이름"),
+                                fieldWithPath("profileObj.givenName").description("given name"),
+                                fieldWithPath("profileObj.familyName").description("family name")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("JWT 값"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
     }
 
     @Test
     public void 네이버_OAuth_로그인_유닛테스트() throws Exception{
         String sampleRequestBody=
-                        "  {\n" +
+                "  {\n" +
                         "    \"id\": \"afdasfdadsf\",\n" +
                         "    \"profile_image\": \"https://user-images.githubusercontent.com/46064193/125324764-2bc8e200-e37b-11eb-8d07-9ac29d0d1b1a.png\",\n" +
                         "    \"email\": \"test@gmail.com\",\n" +
@@ -68,6 +116,23 @@ public class MemberAuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(sampleRequestBody))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"))
+                .andDo(print())
+                .andDo(document("/api/v1/oauth/jwt/naver",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("id").description("Identifier"),
+                                fieldWithPath("profile_image").description("사용자 프로필 링크"),
+                                fieldWithPath("email").description("사용자 이메일"),
+                                fieldWithPath("name").description("사용자 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("JWT 값"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
     }
 }
