@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AlaCardController {
     private final AlaCardService alaCardService;
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<ResponseDto<AlaCardSaveDto>> alaCardSave(@RequestBody AlaCardSaveDto dto) {
         alaCardService.save(AlaCardSaveMapper.INSTANCE.toEntity(dto));
         return ResponseEntity.status(HttpStatus.OK)
