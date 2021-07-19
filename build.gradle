@@ -46,7 +46,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.4.RELEASE'
-    testImplementation 'com.github.fakemongo:fongo:2.1.0'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
