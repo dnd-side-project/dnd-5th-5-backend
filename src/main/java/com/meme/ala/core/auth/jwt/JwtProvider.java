@@ -19,7 +19,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
-public class JwtTokenProvider {
+public class JwtProvider {
     @Value("${jwt.secret}")
     private String secretKey;
     private long tokenValidTime = 30 * 60 * 1000L;
