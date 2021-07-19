@@ -82,7 +82,7 @@ public class MemberAuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"))
                 .andDo(print())
-                .andDo(document("/api/v1/oauth/jwt/google",
+                .andDo(document("api/v1/oauth/jwt/google",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
@@ -120,7 +120,7 @@ public class MemberAuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"))
                 .andDo(print())
-                .andDo(document("/api/v1/oauth/jwt/naver",
+                .andDo(document("api/v1/oauth/jwt/naver",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
