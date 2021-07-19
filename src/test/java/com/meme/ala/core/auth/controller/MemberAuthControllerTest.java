@@ -53,6 +53,14 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                 .andDo(document("api/v1/oauth/jwt/google",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("profileObj.googleId").description("Identifier"),
+                                fieldWithPath("profileObj.imageUrl").description("사용자 프로필 링크"),
+                                fieldWithPath("profileObj.email").description("사용자 이메일"),
+                                fieldWithPath("profileObj.name").description("사용자 이름"),
+                                fieldWithPath("profileObj.givenName").description("given name"),
+                                fieldWithPath("profileObj.familyName").description("family name")
+                        ),                   
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
