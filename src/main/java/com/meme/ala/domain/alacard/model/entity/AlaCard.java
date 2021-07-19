@@ -22,5 +22,5 @@ public class AlaCard {
     private String bigCategory;
 
     @Singular("middleCategoryItem")
-    private List<MiddleCategory> middleCategoryList=new LinkedList<>();
+    private List<MiddleCategory> middleCategoryList = new LinkedList<>();
 }
