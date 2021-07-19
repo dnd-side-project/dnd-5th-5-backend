@@ -63,6 +63,12 @@ jobs:
     
     - name: Build with Gradle test
       run: ./gradlew test
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: build/test-results/**/*.xml
+        check_name: '[unit-test] Results'
     - name: Build with Gradle
       run: ./gradlew build
     # Setup gcloud CLI
@@ -119,20 +125,3 @@ jobs:
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
-publish-test-results:
-  name: "Publish Unit Tests Results"
-  needs: build-and-test
-  runs-on: ubuntu-latest
-  # the build-and-test job might be skipped, we don't need to run this job then
-  if: success() || failure()
-
-  steps:
-    - name: Download Artifacts
-      uses: actions/download-artifact@v2
-      with:
-        path: artifacts
-
-    - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      with:
-        files: artifacts/**/*.xml
