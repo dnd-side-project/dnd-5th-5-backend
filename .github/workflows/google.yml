@@ -61,8 +61,8 @@ jobs:
         restore-keys: |
             ${{ runner.os }}-gradle-
     
-    - name: Build with Gradle test
-      run: ./gradlew test
+    - name: Build with Gradle test bootJar
+      run: ./gradlew test bootJar
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
