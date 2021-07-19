@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.5.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id "org.asciidoctor.convert" version "1.5.9.2"
     id 'java'
 }
 
@@ -19,18 +19,18 @@ configurations {
     }
 }
 
+
+
 repositories {
     mavenCentral()
-}
-
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     implementation 'org.mapstruct:mapstruct:1.4.1.Final'
@@ -47,17 +47,23 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '3.0.0'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
 
 }
 
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
 asciidoctor {
-    inputs.dir snippetsDir
-    dependsOn test
+    sourceDir 'src/main/asciidoc'
+    attributes 'snippets': file('build/generated-snippets')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+
+    from file("build/asciidoc/html5/")
+    into file("src/main/resources/static/docs")
 }

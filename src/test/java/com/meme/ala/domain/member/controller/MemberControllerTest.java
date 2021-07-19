@@ -1,6 +1,7 @@
 package com.meme.ala.domain.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
 import com.meme.ala.core.config.WebSecurityConfig;
 import com.meme.ala.domain.member.service.MemberService;
@@ -16,15 +17,16 @@ import java.util.Map;
 
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
+import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = MemberController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfig.class)})
-public class MemberControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+public class MemberControllerTest extends AbstractControllerTest {
 
     @MockBean
     private MemberService memberService;
@@ -49,7 +51,12 @@ public class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(sampleRequestBody))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"))
+                .andDo(print())
+                .andDo(document("/api/v1/oauth/jwt/google",
+                        getDocumentRequest(),
+                        getDocumentResponse()
+                ));
     }
 
     @Test
