@@ -1,4 +1,4 @@
-package com.meme.ala.domain.member.controller;
+package com.meme.ala.core.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
-@WebMvcTest(value = MemberController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfig.class)})
-public class MemberControllerTest {
+@WebMvcTest(value = MemberAuthController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfig.class)})
+public class MemberAuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
