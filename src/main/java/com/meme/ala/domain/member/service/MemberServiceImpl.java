@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService{
         }else if(provider.equals(OAuthProvider.NAVER)){
             authUserInfo = new NaverUser((Map<String, Object>)data);
         }else {
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new BusinessException(ErrorCode.METHOD_NOT_ALLOWED);
         }
         Optional<Member> optionalMember =
                 memberRepository.findByEmail(authUserInfo.getEmail());
