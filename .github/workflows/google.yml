@@ -96,6 +96,15 @@ jobs:
     - name: Publish
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        
+    - name: 환경변수 치환 
+      uses: danielr1996/envsubst-action@1.0.0
+      env:
+        SPRING_DATA_MONGODB_URI: ${{ secrets.SPRING_DATA_MONGODB_URI }}
+#        SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
+      with:
+        input: deployment.yml
+        output: deployment-prod.yml
 
     # Set up kustomize
     - name: Set up Kustomize

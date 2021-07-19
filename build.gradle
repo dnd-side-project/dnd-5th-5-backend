@@ -42,6 +42,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'com.auth0:java-jwt:3.4.1'
     implementation 'org.hibernate:hibernate-validator:6.1.0.Final'
+
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '3.0.0'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
 }
 
 test {

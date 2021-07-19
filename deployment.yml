@@ -25,3 +25,10 @@ spec:
           name: ala
           ports:
             - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: SPRING_DATA_MONGODB_URI
+              value: "$SPRING_DATA_MONGODB_URI"
+#            - name: JWT_SECRET
+#              value: "$SPRING_JWT_SECRET"
