@@ -1,12 +1,18 @@
 package com.meme.ala.domain.member.model.mapper;
 
-import com.meme.ala.domain.member.model.dto.MemberDto;
+import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
-    // Member toEntity(MemberDto memberDto);
+    MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
-    // MemberDto toDto(Member member);
+    @Mapping(target="nickname",source="memberSetting.nickname")
+    @Mapping(target="statusMessage",source="memberSetting.statusMessage")
+    @Mapping(target="imgUrl",source="memberSetting.imgUrl")
+    @Mapping(target="isOpen",source="memberSetting.isOpen")
+    MemberPrincipalDto toDto(Member member);
 }
