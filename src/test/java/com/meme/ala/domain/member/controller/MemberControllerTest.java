@@ -95,5 +95,26 @@ public class MemberControllerTest extends AbstractControllerTest {
                         )
                 ));
     }
+
+    @DisplayName("사용자 닉네임 중복 처리 테스트")
+    @Test
+    public void 사용자_닉네임_중복_처리_테스트() throws Exception{
+        when(memberRepository.existsMemberByMemberSettingNickname("testNickname")).thenReturn(true);
+
+        mockMvc.perform(get("/api/v1/member/exists?nickname=testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("true"))
+                .andDo(print())
+                .andDo(document("api/v1/member/exists?nickname={nickname}",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("닉네임 중복 여부"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
 }
 
