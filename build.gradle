@@ -1,7 +1,8 @@
+
 plugins {
     id 'org.springframework.boot' version '2.5.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id "org.asciidoctor.convert" version "1.5.9.2"
     id 'java'
 }
 
@@ -24,13 +25,16 @@ repositories {
 }
 
 ext {
-    set('snippetsDir', file("build/generated-snippets"))
+    //snippets dir
+    snippetsDir = file('build/generated-snippets')
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     implementation 'org.mapstruct:mapstruct:1.4.1.Final'
@@ -38,6 +42,8 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.1.Final'
+
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'com.auth0:java-jwt:3.4.1'
@@ -47,10 +53,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    testImplementation group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '3.0.0'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-
 }
+
 
 test {
     outputs.dir snippetsDir
@@ -60,4 +65,11 @@ test {
 asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+
+    from file("build/asciidoc/html5/")
+    into file("src/main/resources/static/docs")
 }
