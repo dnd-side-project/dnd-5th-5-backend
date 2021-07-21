@@ -11,7 +11,7 @@ import com.meme.ala.domain.member.model.entity.cardSetting.Background;
 import com.meme.ala.domain.member.model.entity.cardSetting.Font;
 import org.bson.types.ObjectId;
 
-public class EntityCreator {
+public class EntityFactory {
     public static Member testMember(){
         return Member.builder()
                 .id(new ObjectId("60f3f89c9f21ff292724eb38"))

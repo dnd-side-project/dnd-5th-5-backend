@@ -1,7 +1,7 @@
 package com.meme.ala.domain.member.entity.mapper;
 
-import com.meme.ala.common.DtoCreator;
-import com.meme.ala.common.EntityCreator;
+import com.meme.ala.common.DtoFactory;
+import com.meme.ala.common.EntityFactory;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.mapper.MemberMapper;
@@ -16,8 +16,8 @@ class MemberMapperTest {
     @Autowired
     private MemberMapper memberMapper;
 
-    private final Member member = EntityCreator.testMember();
-    private final MemberPrincipalDto dto = DtoCreator.testMemberPrincipalDto();
+    private final Member member = EntityFactory.testMember();
+    private final MemberPrincipalDto dto = DtoFactory.testMemberPrincipalDto();
 
     @Test
     void 엔티티에서_DTO변환_테스트() {

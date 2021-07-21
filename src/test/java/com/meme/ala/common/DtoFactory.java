@@ -2,7 +2,7 @@ package com.meme.ala.common;
 
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 
-public class DtoCreator {
+public class DtoFactory {
     public static MemberPrincipalDto testMemberPrincipalDto() {
         return MemberPrincipalDto.builder()
                 .email("test@gmail.com")

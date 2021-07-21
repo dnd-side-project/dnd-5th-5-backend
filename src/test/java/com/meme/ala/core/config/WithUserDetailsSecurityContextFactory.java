@@ -1,6 +1,6 @@
 package com.meme.ala.core.config;
 
-import com.meme.ala.common.EntityCreator;
+import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.auth.jwt.UserDetailsImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +14,7 @@ final class WithUserDetailsSecurityContextFactory
 
     public SecurityContext createSecurityContext(AlaWithAccount withUser) {
         String email = withUser.value();
-        UserDetails principal = new UserDetailsImpl(EntityCreator.testMember());
+        UserDetails principal = new UserDetailsImpl(EntityFactory.testMember());
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
