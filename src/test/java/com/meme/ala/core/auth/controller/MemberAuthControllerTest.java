@@ -2,6 +2,7 @@ package com.meme.ala.core.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.common.AbstractControllerTest;
+import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.core.auth.oauth.OAuthProvider;
 import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
@@ -42,7 +44,10 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         "  }\n" +
                         "}";
         when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.GOOGLE))
-                .thenReturn("dummy token");
+                .thenReturn(new HashMap<String,String>() {{
+                    put("jwt", "dummy token");
+                    put("message", ResponseMessage.LOGIN);
+                }});
 
         mockMvc.perform(post("/api/v1/oauth/jwt/google")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +68,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         ),                   
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
-                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("message").description("기존 사용자: LOGIN / 신규 사용자: JOIN"),
                                 fieldWithPath("data").description("JWT 값"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
@@ -80,7 +85,10 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         "    \"name\": \"Jongmin Jung\"}";
 
         when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class),OAuthProvider.NAVER))
-                .thenReturn("dummy token");
+                .thenReturn(new HashMap<String,String>() {{
+                    put("jwt", "dummy token");
+                    put("message", ResponseMessage.JOIN);
+                }});
 
         mockMvc.perform(post("/api/v1/oauth/jwt/naver")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +107,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
-                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("message").description("기존 사용자: LOGIN / 신규 사용자: JOIN"),
                                 fieldWithPath("data").description("JWT 값"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
