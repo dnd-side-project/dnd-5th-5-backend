@@ -48,7 +48,7 @@ include::{snippets}/api/v1/member/me/get/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/member/me/get/response-fields.adoc[]
 
-== POST /api/v1/member/me
+== PATCH /api/v1/member/me
 
 .request
 include::{snippets}/api/v1/member/me/post/http-request.adoc[]

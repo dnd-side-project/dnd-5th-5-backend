@@ -19,8 +19,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,7 +65,7 @@ public class MemberControllerTest extends AbstractControllerTest {
 
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        mockMvc.perform(put("/api/v1/member/me")
+        mockMvc.perform(patch("/api/v1/member/me")
                         .content(sampleRequestBody)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
