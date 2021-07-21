@@ -5,4 +5,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseMessage {
     public static final String SUCCESS = "success";
+    public static final String LOGIN="login";
+    public static final String JOIN="join";
 }
