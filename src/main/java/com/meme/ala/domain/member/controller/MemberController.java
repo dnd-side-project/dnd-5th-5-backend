@@ -22,15 +22,13 @@ public class MemberController {
     @GetMapping("/me")
     public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@CurrentUser Member member){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, MemberMapper.INSTANCE.toPrincipalDto(member)));
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
     }
 
     @PutMapping("/me")
     public ResponseEntity<ResponseDto<MemberPrincipalDto>> updateMember(@CurrentUser Member member, @RequestBody MemberPrincipalDto memberPrincipalDto){
-        memberMapper.updateMemberSettingFromDto(memberPrincipalDto, member.getMemberSetting());
-        memberService.updateMember(member);
-
+        memberService.updateMember(member, memberPrincipalDto);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.UPDATE, memberMapper.toPrincipalDto(member)));
     }
 }

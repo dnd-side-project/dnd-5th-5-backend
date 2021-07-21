@@ -2,14 +2,19 @@ package com.meme.ala.domain.member.controller;
 
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.core.config.AlaWithAccount;
-import com.meme.ala.domain.member.service.MemberService;
+import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
+import org.mockito.AdditionalAnswers;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,9 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemberControllerTest extends AbstractControllerTest {
-
     @MockBean
-    private MemberService memberService;
+    private MemberRepository memberRepository;
 
     @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자 세팅 정보를 읽어오는 테스트")
@@ -57,6 +61,8 @@ public class MemberControllerTest extends AbstractControllerTest {
                         "    \"statusMessage\": \"update status message\", \n" +
                         "    \"imgUrl\": \"/test/url.jpg\", \n" +
                         "    \"isOpen\": true }";
+
+        when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
 
         mockMvc.perform(put("/api/v1/member/me")
                         .content(sampleRequestBody)
