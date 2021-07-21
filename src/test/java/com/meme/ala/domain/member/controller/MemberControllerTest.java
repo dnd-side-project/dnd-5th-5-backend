@@ -17,6 +17,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -105,9 +107,12 @@ public class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("true"))
                 .andDo(print())
-                .andDo(document("api/v1/member/exists?nickname={nickname}",
+                .andDo(document("api/v1/member/exists",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("nickname").description("닉네임")
+                        ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),

@@ -31,4 +31,10 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.UPDATE, memberMapper.toPrincipalDto(member)));
     }
+
+    @GetMapping("/exists")
+    public ResponseEntity<ResponseDto<Boolean>> existsNickname(@RequestParam String nickname){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberService.existsNickname(nickname)));
+    }
 }

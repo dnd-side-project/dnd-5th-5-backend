@@ -84,6 +84,6 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public boolean existsNickname(String nickname) {
-        return false;
+        return memberRepository.existsMemberByMemberSettingNickname(nickname);
     }
 }
