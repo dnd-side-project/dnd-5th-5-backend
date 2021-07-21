@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @SpringBootTest
 public class JwtTokenProviderTest {
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtProvider jwtTokenProvider;
 
     @Test
     public void Jwt_Create_테스트(){

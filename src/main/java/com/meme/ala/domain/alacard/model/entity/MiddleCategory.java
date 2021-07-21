@@ -3,6 +3,7 @@ package com.meme.ala.domain.alacard.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Singular;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,6 @@ public class MiddleCategory {
 
     private String form;
 
-    @Builder.Default
+    @Singular("wordItem")
     private List<Word> wordList=new LinkedList<>();
 }
