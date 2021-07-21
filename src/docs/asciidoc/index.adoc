@@ -9,7 +9,7 @@
 == 설명
 
 
-=== /api/v1/oauth/jwt/google
+== POST /api/v1/oauth/jwt/google
 
 .request
 include::{snippets}/api/v1/oauth/jwt/google/http-request.adoc[]
@@ -23,11 +23,7 @@ include::{snippets}/api/v1/oauth/jwt/google/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/oauth/jwt/google/response-fields.adoc[]
 
-
----
-
-
-=== /api/v1/oauth/jwt/naver
+== POST /api/v1/oauth/jwt/naver
 
 .request
 include::{snippets}/api/v1/oauth/jwt/naver/http-request.adoc[]
@@ -41,19 +37,30 @@ include::{snippets}/api/v1/oauth/jwt/naver/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/oauth/jwt/naver/response-fields.adoc[]
 
-
----
-
-
-=== /api/v1/member/me
+== GET /api/v1/member/me
 
 .request
-include::{snippets}/api/v1/member/me/http-request.adoc[]
+include::{snippets}/api/v1/member/me/get/http-request.adoc[]
 
 .response
-include::{snippets}/api/v1/member/me/http-response.adoc[]
+include::{snippets}/api/v1/member/me/get/http-response.adoc[]
 
 .response fields
-include::{snippets}/api/v1/member/me/response-fields.adoc[]
+include::{snippets}/api/v1/member/me/get/response-fields.adoc[]
+
+== POST /api/v1/member/me
+
+.request
+include::{snippets}/api/v1/member/me/post/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/member/me/post/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/member/me/post/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/member/me/post/response-fields.adoc[]
+
 
 
