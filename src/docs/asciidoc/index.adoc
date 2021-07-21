@@ -42,3 +42,18 @@ include::{snippets}/api/v1/oauth/jwt/naver/http-response.adoc[]
 include::{snippets}/api/v1/oauth/jwt/naver/response-fields.adoc[]
 
 
+---
+
+
+=== /api/v1/member/me
+
+.request
+include::{snippets}/api/v1/member/me/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/member/me/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/member/me/response-fields.adoc[]
+
+
