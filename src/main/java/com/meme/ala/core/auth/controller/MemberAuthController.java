@@ -19,9 +19,9 @@ public class MemberAuthController {
     @PostMapping("/jwt/{provider}")
     public ResponseEntity<ResponseDto<String>> jwtGoogleCreate(@RequestBody Map<String, Object> data,
                                                                @PathVariable("provider") String provider) {
-        String jwtToken = memberService.loginOrJoin(data, provider);
+        Map<String,String> oauthMap= memberService.loginOrJoin(data, provider);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, jwtToken));
+                .body(ResponseDto.of(HttpStatus.OK, oauthMap.get("message"), oauthMap.get("jwt")));
     }
 }

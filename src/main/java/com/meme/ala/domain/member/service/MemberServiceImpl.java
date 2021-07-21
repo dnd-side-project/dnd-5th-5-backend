@@ -1,5 +1,6 @@
 package com.meme.ala.domain.member.service;
 
+import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.core.auth.jwt.JwtTokenProvider;
 import com.meme.ala.core.auth.oauth.GoogleUser;
 import com.meme.ala.core.auth.oauth.NaverUser;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +27,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     @Transactional(readOnly = true)
-    public String loginOrJoin(Map<String, Object> data, String provider) {
+    public Map<String,String> loginOrJoin(Map<String, Object> data, String provider) {
+        Map<String,String> resultMap=new HashMap<>();
         OAuthUserInfo authUserInfo;
         if(provider.equals(OAuthProvider.GOOGLE)){
             authUserInfo = new GoogleUser((Map<String, Object>)data.get("profileObj"));
@@ -37,9 +40,15 @@ public class MemberServiceImpl implements MemberService{
         Optional<Member> optionalMember =
                 memberRepository.findByEmail(authUserInfo.getEmail());
         if(!optionalMember.isPresent()){
+            resultMap.put("message", ResponseMessage.JOIN);
             join(authUserInfo,provider);
         }
-        return jwtTokenProvider.createToken(authUserInfo.getEmail());
+        else{
+            resultMap.put("message",ResponseMessage.LOGIN);
+        }
+        String jwt=jwtTokenProvider.createToken(authUserInfo.getEmail());
+        resultMap.put("jwt",jwt);
+        return resultMap;
     }
 
     @Override
