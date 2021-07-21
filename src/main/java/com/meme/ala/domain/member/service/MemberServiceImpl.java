@@ -80,4 +80,10 @@ public class MemberServiceImpl implements MemberService{
         memberMapper.updateMemberSettingFromDto(memberPrincipalDto, newMember.getMemberSetting());
         memberRepository.save(newMember);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsNickname(String nickname) {
+        return memberRepository.existsMemberByMemberSettingNickname(nickname);
+    }
 }
