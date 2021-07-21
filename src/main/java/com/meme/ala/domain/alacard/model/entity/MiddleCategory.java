@@ -23,5 +23,5 @@ public class MiddleCategory {
     private String form;
 
     @Singular("wordItem")
-    private List<Word> wordList=new LinkedList<>();
+    private List<Word> wordList;
 }
