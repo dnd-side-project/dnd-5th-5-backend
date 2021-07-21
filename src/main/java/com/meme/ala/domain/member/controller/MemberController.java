@@ -25,7 +25,7 @@ public class MemberController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
     }
 
-    @PutMapping("/me")
+    @PatchMapping("/me")
     public ResponseEntity<ResponseDto<MemberPrincipalDto>> updateMember(@CurrentUser Member member, @RequestBody MemberPrincipalDto memberPrincipalDto){
         memberService.updateMember(member, memberPrincipalDto);
         return ResponseEntity.status(HttpStatus.OK)
