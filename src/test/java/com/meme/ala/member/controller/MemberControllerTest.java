@@ -1,13 +1,9 @@
 package com.meme.ala.member.controller;
 
 import com.meme.ala.common.AbstractControllerTest;
-import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.config.AlaWithAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
@@ -20,10 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MemberControllerTest extends AbstractControllerTest {
-    @Autowired
-    JwtProvider jwtProvider;
-    @MockBean
-    UserDetails userDetails;
     @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자 세팅 정보를 읽어오는 테스트")
     @Test
