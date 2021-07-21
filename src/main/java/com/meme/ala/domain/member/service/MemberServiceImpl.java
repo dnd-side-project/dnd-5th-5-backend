@@ -70,4 +70,10 @@ public class MemberServiceImpl implements MemberService{
         }
         memberRepository.save(newMember);
     }
+
+    @Override
+    @Transactional
+    public void updateMember(Member newMember) {
+        memberRepository.save(newMember);
+    }
 }
