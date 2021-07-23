@@ -64,7 +64,6 @@ test {
 
 asciidoctor {
     inputs.dir snippetsDir
-    dependsOn test
 }
 
 task copyDocument(type: Copy) {

@@ -8,8 +8,10 @@ import com.meme.ala.core.auth.oauth.OAuthProvider;
 import com.meme.ala.core.auth.oauth.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
+import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
+import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final JwtProvider jwtTokenProvider;
+    private final MemberMapper memberMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -69,5 +72,18 @@ public class MemberServiceImpl implements MemberService{
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         memberRepository.save(newMember);
+    }
+
+    @Override
+    @Transactional
+    public void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto) {
+        memberMapper.updateMemberSettingFromDto(memberPrincipalDto, newMember.getMemberSetting());
+        memberRepository.save(newMember);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsNickname(String nickname) {
+        return memberRepository.existsMemberByMemberSettingNickname(nickname);
     }
 }
