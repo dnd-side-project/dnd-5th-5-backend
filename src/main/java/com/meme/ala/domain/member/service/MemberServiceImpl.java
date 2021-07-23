@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService{
                 .email(authUserInfo.getEmail())
                 .memberSetting(
                         MemberSetting.builder()
-                                .nickname("alamonster_" + memberRepository.count())
+                                .nickname("ala_" + memberRepository.count())
                                 .build())
                 .build();
         if (provider.equals(OAuthProvider.GOOGLE)) {
