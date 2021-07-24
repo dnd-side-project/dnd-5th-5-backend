@@ -4,9 +4,10 @@ import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AlaCardSaveMapper {
     AlaCardSaveMapper INSTANCE = Mappers.getMapper(AlaCardSaveMapper.class);
     @Mapping(target = "id", ignore = true)
