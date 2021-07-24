@@ -11,7 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,8 +36,9 @@ public class AlaCardMapperTest {
     }
     @Test
     void 엔티티로부터_SelectionWordDto리스트_변환_테스트(){
-        List<SelectionWordDto> dtoList = alaCardSaveMapper.map(alaCard);
-        List<Word> wordList=alaCard.getMiddleCategoryList().get(0).getWordList();
-        assertEquals(dtoList.get(0).getWordName(),wordList.get(0).wordName);
+        List<SelectionWordDto> dtoList = alaCardSaveMapper.alaCardToSelectionWordDtoList(alaCard);
+        assertEquals(dtoList.get(0).getWordName(),alaCard.getMiddleCategoryList().get(0).getWordList().get(0).getWordName());
+        assertEquals(dtoList.get(0).getBigCategory(),alaCard.getBigCategory());
+        assertEquals(dtoList.get(0).getHint(),alaCard.getMiddleCategoryList().get(0).getHint());
     }
 }
