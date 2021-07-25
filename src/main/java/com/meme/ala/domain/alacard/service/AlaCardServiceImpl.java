@@ -15,7 +15,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 @Service
-public class AlaCardServiceImpl implements AlaCardService{
+public class AlaCardServiceImpl implements AlaCardService {
     private final AlaCardRepository alaCardRepository;
     private final MemberService memberService;
     private final AlaCardSaveMapper alaCardSaveMapper;
@@ -33,16 +33,15 @@ public class AlaCardServiceImpl implements AlaCardService{
     public List<SelectionWordDto> getWordList(String nickname, Boolean shuffle) {
 
         Optional<Member> member = memberService.findByNickname(nickname);
-        if(member.isPresent()){
+        if (member.isPresent()) {
             List<AlaCard> alaCardList =
                     new ArrayList<>(member.get().getAlaCardAlaCardSettingMap().keySet());
-            if(shuffle){
+            if (shuffle) {
                 Collections.shuffle(alaCardList);
             }
             List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
-            return new ArrayList<>(wordDtoList.subList(0,Math.min(maxWords,wordDtoList.size())));
-        }
-        else{
+            return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
+        } else {
             return new ArrayList<>();
         }
     }
