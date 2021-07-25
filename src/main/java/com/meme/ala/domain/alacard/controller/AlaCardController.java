@@ -29,12 +29,7 @@ public class AlaCardController {
     @GetMapping("/wordlist")
     public ResponseEntity<ResponseDto<List<SelectionWordDto>>> wordList(@RequestParam String nickname) {
         List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname, true);
-        if (wordDtoList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(ResponseDto.of(HttpStatus.UNPROCESSABLE_ENTITY, ResponseMessage.FAILURE, wordDtoList));
-        } else {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
-        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
     }
 }

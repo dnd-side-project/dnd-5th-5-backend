@@ -24,5 +24,5 @@ public class Aggregation {
     private Member member;
 
     @Builder.Default
-    List<WordCount> wordCountList=new LinkedList<>();
+    List<WordCount> wordCountList = new LinkedList<>();
 }

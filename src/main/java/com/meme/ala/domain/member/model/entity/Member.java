@@ -33,9 +33,9 @@ public class Member {
     private MemberSetting memberSetting;
 
     @Builder.Default
-    private String authority=Authority.ROLE_USER;
+    private String authority = Authority.ROLE_USER;
 
     @Builder.Default
     @DBRef
-    Map<AlaCard, AlaCardSetting> alaCardAlaCardSettingMap=new HashMap<>();
+    Map<AlaCard, AlaCardSetting> alaCardAlaCardSettingMap = new HashMap<>();
 }
