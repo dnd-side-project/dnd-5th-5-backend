@@ -73,4 +73,15 @@ include::{snippets}/api/v1/member/exists/request-parameters.adoc[]
 .response
 include::{snippets}/api/v1/member/exists/http-response.adoc[]
 
+== GET /api/v1/alacard/wordlist
+
+.request
+include::{snippets}/api/v1/alacard/wordlist/http-request.adoc[]
+
+.request parameters
+include::{snippets}/api/v1/alacard/wordlist/request-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/alacard/wordlist/http-response.adoc[]
+
 

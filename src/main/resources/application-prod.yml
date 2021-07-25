@@ -1,2 +1,4 @@
 jwt:
   secret: alasecret
+alacard:
+  maxwords: 50
