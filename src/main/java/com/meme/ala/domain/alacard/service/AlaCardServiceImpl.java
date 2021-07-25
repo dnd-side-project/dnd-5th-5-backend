@@ -1,5 +1,7 @@
 package com.meme.ala.domain.alacard.service;
 
+import com.meme.ala.core.error.ErrorCode;
+import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,18 +35,12 @@ public class AlaCardServiceImpl implements AlaCardService {
     @Override
     @Transactional(readOnly = true)
     public List<SelectionWordDto> getWordList(String nickname, Boolean shuffle) {
-
-        Optional<Member> member = memberService.findByNickname(nickname);
-        if (member.isPresent()) {
-            List<AlaCard> alaCardList =
-                    new ArrayList<>(member.get().getAlaCardAlaCardSettingMap().keySet());
-            if (shuffle) {
-                Collections.shuffle(alaCardList);
-            }
-            List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
-            return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
-        } else {
-            return new ArrayList<>();
+        Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        List<AlaCard> alaCardList = new ArrayList<>(member.getAlaCardAlaCardSettingMap().keySet());
+        if (shuffle) {
+            Collections.shuffle(alaCardList);
         }
+        List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
+        return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
     }
 }

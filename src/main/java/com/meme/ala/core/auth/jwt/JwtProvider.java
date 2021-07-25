@@ -21,9 +21,9 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     private final UserDetailsService userDetailsService;
+    private final long tokenValidTime = 30 * 60 * 1000L;
     @Value("${jwt.secret}")
     private String secretKey;
-    private final long tokenValidTime = 30 * 60 * 1000L;
 
     @PostConstruct
     protected void init() {
