@@ -19,5 +19,5 @@ public class WordCount {
     private Word word;
 
     @Builder.Default
-    private int count=0;
+    private int count = 0;
 }

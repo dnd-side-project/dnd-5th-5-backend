@@ -16,5 +16,5 @@ public class AlaCardSetting {
     private Font font;
 
     @Builder.Default
-    private Boolean isOpen=true;
+    private Boolean isOpen = true;
 }

@@ -23,34 +23,33 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String,String> loginOrJoin(Map<String, Object> data, String provider) {
-        Map<String,String> resultMap=new HashMap<>();
+    public Map<String, String> loginOrJoin(Map<String, Object> data, String provider) {
+        Map<String, String> resultMap = new HashMap<>();
         OAuthUserInfo authUserInfo;
-        if(provider.equals(OAuthProvider.GOOGLE)){
-            authUserInfo = new GoogleUser((Map<String, Object>)data.get("profileObj"));
-        }else if(provider.equals(OAuthProvider.NAVER)){
-            authUserInfo = new NaverUser((Map<String, Object>)data);
-        }else {
+        if (provider.equals(OAuthProvider.GOOGLE)) {
+            authUserInfo = new GoogleUser((Map<String, Object>) data.get("profileObj"));
+        } else if (provider.equals(OAuthProvider.NAVER)) {
+            authUserInfo = new NaverUser(data);
+        } else {
             throw new BusinessException(ErrorCode.METHOD_NOT_ALLOWED);
         }
         Optional<Member> optionalMember =
                 memberRepository.findByEmail(authUserInfo.getEmail());
-        if(!optionalMember.isPresent()){
-            join(authUserInfo,provider);
-            resultMap.put("message",ResponseMessage.JOIN);
-        }
-        else {
+        if (!optionalMember.isPresent()) {
+            join(authUserInfo, provider);
+            resultMap.put("message", ResponseMessage.JOIN);
+        } else {
             resultMap.put("message", ResponseMessage.LOGIN);
         }
-        String jwt=jwtTokenProvider.createToken(authUserInfo.getEmail());
-        resultMap.put("jwt",jwt);
+        String jwt = jwtTokenProvider.createToken(authUserInfo.getEmail());
+        resultMap.put("jwt", jwt);
         return resultMap;
     }
 
@@ -85,5 +84,11 @@ public class MemberServiceImpl implements MemberService{
     @Transactional(readOnly = true)
     public boolean existsNickname(String nickname) {
         return memberRepository.existsMemberByMemberSettingNickname(nickname);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByMemberSettingNickname(nickname);
     }
 }

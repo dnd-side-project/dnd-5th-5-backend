@@ -11,8 +11,13 @@ import com.meme.ala.domain.member.model.entity.cardSetting.Background;
 import com.meme.ala.domain.member.model.entity.cardSetting.Font;
 import org.bson.types.ObjectId;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EntityFactory {
     public static Member testMember(){
+        Map<AlaCard, AlaCardSetting> settingMap=new HashMap<>();
+        settingMap.put(EntityFactory.testAlaCard(),EntityFactory.testAlaCardSetting());
         return Member.builder()
                 .id(new ObjectId("60f3f89c9f21ff292724eb38"))
                 .email("test@gmail.com")
@@ -26,6 +31,7 @@ public class EntityFactory {
                         .statusMessage("너 자신을 ala")
                         .build()
                 )
+                .alaCardAlaCardSettingMap(settingMap)
                 .build();
     }
 
