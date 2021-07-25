@@ -13,10 +13,10 @@ import org.mapstruct.factory.Mappers;
 public interface MemberMapper {
     MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
-    @Mapping(target="nickname",source="memberSetting.nickname")
-    @Mapping(target="statusMessage",source="memberSetting.statusMessage")
-    @Mapping(target="imgUrl",source="memberSetting.imgUrl")
-    @Mapping(target="isOpen",source="memberSetting.isOpen")
+    @Mapping(target = "nickname", source = "memberSetting.nickname")
+    @Mapping(target = "statusMessage", source = "memberSetting.statusMessage")
+    @Mapping(target = "imgUrl", source = "memberSetting.imgUrl")
+    @Mapping(target = "isOpen", source = "memberSetting.isOpen")
     MemberPrincipalDto toPrincipalDto(Member member);
 
     void updateMemberSettingFromDto(MemberPrincipalDto dto, @MappingTarget MemberSetting memberSetting);

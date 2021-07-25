@@ -2,7 +2,7 @@ package com.meme.ala.core.auth.oauth;
 
 import java.util.Map;
 
-public class NaverUser implements OAuthUserInfo{
+public class NaverUser implements OAuthUserInfo {
     private Map<String, Object> attribute;
 
     public NaverUser(Map<String, Object> attribute) {
@@ -11,7 +11,7 @@ public class NaverUser implements OAuthUserInfo{
 
     @Override
     public String getProviderId() {
-        return (String)attribute.get("id");
+        return (String) attribute.get("id");
     }
 
     @Override
@@ -21,12 +21,12 @@ public class NaverUser implements OAuthUserInfo{
 
     @Override
     public String getEmail() {
-        return (String)attribute.get("email");
+        return (String) attribute.get("email");
     }
 
     @Override
     public String getName() {
-        return (String)attribute.get("name");
+        return (String) attribute.get("name");
     }
 
     @Override

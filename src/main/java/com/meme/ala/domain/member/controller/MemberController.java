@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value="/api/v1/member")
+@RequestMapping(value = "/api/v1/member")
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
@@ -20,20 +20,20 @@ public class MemberController {
     private final MemberMapper memberMapper;
 
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@CurrentUser Member member){
+    public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@CurrentUser Member member) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<ResponseDto<MemberPrincipalDto>> updateMember(@CurrentUser Member member, @RequestBody MemberPrincipalDto memberPrincipalDto){
+    public ResponseEntity<ResponseDto<MemberPrincipalDto>> updateMember(@CurrentUser Member member, @RequestBody MemberPrincipalDto memberPrincipalDto) {
         memberService.updateMember(member, memberPrincipalDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.UPDATE, memberMapper.toPrincipalDto(member)));
     }
 
     @GetMapping("/exists")
-    public ResponseEntity<ResponseDto<Boolean>> existsNickname(@RequestParam String nickname){
+    public ResponseEntity<ResponseDto<Boolean>> existsNickname(@RequestParam String nickname) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberService.existsNickname(nickname)));
     }

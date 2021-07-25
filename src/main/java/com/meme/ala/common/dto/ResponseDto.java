@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import java.util.Optional;
 
 @Getter
-public class ResponseDto<T>{
+public class ResponseDto<T> {
     private final int status;
     private final String message;
 

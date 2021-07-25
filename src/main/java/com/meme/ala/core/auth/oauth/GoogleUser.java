@@ -2,7 +2,7 @@ package com.meme.ala.core.auth.oauth;
 
 import java.util.Map;
 
-public class GoogleUser implements OAuthUserInfo{
+public class GoogleUser implements OAuthUserInfo {
     private Map<String, Object> attribute;
 
     public GoogleUser(Map<String, Object> attribute) {
@@ -11,7 +11,7 @@ public class GoogleUser implements OAuthUserInfo{
 
     @Override
     public String getProviderId() {
-        return (String)attribute.get("googleId");
+        return (String) attribute.get("googleId");
     }
 
     @Override
@@ -21,12 +21,12 @@ public class GoogleUser implements OAuthUserInfo{
 
     @Override
     public String getEmail() {
-        return (String)attribute.get("email");
+        return (String) attribute.get("email");
     }
 
     @Override
     public String getName() {
-        return (String)attribute.get("name");
+        return (String) attribute.get("name");
     }
 
     @Override

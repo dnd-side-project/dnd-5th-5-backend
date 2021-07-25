@@ -8,9 +8,13 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface MemberService {
-    public Map<String,String> loginOrJoin(Map<String, Object> data, String provider);
-    public void join(OAuthUserInfo authUserInfo, String provider);
-    public void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto);
-    public boolean existsNickname(String nickname);
-    public Optional<Member> findByNickname(String nickname);
+    Map<String, String> loginOrJoin(Map<String, Object> data, String provider);
+
+    void join(OAuthUserInfo authUserInfo, String provider);
+
+    void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto);
+
+    boolean existsNickname(String nickname);
+
+    Optional<Member> findByNickname(String nickname);
 }

@@ -13,13 +13,13 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
     private Member member;
 
-    public UserDetailsImpl(Member member){
-        this.member=member;
+    public UserDetailsImpl(Member member) {
+        this.member = member;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities=new ArrayList<>();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(member.getAuthority()));
         return authorities;
     }

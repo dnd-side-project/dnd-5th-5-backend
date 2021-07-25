@@ -24,8 +24,8 @@ public class Friend {
     private Member member;
 
     @Builder.Default
-    private List<ObjectId> pendings=new LinkedList<>();
+    private List<ObjectId> pendings = new LinkedList<>();
 
     @Builder.Default
-    private List<ObjectId> friends=new LinkedList<>();
+    private List<ObjectId> friends = new LinkedList<>();
 }

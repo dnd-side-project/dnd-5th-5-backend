@@ -15,7 +15,7 @@ public class AlaApplication {
     }
 
     @GetMapping("/ping")
-    public ResponseEntity<?> ping(){
+    public ResponseEntity<?> ping() {
         return ResponseEntity.ok("pong");
     }
 
