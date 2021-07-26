@@ -17,4 +17,6 @@ public interface MemberService {
     boolean existsNickname(String nickname);
 
     Optional<Member> findByNickname(String nickname);
+
+    void deleteMemberByNickname(String nickname);
 }

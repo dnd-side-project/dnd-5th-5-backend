@@ -37,4 +37,11 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberService.existsNickname(nickname)));
     }
+
+    @GetMapping("/delete")
+    public ResponseEntity<ResponseDto<String>> deleteMemberByNickname(@RequestParam String nickname) {
+        memberService.deleteMemberByNickname(nickname);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.DELETED));
+    }
 }

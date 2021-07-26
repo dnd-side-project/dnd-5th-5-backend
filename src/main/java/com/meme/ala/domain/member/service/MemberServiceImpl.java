@@ -77,7 +77,6 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto) {
         memberMapper.updateMemberSettingFromDto(memberPrincipalDto, newMember.getMemberSetting());
-        memberRepository.save(newMember);
     }
 
     @Override
@@ -90,5 +89,11 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(readOnly = true)
     public Optional<Member> findByNickname(String nickname) {
         return memberRepository.findByMemberSettingNickname(nickname);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMemberByNickname(String nickname) {
+        memberRepository.deleteMemberByMemberSettingNickname(nickname);
     }
 }
