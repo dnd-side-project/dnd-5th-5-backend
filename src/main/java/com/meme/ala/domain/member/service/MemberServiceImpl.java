@@ -77,6 +77,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto) {
         memberMapper.updateMemberSettingFromDto(memberPrincipalDto, newMember.getMemberSetting());
+        memberRepository.save(newMember);
     }
 
     @Override
