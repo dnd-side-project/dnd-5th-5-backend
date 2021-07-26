@@ -9,4 +9,5 @@ public class ResponseMessage {
     public static final String LOGIN = "login";
     public static final String JOIN = "join";
     public static final String UPDATE = "update";
+    public static final String DELETED = "deleted";
 }

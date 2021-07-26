@@ -91,4 +91,10 @@ public class MemberServiceImpl implements MemberService {
     public Optional<Member> findByNickname(String nickname) {
         return memberRepository.findByMemberSettingNickname(nickname);
     }
+
+    @Override
+    @Transactional
+    public void deleteMemberByNickname(String nickname) {
+        memberRepository.deleteMemberByMemberSettingNickname(nickname);
+    }
 }
