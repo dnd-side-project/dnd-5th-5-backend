@@ -1,34 +1,31 @@
-package com.meme.ala.domain.member.controller;
+package com.meme.ala.domain.friend.controller;
 
 import com.meme.ala.common.annotation.CurrentUser;
 import com.meme.ala.common.dto.ResponseDto;
 import com.meme.ala.common.message.ResponseMessage;
-import com.meme.ala.domain.member.model.dto.MemberFriendDto;
+import com.meme.ala.domain.friend.model.dto.FriendDto;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.model.mapper.MemberFriendMapper;
-import com.meme.ala.domain.member.model.mapper.MemberMapper;
-import com.meme.ala.domain.member.service.MemberFriendService;
-import com.meme.ala.domain.member.service.MemberService;
+import com.meme.ala.domain.friend.model.mapper.FriendMapper;
+import com.meme.ala.domain.friend.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping(value = "/api/v1/member")
+@RequestMapping(value = "/api/v1/friend")
 @RestController
 @RequiredArgsConstructor
-public class MemberFriendsController {
-    private final MemberFriendService memberFriendService;
-    private final MemberFriendMapper memberFriendMapper;
+public class FriendController {
+    private final FriendService memberFriendService;
+    private final FriendMapper memberFriendMapper;
 
-    @GetMapping("/me/friends")
-    public ResponseEntity<ResponseDto<List<MemberFriendDto>>> getMemberFriends(@CurrentUser Member member) {
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<FriendDto>>> getMemberFriends(@CurrentUser Member member) {
         List<Member> memberFriendList = memberFriendService.getMemberFriend(member);
 
         return ResponseEntity.status(HttpStatus.OK)

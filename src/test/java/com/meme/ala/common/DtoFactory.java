@@ -4,7 +4,7 @@ import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.MiddleCategoryDto;
 import com.meme.ala.domain.alacard.model.dto.request.SentenceComponentDto;
 import com.meme.ala.domain.alacard.model.dto.request.WordDto;
-import com.meme.ala.domain.member.model.dto.MemberFriendDto;
+import com.meme.ala.domain.friend.model.dto.FriendDto;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 
 public class DtoFactory {
@@ -33,8 +33,8 @@ public class DtoFactory {
                 ).build();
     }
 
-    public static MemberFriendDto testMemberFriendDto() {
-        return MemberFriendDto.builder()
+    public static FriendDto testMemberFriendDto() {
+        return FriendDto.builder()
                 .nickname("testNickname")
                 .statusMessage("너 자신을 ala")
                 .imgUrl("https://user-images.githubusercontent.com/46064193/126342816-399b6cfa-869c-485f-b676-a303af41f2ec.png")

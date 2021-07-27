@@ -1,4 +1,4 @@
-package com.meme.ala.domain.member.model.dto;
+package com.meme.ala.domain.friend.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class MemberFriendDto {
+public class FriendDto {
     private String nickname;
     private String statusMessage;
     private String imgUrl;

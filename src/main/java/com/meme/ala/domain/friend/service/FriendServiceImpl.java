@@ -1,10 +1,11 @@
-package com.meme.ala.domain.member.service;
+package com.meme.ala.domain.friend.service;
 
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.friend.service.FriendService;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.model.entity.MemberFriend;
-import com.meme.ala.domain.member.repository.MemberFriendRepository;
+import com.meme.ala.domain.friend.model.entity.Friend;
+import com.meme.ala.domain.friend.repository.FriendRepository;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,14 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class MemberFriendServiceImpl implements MemberFriendService {
-    private MemberFriendRepository memberFriendRepository;
+public class FriendServiceImpl implements FriendService {
+    private FriendRepository memberFriendRepository;
     private MemberRepository memberRepository;
 
     @Override
     @Transactional(readOnly = true)
     public List<Member> getMemberFriend(Member member) {
-        MemberFriend memberFriend = memberFriendRepository.findById(member.getId())
+        Friend memberFriend = memberFriendRepository.findById(member.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
         return memberFriend

@@ -1,13 +1,11 @@
-package com.meme.ala.domain.member.controller;
+package com.meme.ala.domain.friend.controller;
 
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.service.MemberFriendService;
-import org.junit.jupiter.api.DisplayName;
+import com.meme.ala.domain.friend.service.FriendService;
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -19,7 +17,6 @@ import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -27,10 +24,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MemberFriendControllerTest extends AbstractControllerTest {
+public class FriendControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private MemberFriendService memberFriendService;
+    private FriendService memberFriendService;
 
     @AlaWithAccount("test@gmail.com")
     @Test
@@ -40,12 +37,12 @@ public class MemberFriendControllerTest extends AbstractControllerTest {
 
         given(memberFriendService.getMemberFriend(any(Member.class))).willReturn(friends);
 
-        mockMvc.perform(get("/api/v1/member/me/friends"))
+        mockMvc.perform(get("/api/v1/friend"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(READ_MEMBER_FRIENDS))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].nickname").value("testNickname"))
                 .andDo(print())
-                .andDo(document("api/v1/member/me/friends",
+                .andDo(document("api/v1/friend",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         responseFields(
