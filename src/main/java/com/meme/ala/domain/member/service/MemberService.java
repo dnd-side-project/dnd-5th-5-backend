@@ -19,4 +19,5 @@ public interface MemberService {
     Optional<Member> findByNickname(String nickname);
 
     void deleteMemberByNickname(String nickname);
+
 }

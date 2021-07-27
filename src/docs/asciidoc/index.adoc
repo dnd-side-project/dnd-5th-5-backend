@@ -104,4 +104,13 @@ include::{snippets}/api/v1/alacard/wordlist/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/wordlist/response-fields.adoc[]
 
+== GET /api/v1/member/me/friends
 
+.request
+include::{snippets}/api/v1/friend/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/friend/response-fields.adoc[]
