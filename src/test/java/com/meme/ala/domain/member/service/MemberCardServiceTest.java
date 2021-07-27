@@ -34,18 +34,18 @@ public class MemberCardServiceTest {
 
     @DisplayName("멤버 카드 할당 테스트")
     @Test
-    public void 멤버_카드_할당_테스트() throws Exception{
+    public void 멤버_카드_할당_테스트() throws Exception {
         List<AlaCard> alaCardList = new ArrayList<>();
-        for(int i=0; i<defaultCardNum*2; i++){
-            AlaCard alaCard = AlaCard.builder().bigCategory("test"+ i).build();
+        for (int i = 0; i < defaultCardNum * 2; i++) {
+            AlaCard alaCard = AlaCard.builder().bigCategory("test" + i).build();
             alaCardList.add(alaCard);
         }
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
         when(memberRepository.existsMemberByMemberSettingNickname(any(String.class))).thenReturn(false);
         when(alaCardRepository.findAll()).thenReturn(alaCardList);
 
-        Member testMember= Member.builder().build();
-        memberCardService.assignCard(testMember,defaultCardNum);
+        Member testMember = Member.builder().build();
+        memberCardService.assignCard(testMember, defaultCardNum);
 
         testMember.getAlaCardAlaCardSettingMap().keySet().forEach(alaCard -> System.out.println(alaCard.getBigCategory()));
         assertThat(testMember.getAlaCardAlaCardSettingMap().values().size()).isEqualTo(defaultCardNum);
