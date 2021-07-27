@@ -3,6 +3,7 @@ package com.meme.ala.domain.member.service;
 import com.meme.ala.core.auth.oauth.OAuthUserInfo;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.model.entity.MemberFriend;
 
 import java.util.Map;
 import java.util.Optional;
@@ -19,4 +20,5 @@ public interface MemberService {
     Optional<Member> findByNickname(String nickname);
 
     void deleteMemberByNickname(String nickname);
+
 }
