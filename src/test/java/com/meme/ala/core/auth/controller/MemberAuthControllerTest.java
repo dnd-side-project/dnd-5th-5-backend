@@ -31,8 +31,8 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
     @DisplayName("구글 OAuth 로그인/가입 테스트")
     @Test
-    public void 구글_OAuth_로그인_유닛테스트() throws Exception{
-        String sampleRequestBody=
+    public void 구글_OAuth_로그인_유닛테스트() throws Exception {
+        String sampleRequestBody =
                 "{\n" +
                         "  \"profileObj\": {\n" +
                         "    \"googleId\": \"1155\",\n" +
@@ -44,7 +44,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         "  }\n" +
                         "}";
         when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.GOOGLE))
-                .thenReturn(new HashMap<String,String>() {{
+                .thenReturn(new HashMap<String, String>() {{
                     put("jwt", "dummy token");
                     put("message", ResponseMessage.LOGIN);
                 }});
@@ -65,7 +65,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                                 fieldWithPath("profileObj.name").description("사용자 이름"),
                                 fieldWithPath("profileObj.givenName").description("given name"),
                                 fieldWithPath("profileObj.familyName").description("family name")
-                        ),                   
+                        ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("기존 사용자: LOGIN / 신규 사용자: JOIN"),
@@ -76,16 +76,16 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void 네이버_OAuth_로그인_유닛테스트() throws Exception{
-        String sampleRequestBody=
+    public void 네이버_OAuth_로그인_유닛테스트() throws Exception {
+        String sampleRequestBody =
                 "  {\n" +
                         "    \"id\": \"afdasfdadsf\",\n" +
                         "    \"profile_image\": \"https://user-images.githubusercontent.com/46064193/125324764-2bc8e200-e37b-11eb-8d07-9ac29d0d1b1a.png\",\n" +
                         "    \"email\": \"test@gmail.com\",\n" +
                         "    \"name\": \"Jongmin Jung\"}";
 
-        when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class),OAuthProvider.NAVER))
-                .thenReturn(new HashMap<String,String>() {{
+        when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.NAVER))
+                .thenReturn(new HashMap<String, String>() {{
                     put("jwt", "dummy token");
                     put("message", ResponseMessage.JOIN);
                 }});
