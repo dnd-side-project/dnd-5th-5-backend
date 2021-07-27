@@ -7,6 +7,7 @@ import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
 import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.service.MemberCardService;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import java.util.List;
 public class AlaCardServiceImpl implements AlaCardService {
     private final AlaCardRepository alaCardRepository;
     private final MemberService memberService;
+    private final MemberCardService memberCardService;
     private final AlaCardSaveMapper alaCardSaveMapper;
     @Value("${alacard.maxwords}")
     private int maxWords;
@@ -36,7 +38,7 @@ public class AlaCardServiceImpl implements AlaCardService {
     @Transactional(readOnly = true)
     public List<SelectionWordDto> getWordList(String nickname, Boolean shuffle) {
         Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-        List<AlaCard> alaCardList = new ArrayList<>(member.getAlaCardAlaCardSettingMap().keySet());
+        List<AlaCard> alaCardList = memberCardService.getAlaCardListFromMember(member);
         if (shuffle) {
             Collections.shuffle(alaCardList);
         }

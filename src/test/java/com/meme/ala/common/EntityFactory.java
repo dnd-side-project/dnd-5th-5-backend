@@ -4,6 +4,7 @@ import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceComponent;
 import com.meme.ala.domain.alacard.model.entity.Word;
+import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
@@ -11,13 +12,16 @@ import com.meme.ala.domain.member.model.entity.cardSetting.Background;
 import com.meme.ala.domain.member.model.entity.cardSetting.Font;
 import org.bson.types.ObjectId;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EntityFactory {
-    public static Member testMember(){
-        Map<AlaCard, AlaCardSetting> settingMap=new HashMap<>();
-        settingMap.put(EntityFactory.testAlaCard(),EntityFactory.testAlaCardSetting());
+    public static Member testMember() {
+        List<AlaCardSettingPair> alaCardSettingPairList = new LinkedList<>();
+        alaCardSettingPairList.add(AlaCardSettingPair.builder()
+                .alaCard(EntityFactory.testAlaCard())
+                .alaCardSetting(EntityFactory.testAlaCardSetting())
+                .build());
         return Member.builder()
                 .id(new ObjectId("60f3f89c9f21ff292724eb38"))
                 .email("test@gmail.com")
@@ -31,7 +35,7 @@ public class EntityFactory {
                         .statusMessage("너 자신을 ala")
                         .build()
                 )
-                .alaCardAlaCardSettingMap(settingMap)
+                .alaCardSettingPairList(alaCardSettingPairList)
                 .build();
     }
 
