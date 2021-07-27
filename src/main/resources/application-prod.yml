@@ -2,3 +2,5 @@ jwt:
   secret: alasecret
 alacard:
   maxwords: 50
+member:
+  alacardnum: 4

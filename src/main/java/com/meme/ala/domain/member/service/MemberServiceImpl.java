@@ -14,6 +14,7 @@ import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +25,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
+    @Value("${member.alacardnum}")
+    private int defaultCardNum;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
+    private final MemberCardService memberCardService;
 
     @Override
     @Transactional(readOnly = true)
@@ -70,6 +74,7 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+        memberCardService.assignCard(newMember, defaultCardNum);
         memberRepository.save(newMember);
     }
 

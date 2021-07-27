@@ -54,6 +54,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    compile group: 'com.github.ben-manes.caffeine', name: 'caffeine'
 }
 
 
