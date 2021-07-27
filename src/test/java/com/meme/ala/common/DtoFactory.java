@@ -7,6 +7,9 @@ import com.meme.ala.domain.alacard.model.dto.request.WordDto;
 import com.meme.ala.domain.friend.model.dto.FriendDto;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class DtoFactory {
     public static MemberPrincipalDto testMemberPrincipalDto() {
         return MemberPrincipalDto.builder()
@@ -18,19 +21,25 @@ public class DtoFactory {
                 .build();
     }
 
-    public static AlaCardSaveDto alaCardSaveDto(){
-        return AlaCardSaveDto.builder()
-                .bigCategory("test")
-                .middleCategoryItem(MiddleCategoryDto.builder()
+    public static AlaCardSaveDto alaCardSaveDto() {
+        List<WordDto> wordDtoList = Arrays.asList(
+                new WordDto("공부"),
+                new WordDto("수영"),
+                new WordDto("테스트")
+        );
+        List<MiddleCategoryDto> middleCategoryDtoList = Arrays.asList(
+                MiddleCategoryDto.builder()
                         .middleCategoryName("testMiddle")
                         .hint("testHint")
                         .prefix("???는 ")
                         .form("???하는 것을 좋아")
                         .sentenceComponent(SentenceComponentDto.builder().eomi("한다").josa("하고, ").build())
-                        .wordItem(WordDto.builder().wordName("공부").build())
-                        .wordItem(WordDto.builder().wordName("수영").build())
-                        .wordItem(WordDto.builder().wordName("테스트").build()).build()
-                ).build();
+                        .wordList(wordDtoList).build()
+        );
+        return AlaCardSaveDto.builder()
+                .bigCategory("test")
+                .middleCategoryList(middleCategoryDtoList)
+                .build();
     }
 
     public static FriendDto testMemberFriendDto() {
