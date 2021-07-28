@@ -1,11 +1,15 @@
 package com.meme.ala.domain.alacard.controller;
 
+import com.meme.ala.common.annotation.CurrentUser;
 import com.meme.ala.common.dto.ResponseDto;
 import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
+import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.service.MemberCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,7 @@ import java.util.List;
 @RestController
 public class AlaCardController {
     private final AlaCardService alaCardService;
+    private final MemberCardService memberCardService;
 
     @PostMapping
     public ResponseEntity<ResponseDto<AlaCardSaveDto>> alaCardSave(@RequestBody AlaCardSaveDto dto) {
@@ -31,5 +36,12 @@ public class AlaCardController {
         List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname, true);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
+    }
+
+    @GetMapping("/alacardlist")
+    public ResponseEntity<ResponseDto<List<AlaCardDto>>> alacardlist(@CurrentUser Member member) {
+        List<AlaCardDto> alaCardDtoList = memberCardService.getAlaCardDtoList(member);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardDtoList));
     }
 }

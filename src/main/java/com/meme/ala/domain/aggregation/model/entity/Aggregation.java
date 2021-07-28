@@ -20,8 +20,7 @@ public class Aggregation {
     @Id
     private ObjectId id;
 
-    @DBRef(lazy = true)
-    private Member member;
+    private ObjectId memberId;
 
     @Builder.Default
     List<WordCount> wordCountList = new LinkedList<>();

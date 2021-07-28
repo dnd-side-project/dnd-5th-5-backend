@@ -1,9 +1,13 @@
 package com.meme.ala.common;
 
+import com.meme.ala.domain.aggregation.model.dto.response.WordCountDto;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.MiddleCategoryDto;
 import com.meme.ala.domain.alacard.model.dto.request.SentenceComponentDto;
 import com.meme.ala.domain.alacard.model.dto.request.WordDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
+import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.friend.model.dto.FriendDto;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 
@@ -47,6 +51,39 @@ public class DtoFactory {
                 .nickname("testNickname")
                 .statusMessage("너 자신을 ala")
                 .imgUrl("https://user-images.githubusercontent.com/46064193/126342816-399b6cfa-869c-485f-b676-a303af41f2ec.png")
+                .build();
+    }
+
+    public static WordCountDto testWordCountDto() {
+        return WordCountDto.builder()
+                .count(10)
+                .wordName("testWord")
+                .build();
+    }
+
+    public static AlaCardDto testAlaCardDto() {
+        return AlaCardDto.builder()
+                .selectedWordList(Arrays.asList(DtoFactory.testWordCountDto()))
+                .sentence("testSentence")
+                .alaCardSettingDto(testAlaCardSettingDto())
+                .build();
+    }
+
+    public static AlaCardSettingDto testAlaCardSettingDto() {
+        return AlaCardSettingDto.builder()
+                .backgroundColor("#fffff")
+                .font("sans")
+                .fontColor("FFFFFF")
+                .isOpen(true)
+                .build();
+    }
+
+    public static SelectionWordDto testSelectionWordDto() {
+        return SelectionWordDto.builder()
+                .wordName("testWord")
+                .middleCategory("testMiddle")
+                .hint("testHint")
+                .bigCategory("test")
                 .build();
     }
 }

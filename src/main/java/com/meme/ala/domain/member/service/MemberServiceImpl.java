@@ -31,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
     private final MemberCardService memberCardService;
+    private final MemberAggregationService memberAggregationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -75,6 +76,7 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         memberCardService.assignCard(newMember, defaultCardNum);
+        memberAggregationService.initAggregation(newMember);
         memberRepository.save(newMember);
     }
 
