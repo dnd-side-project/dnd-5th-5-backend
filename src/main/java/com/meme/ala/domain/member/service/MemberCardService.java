@@ -9,4 +9,6 @@ public interface MemberCardService {
     public void assignCard(Member member, int num);
 
     public List<AlaCard> getAlaCardList();
+
+    public List<AlaCard> getAlaCardListFromMember(Member member);
 }

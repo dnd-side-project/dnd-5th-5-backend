@@ -47,7 +47,8 @@ public class MemberCardServiceTest {
         Member testMember = Member.builder().build();
         memberCardService.assignCard(testMember, defaultCardNum);
 
-        testMember.getAlaCardAlaCardSettingMap().keySet().forEach(alaCard -> System.out.println(alaCard.getBigCategory()));
-        assertThat(testMember.getAlaCardAlaCardSettingMap().values().size()).isEqualTo(defaultCardNum);
+        testMember.getAlaCardSettingPairList()
+                .forEach(alaCardSettingPair -> System.out.println(alaCardSettingPair.getAlaCard().getBigCategory()));
+        assertThat(testMember.getAlaCardSettingPairList().size()).isEqualTo(defaultCardNum);
     }
 }
