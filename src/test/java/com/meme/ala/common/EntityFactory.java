@@ -4,6 +4,7 @@ import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceComponent;
 import com.meme.ala.domain.alacard.model.entity.Word;
+import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
@@ -12,10 +13,16 @@ import com.meme.ala.domain.member.model.entity.cardSetting.Background;
 import com.meme.ala.domain.member.model.entity.cardSetting.Font;
 import org.bson.types.ObjectId;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class EntityFactory {
+    public static String testObjectId(){
+
+        return "00000000000000000000000";
+    }
+
     public static Member testMember() {
         List<AlaCardSettingPair> alaCardSettingPairList = new LinkedList<>();
         alaCardSettingPairList.add(AlaCardSettingPair.builder()
@@ -63,6 +70,17 @@ public class EntityFactory {
                 )
                 .font(Font.builder().font("sans").build())
                 .isOpen(true)
+                .build();
+    }
+
+    public static FriendInfo testFriendInfo() {
+        List<ObjectId> friends = new LinkedList<>(Arrays.asList(new ObjectId(testObjectId() + "2"), new ObjectId(testObjectId() + "3")));
+        List<ObjectId> pendings = new LinkedList<>(Arrays.asList(new ObjectId(testObjectId() + "4"), new ObjectId(testObjectId() + "5")));
+
+        return FriendInfo.builder()
+                .memberId(new ObjectId(testObjectId() + "1"))
+                .friends(friends)
+                .pendings(pendings)
                 .build();
     }
 
