@@ -91,7 +91,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].selectedWordList[*].wordName").description("선택된단어"),
                                 fieldWithPath("data[*].selectedWordList[*].count").description("선택된단어횟수"),
                                 fieldWithPath("data[*].alaCardSettingDto").description("알라카드 세팅정보"),
-                                fieldWithPath("data[*].alaCardSettingDto.backgroundColor").description("배경 색"),
+                                fieldWithPath("data[*].alaCardSettingDto.backgroundImgUrl").description("배경 이미지"),
                                 fieldWithPath("data[*].alaCardSettingDto.fontColor").description("글씨 색"),
                                 fieldWithPath("data[*].alaCardSettingDto.font").description("글씨체"),
                                 fieldWithPath("data[*].alaCardSettingDto.isOpen").description("카드 공개 여부"),

@@ -59,7 +59,7 @@ public class EntityFactory {
         return AlaCardSetting.builder()
                 .background(Background.builder()
                         .fontColor("FFFFFF")
-                        .backgroundColor("#fffff")
+                        .imgUrl("http://test/background.jpg")
                         .build()
                 )
                 .font(Font.builder().fontName("sans").build())

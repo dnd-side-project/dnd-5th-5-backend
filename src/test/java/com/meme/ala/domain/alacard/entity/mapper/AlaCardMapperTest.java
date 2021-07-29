@@ -33,6 +33,6 @@ public class AlaCardMapperTest {
         assertEquals(mappedDto.getSelectedWordList().get(0).getWordName(), alaCardDto.getSelectedWordList().get(0).getWordName());
         assertEquals(mappedDto.getAlaCardSettingDto().getFont(), alaCardDto.getAlaCardSettingDto().getFont());
         assertEquals(mappedDto.getAlaCardSettingDto().getFontColor(), alaCardDto.getAlaCardSettingDto().getFontColor());
-        assertEquals(mappedDto.getAlaCardSettingDto().getBackgroundColor(), alaCardDto.getAlaCardSettingDto().getBackgroundColor());
+        assertEquals(mappedDto.getAlaCardSettingDto().getBackgroundImgUrl(), alaCardDto.getAlaCardSettingDto().getBackgroundImgUrl());
     }
 }

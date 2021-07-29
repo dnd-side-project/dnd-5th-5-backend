@@ -71,7 +71,7 @@ public class AlaCardServiceImpl implements AlaCardService {
                         AlaCardSetting.builder()
                                 .background(Background.builder()
                                         .fontColor("#ffffff")
-                                        .backgroundColor("#000000")
+                                        .imgUrl("https://user-images.githubusercontent.com/46064193/127431607-cd319904-0147-4ccc-8880-373ca25f2d8a.png")
                                         .build())
                                 .font(Font.builder()
                                         .fontName("noto sans")
