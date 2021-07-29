@@ -1,6 +1,7 @@
 package com.meme.ala.domain.friend.service;
 
 import com.meme.ala.core.error.ErrorCode;
+import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -45,11 +46,15 @@ public class FriendServiceImpl implements FriendService {
         FriendInfo followingFriendInfo = friendInfoRepository.findById(following.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
+        if(isFriend(member, following))
+            throw new BusinessException(ErrorCode.ALREADY_FRIEND);
+
         followingFriendInfo.getPendings().add(member.getId());
 
         friendInfoRepository.save(followingFriendInfo);
     }
 
+    @Override
     @Transactional
     public void acceptMemberFriend(Member member, String followerNickname){
         Member follower = memberRepository.findByMemberSettingNickname(followerNickname)
@@ -71,6 +76,13 @@ public class FriendServiceImpl implements FriendService {
         followerFriendInfo.getFriends().add(member.getId());
 
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, followerFriendInfo));
+    }
+
+    public boolean isFriend(Member member, Member following){
+        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
+                    .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        return memberFriendInfo.getFriends().contains(following.getId());
     }
 
 }

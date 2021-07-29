@@ -39,6 +39,11 @@ class FriendServiceTest {
     void addMemberFriend() {
         Member member = EntityFactory.testMember(); // objectId : 60f3f89c9f21ff292724eb38
 
+        FriendInfo memberFriendInfo = EntityFactory.testFriendInfo();
+        memberFriendInfo.setMemberId(member.getId());
+        memberFriendInfo.setFriends(new LinkedList<>());
+        memberFriendInfo.setPendings(new LinkedList<>());
+
         Member following = EntityFactory.testMember(); // // objectId : 000000000000000000000001
         following.setId(new ObjectId(EntityFactory.testObjectId() + "1"));
         following.getMemberSetting().setNickname("friendNickname");
@@ -47,6 +52,7 @@ class FriendServiceTest {
 
         given(memberRepository.findByMemberSettingNickname(eq(following.getMemberSetting().getNickname()))).willReturn(Optional.of(following));
         given(friendInfoRepository.findById(eq(following.getId()))).willReturn(Optional.of(followingFriendInfo));
+        given(friendInfoRepository.findById(eq(member.getId()))).willReturn(Optional.of(memberFriendInfo));
 
         friendService.addMemberFriend(member, "friendNickname");
 
