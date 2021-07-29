@@ -76,4 +76,21 @@ public class FriendControllerTest extends AbstractControllerTest {
                         )
                 ));
     }
+
+    @AlaWithAccount("test@gmail.com")
+    @Test
+    public void 사용자_친구_수락_테스트() throws Exception{
+
+        mockMvc.perform(post("/api/v1/friend/accept/{nickname}", "testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SUCCESS))
+                .andDo(print())
+                .andDo(document("api/v1/friend/accept/nickname",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("nickname").description("친구 닉네임")
+                        )
+                ));
+    }
 }

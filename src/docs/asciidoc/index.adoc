@@ -126,4 +126,15 @@ include::{snippets}/api/v1/friend/nickname/path-parameters.adoc[]
 .response
 include::{snippets}/api/v1/friend/nickname/http-response.adoc[]
 
+== POST /api/v1/friend/accept/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/accept/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/accept/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/accept/nickname/http-response.adoc[]
+
 

@@ -40,4 +40,12 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
     }
+
+    @PostMapping("/accept/{nickname}")
+    public ResponseEntity<ResponseDto> acceptMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
+        friendService.acceptMemberFriend(member, nickname);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
+    }
 }
