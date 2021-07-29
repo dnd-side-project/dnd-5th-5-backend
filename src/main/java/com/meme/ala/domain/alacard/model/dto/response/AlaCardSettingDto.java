@@ -10,7 +10,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class AlaCardSettingDto {
-    private String backgroundColor;
+    private String backgroundImgUrl;
     private String fontColor;
     private String font;
     private Boolean isOpen;

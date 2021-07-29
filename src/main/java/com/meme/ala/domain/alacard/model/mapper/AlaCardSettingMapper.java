@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 public interface AlaCardSettingMapper {
     AlaCardSettingMapper INSTANCE = Mappers.getMapper(AlaCardSettingMapper.class);
 
-    @Mapping(target = "backgroundColor", source = "background.backgroundColor")
+    @Mapping(target = "backgroundImgUrl", source = "background.imgUrl")
     @Mapping(target = "fontColor", source = "background.fontColor")
     @Mapping(target = "font", source = "font.fontName")
     AlaCardSettingDto toDto(AlaCardSetting alaCardSetting);
