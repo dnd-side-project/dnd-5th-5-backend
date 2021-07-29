@@ -121,7 +121,7 @@ public class AlaCardServiceImpl implements AlaCardService {
         } else if (idx == size - 1) {
             return formSentence + middleCategory.getSentenceComponent().getEomi();
         } else {
-            return formSentence + middleCategory.getSentenceComponent().getEomi();
+            return formSentence + middleCategory.getSentenceComponent().getJosa();
         }
     }
 }
