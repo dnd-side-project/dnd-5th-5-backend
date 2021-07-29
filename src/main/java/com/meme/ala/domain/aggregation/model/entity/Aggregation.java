@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-@Document(collection = "Aggregation")
+@Document(collection = "AGGREGATION")
 public class Aggregation {
     @Id
     private ObjectId id;
