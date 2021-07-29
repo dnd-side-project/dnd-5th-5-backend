@@ -8,6 +8,7 @@ import com.meme.ala.core.auth.oauth.OAuthProvider;
 import com.meme.ala.core.auth.oauth.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
@@ -31,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
     private final MemberCardService memberCardService;
+    private final AggregationService aggregationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -75,6 +77,7 @@ public class MemberServiceImpl implements MemberService {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
         memberCardService.assignCard(newMember, defaultCardNum);
+        aggregationService.initAggregation(newMember);
         memberRepository.save(newMember);
     }
 

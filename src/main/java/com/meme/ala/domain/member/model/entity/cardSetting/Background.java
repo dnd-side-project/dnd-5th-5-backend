@@ -15,7 +15,7 @@ public class Background {
     @Id
     private ObjectId id;
 
-    private String imgUrl;
+    private String backgroundColor;
 
     private String fontColor;
 }

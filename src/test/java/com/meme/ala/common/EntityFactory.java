@@ -1,5 +1,6 @@
 package com.meme.ala.common;
 
+import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceComponent;
@@ -58,12 +59,20 @@ public class EntityFactory {
         return AlaCardSetting.builder()
                 .background(Background.builder()
                         .fontColor("FFFFFF")
-                        .imgUrl("http://test")
+                        .backgroundColor("#fffff")
                         .build()
                 )
-                .font(Font.builder().font("sans").build())
+                .font(Font.builder().fontName("sans").build())
                 .isOpen(true)
                 .build();
     }
 
+    public static WordCount testWordCount() {
+        return WordCount.builder()
+                .word(Word.builder().wordName("testWord")
+                        .build())
+                .middleCategoryName("testMiddle")
+                .count(10)
+                .build();
+    }
 }

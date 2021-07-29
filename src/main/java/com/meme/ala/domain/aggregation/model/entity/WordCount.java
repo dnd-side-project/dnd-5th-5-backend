@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Getter
 @Builder
@@ -15,7 +14,6 @@ public class WordCount {
 
     private String middleCategoryName;
 
-    @DBRef(lazy = true)
     private Word word;
 
     @Builder.Default
