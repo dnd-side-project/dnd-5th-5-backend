@@ -72,7 +72,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     public void 사용자의_문장_리스트와_단어_카운트를_제공하는_테스트() throws Exception {
         List<AlaCardDto> alaCardDtoList = new LinkedList<>(Arrays.asList(DtoFactory.testAlaCardDto()));
 
-        given(memberCardService.getAlaCardDtoList(any(Member.class))).willReturn(alaCardDtoList);
+        given(alaCardService.getAlaCardDtoList(any(Member.class))).willReturn(alaCardDtoList);
 
         mockMvc.perform(get("/api/v1/alacard/alacardlist"))
                 .andExpect(status().isOk())

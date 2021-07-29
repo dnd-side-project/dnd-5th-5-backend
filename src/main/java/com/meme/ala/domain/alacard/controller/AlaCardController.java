@@ -22,7 +22,6 @@ import java.util.List;
 @RestController
 public class AlaCardController {
     private final AlaCardService alaCardService;
-    private final MemberCardService memberCardService;
 
     @PostMapping
     public ResponseEntity<ResponseDto<AlaCardSaveDto>> alaCardSave(@RequestBody AlaCardSaveDto dto) {
@@ -40,7 +39,7 @@ public class AlaCardController {
 
     @GetMapping("/alacardlist")
     public ResponseEntity<ResponseDto<List<AlaCardDto>>> alacardlist(@CurrentUser Member member) {
-        List<AlaCardDto> alaCardDtoList = memberCardService.getAlaCardDtoList(member);
+        List<AlaCardDto> alaCardDtoList = alaCardService.getAlaCardDtoList(member);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardDtoList));
     }

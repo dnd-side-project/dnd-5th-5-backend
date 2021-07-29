@@ -13,8 +13,4 @@ public interface MemberCardService {
     public List<AlaCard> getAlaCardList();
 
     public List<AlaCard> getAlaCardListFromMember(Member member);
-
-    public List<AlaCardDto> getAlaCardDtoList(Member member);
-
-    public SentenceWord toSentence(AlaCard alaCard, Member member);
 }
