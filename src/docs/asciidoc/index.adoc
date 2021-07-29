@@ -115,7 +115,7 @@ include::{snippets}/api/v1/alacard/alacardlist/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/alacardlist/response-fields.adoc[]
 
-== GET /api/v1/member/me/friends
+== GET /api/v1/friend
 
 .request
 include::{snippets}/api/v1/friend/http-request.adoc[]
@@ -125,3 +125,27 @@ include::{snippets}/api/v1/friend/http-response.adoc[]
 
 .response fields
 include::{snippets}/api/v1/friend/response-fields.adoc[]
+
+== POST /api/v1/friend/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/nickname/http-response.adoc[]
+
+== POST /api/v1/friend/accept/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/accept/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/accept/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/accept/nickname/http-response.adoc[]
+
+

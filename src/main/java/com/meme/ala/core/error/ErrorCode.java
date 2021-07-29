@@ -14,7 +14,11 @@ public enum ErrorCode {
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 
     // Member
-    EMAIL_DUPLICATION(400, "M001", "Email is Duplication");
+    EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
+
+    // Friend
+    ALREADY_FRIEND(400, "F001", "Already Friend");
+
     private final String code;
     private final String message;
     private int status;

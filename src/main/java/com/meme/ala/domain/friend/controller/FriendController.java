@@ -10,9 +10,7 @@ import com.meme.ala.domain.friend.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,16 +19,33 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class FriendController {
-    private final FriendService memberFriendService;
-    private final FriendMapper memberFriendMapper;
+    private final FriendService friendService;
+    private final FriendMapper friendMapper;
 
     @GetMapping
     public ResponseEntity<ResponseDto<List<FriendDto>>> getMemberFriends(@CurrentUser Member member) {
-        List<Member> memberFriendList = memberFriendService.getMemberFriend(member);
+        List<Member> memberFriendList = friendService.getMemberFriend(member);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.READ_MEMBER_FRIENDS,
-                        memberFriendList.stream().map(memberFriendMapper::toMemberFriendDtoFromMember).collect(Collectors.toList()))
+                        memberFriendList.stream().map(friendMapper::toMemberFriendDtoFromMember).collect(Collectors.toList()))
                 );
+    }
+
+
+    @PostMapping("/{nickname}")
+    public ResponseEntity<ResponseDto> addMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
+        friendService.addMemberFriend(member, nickname);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                    .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
+    }
+
+    @PostMapping("/accept/{nickname}")
+    public ResponseEntity<ResponseDto> acceptMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
+        friendService.acceptMemberFriend(member, nickname);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
     }
 }

@@ -14,8 +14,8 @@ import java.util.List;
 @Getter @Setter
 @Builder
 @AllArgsConstructor
-@Document(collection = "FRIEND")
-public class Friend {
+@Document(collection = "FRIEND_INFO")
+public class FriendInfo {
 
     @Id
     private ObjectId memberId;
