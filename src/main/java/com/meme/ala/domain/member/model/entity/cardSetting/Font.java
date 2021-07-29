@@ -15,5 +15,5 @@ public class Font {
     @Id
     private ObjectId id;
 
-    private String font;
+    private String fontName;
 }
