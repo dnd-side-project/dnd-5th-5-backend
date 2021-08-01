@@ -41,6 +41,12 @@ public class AggregationServiceImpl implements AggregationService {
         aggregationRepository.save(aggregation);
     }
 
+    @Override
+    @Transactional
+    public void save(Aggregation aggregation) {
+        aggregationRepository.save(aggregation);
+    }
+
     private List<List<WordCount>> toNestedWordCountList(AlaCardSettingPair alaCardSettingPair) {
         return alaCardSettingPair.getAlaCard().getMiddleCategoryList().stream()
                 .map(middleCategory -> toWordCountList(middleCategory, alaCardSettingPair.getAlaCard().getId()))
