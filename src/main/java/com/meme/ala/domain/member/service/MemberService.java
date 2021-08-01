@@ -20,4 +20,5 @@ public interface MemberService {
 
     void deleteMemberByNickname(String nickname);
 
+    String shareLink(String nickname);
 }

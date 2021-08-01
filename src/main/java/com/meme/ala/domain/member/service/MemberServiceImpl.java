@@ -105,4 +105,9 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMemberByNickname(String nickname) {
         memberRepository.deleteMemberByMemberSettingNickname(nickname);
     }
+
+    @Override
+    public String shareLink(String nickname) {
+        return null;
+    }
 }
