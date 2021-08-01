@@ -28,6 +28,8 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
     @Value("${member.alacardnum}")
     private int defaultCardNum;
+    @Value("${frontdomain}")
+    private String frontUrl;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
@@ -104,5 +106,16 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void deleteMemberByNickname(String nickname) {
         memberRepository.deleteMemberByMemberSettingNickname(nickname);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String shareSelectLink(String nickname) {
+        return frontUrl + "select/" + nickname;
+    }
+
+    @Override
+    public String shareMyPageLink(String nickname) {
+        return frontUrl + "mypage/" + nickname;
     }
 }

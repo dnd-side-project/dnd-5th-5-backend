@@ -7,6 +7,7 @@ import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.*;
 import org.mockito.AdditionalAnswers;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -28,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberControllerTest extends AbstractControllerTest {
     @MockBean
     private MemberRepository memberRepository;
+    @Value("${frontdomain}")
+    private String frontUrl;
 
     @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자 세팅 정보를 읽어오는 테스트")
@@ -142,6 +145,50 @@ public class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("삭제 여부"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @DisplayName("사용자 닉네임으로 셀렉뷰 공유 링크")
+    @Test
+    public void 사용자_닉네임으로_셀렉뷰_공유_링크() throws Exception{
+        mockMvc.perform(get("/api/v1/member/sharelink?nickname=testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(frontUrl+"select/"+"testNickname"))
+                .andDo(print())
+                .andDo(document("api/v1/member/sharelink",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("nickname").description("닉네임")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("사용자 셀렉뷰 공유 링크"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @DisplayName("사용자 닉네임으로 마이페이지 공유 링크")
+    @Test
+    public void 사용자_닉네임으로_마이페이지_공유_링크() throws Exception{
+        mockMvc.perform(get("/api/v1/member/mypagelink?nickname=testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(frontUrl+"mypage/"+"testNickname"))
+                .andDo(print())
+                .andDo(document("api/v1/member/mypagelink",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("nickname").description("닉네임")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("사용자 마이페이지 공유 링크"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

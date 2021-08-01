@@ -44,4 +44,16 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.DELETED));
     }
+
+    @GetMapping("/sharelink")
+    public ResponseEntity<ResponseDto<String>> getShareSelectLink(@RequestParam String nickname) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberService.shareSelectLink(nickname)));
+    }
+
+    @GetMapping("/mypagelink")
+    public ResponseEntity<ResponseDto<String>> getMypageLink(@RequestParam String nickname) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberService.shareMyPageLink(nickname)));
+    }
 }
