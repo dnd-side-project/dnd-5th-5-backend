@@ -3,14 +3,17 @@ package com.meme.ala.domain.alacard.controller;
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.DtoFactory;
 import com.meme.ala.common.EntityFactory;
+import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.core.config.AlaWithAccount;
+import com.meme.ala.domain.aggregation.model.entity.Aggregation;
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.service.MemberCardService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
@@ -21,20 +24,22 @@ import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AlaCardControllerTest extends AbstractControllerTest {
     @MockBean
-    private MemberCardService memberCardService;
-    @MockBean
     private AlaCardService alaCardService;
+    @MockBean
+    private AggregationService aggregationService;
+
     private Member testMember = EntityFactory.testMember();
 
     @DisplayName("알라 카드의 단어 리스트를 제공하는 테스트")
@@ -47,7 +52,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bigCategory").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].middleCategory").value("testMiddle"))
                 .andDo(print())
-                .andDo(document("api/v1/alacard/wordlist",
+                .andDo(document("api/v1/alacard/wordlist/get",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
@@ -95,6 +100,50 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].alaCardSettingDto.fontColor").description("글씨 색"),
                                 fieldWithPath("data[*].alaCardSettingDto.font").description("글씨체"),
                                 fieldWithPath("data[*].alaCardSettingDto.isOpen").description("카드 공개 여부"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @DisplayName("사용자의 단어 리스트를 제출받는 테스트")
+    @Test
+    public void 사용자의_단어_리스트를_제출받는_테스트() throws Exception {
+        String sampleRequestBody =
+                "{\n" +
+                        "  \"words\": [\n" +
+                        "    {\n" +
+                        "      \"bigCategory\": \"test\",\n" +
+                        "      \"middleCategory\": \"testMiddle\",\n" +
+                        "      \"hint\": \"testHint\",\n" +
+                        "      \"wordName\": \"testWord\"\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}";
+
+        doNothing().when(alaCardService).submitWordList(any(Member.class), any(Aggregation.class), any(List.class));
+        given(aggregationService.findByMember(any(Member.class))).willReturn(EntityFactory.testAggregation());
+
+        mockMvc.perform(post("/api/v1/alacard/wordlist")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(sampleRequestBody))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(ResponseMessage.SUBMITTED))
+                .andDo(print())
+                .andDo(document("api/v1/alacard/wordlist/post",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("words").description("선택된 단어들"),
+                                fieldWithPath("words[*].bigCategory").description("대분류"),
+                                fieldWithPath("words[*].middleCategory").description("중분류"),
+                                fieldWithPath("words[*].hint").description("힌트"),
+                                fieldWithPath("words[*].wordName").description("단어명")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("사용자 단어 리스트 제출이 성공 메시지"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

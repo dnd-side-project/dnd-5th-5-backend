@@ -1,5 +1,6 @@
 package com.meme.ala.common;
 
+import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
@@ -19,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class EntityFactory {
-    public static String testObjectId(){
+    public static String testObjectId() {
 
         return "00000000000000000000000";
     }
@@ -91,6 +92,12 @@ public class EntityFactory {
                         .build())
                 .middleCategoryName("testMiddle")
                 .count(10)
+                .build();
+    }
+
+    public static Aggregation testAggregation() {
+        return Aggregation.builder()
+                .wordCountList(Arrays.asList(EntityFactory.testWordCount()))
                 .build();
     }
 }

@@ -25,11 +25,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -59,6 +57,39 @@ public class AlaCardServiceImpl implements AlaCardService {
         }
         List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
         return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
+    }
+
+    @Override
+    @Transactional
+    public void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList) {
+        Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordDtoList);
+        for (Map.Entry<String, List<String>> entry : dtoMap.entrySet()) {
+            String middleCategory = entry.getKey();
+            List<String> wordNameList = entry.getValue();
+            List<WordCount> aggregationList = aggregation.getWordCountList();
+            for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
+                if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory) &&
+                        wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
+                    aggregationList.get(i).setCount(aggregationList.get(i).getCount() + 1);
+                }
+            }
+        }
+        aggregationService.save(aggregation);
+    }
+
+    private Map<String, List<String>> dtoListToMapByMiddleCategory(List<SelectionWordDto> wordDtoList) {
+        Map<String, List<String>> dtoMap = new HashMap();
+        for (SelectionWordDto dto : wordDtoList) {
+            String middleCategory = dto.getMiddleCategory();
+            if (dtoMap.containsKey(middleCategory)) {
+                List<String> dtoList = dtoMap.get(middleCategory);
+                dtoList.add(dto.getWordName());
+            } else {
+                List<String> dtoList = Stream.of(dto).map(SelectionWordDto::getWordName).collect(Collectors.toList());
+                dtoMap.put(middleCategory, dtoList);
+            }
+        }
+        return dtoMap;
     }
 
     @Override

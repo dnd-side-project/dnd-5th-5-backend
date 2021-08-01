@@ -7,4 +7,6 @@ public interface AggregationService {
     public Aggregation findByMember(Member member);
 
     public void initAggregation(Member member);
+
+    public void save(Aggregation aggregation);
 }

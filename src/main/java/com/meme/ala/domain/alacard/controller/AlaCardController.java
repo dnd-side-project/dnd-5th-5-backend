@@ -3,13 +3,15 @@ package com.meme.ala.domain.alacard.controller;
 import com.meme.ala.common.annotation.CurrentUser;
 import com.meme.ala.common.dto.ResponseDto;
 import com.meme.ala.common.message.ResponseMessage;
+import com.meme.ala.domain.aggregation.model.entity.Aggregation;
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
+import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.service.MemberCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 public class AlaCardController {
     private final AlaCardService alaCardService;
+    private final AggregationService aggregationService;
 
     @PostMapping
     public ResponseEntity<ResponseDto<AlaCardSaveDto>> alaCardSave(@RequestBody AlaCardSaveDto dto) {
@@ -31,10 +34,18 @@ public class AlaCardController {
     }
 
     @GetMapping("/wordlist")
-    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> wordList(@RequestParam String nickname) {
+    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@RequestParam String nickname) {
         List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname, true);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
+    }
+
+    @PostMapping("/wordlist")
+    public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody SubmitWordDto submitWordDto) {
+        Aggregation aggregation = aggregationService.findByMember(member);
+        alaCardService.submitWordList(member, aggregation, submitWordDto.getWords());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.SUBMITTED));
     }
 
     @GetMapping("/alacardlist")
