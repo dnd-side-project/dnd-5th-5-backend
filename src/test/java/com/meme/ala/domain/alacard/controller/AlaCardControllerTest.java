@@ -3,6 +3,7 @@ package com.meme.ala.domain.alacard.controller;
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.DtoFactory;
 import com.meme.ala.common.EntityFactory;
+import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.service.AlaCardService;
@@ -21,18 +22,17 @@ import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AlaCardControllerTest extends AbstractControllerTest {
-    @MockBean
-    private MemberCardService memberCardService;
     @MockBean
     private AlaCardService alaCardService;
     private Member testMember = EntityFactory.testMember();
@@ -95,6 +95,37 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].alaCardSettingDto.fontColor").description("글씨 색"),
                                 fieldWithPath("data[*].alaCardSettingDto.font").description("글씨체"),
                                 fieldWithPath("data[*].alaCardSettingDto.isOpen").description("카드 공개 여부"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @DisplayName("사용자의 단어 리스트를 제출받는 테스트")
+    @Test
+    public void 사용자의_단어_리스트를_제출받는_테스트() throws Exception {
+        List<AlaCardDto> alaCardDtoList = new LinkedList<>(Arrays.asList(DtoFactory.testAlaCardDto()));
+
+        doNothing().when(alaCardService).submitWordList(any(Member.class), any(List.class));
+
+        mockMvc.perform(post("/api/v1/alacard/wordlist"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(ResponseMessage.SUBMITTED))
+                .andDo(print())
+                .andDo(document("api/v1/alacard/wordlist",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("[*].bigCategory").description("대분류"),
+                                parameterWithName("[*].middleCategory").description("중분류"),
+                                parameterWithName("[*].hint").description("힌트"),
+                                parameterWithName("[*].wordName").description("단어명")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("사용자 단어 리스트 제출이 성공 메시지"),
+                                fieldWithPath("data[*].sentence").description("문장"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

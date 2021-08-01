@@ -9,7 +9,6 @@ import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.service.MemberCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +30,17 @@ public class AlaCardController {
     }
 
     @GetMapping("/wordlist")
-    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> wordList(@RequestParam String nickname) {
+    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@RequestParam String nickname) {
         List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname, true);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
+    }
+
+    @PostMapping("/wordlist")
+    public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody List<SelectionWordDto> selectionWordDtoList) {
+        alaCardService.submitWordList(member, selectionWordDtoList);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.SUBMITTED));
     }
 
     @GetMapping("/alacardlist")

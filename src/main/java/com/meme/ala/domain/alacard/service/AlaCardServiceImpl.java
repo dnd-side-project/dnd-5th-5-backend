@@ -62,6 +62,11 @@ public class AlaCardServiceImpl implements AlaCardService {
     }
 
     @Override
+    public void submitWordList(Member member, List<SelectionWordDto> wordDtoList) {
+
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<AlaCardDto> getAlaCardDtoList(Member member) {
         List<AlaCardSettingPair> alaCardSettingPairList = member.getAlaCardSettingPairList();

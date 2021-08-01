@@ -13,6 +13,8 @@ public interface AlaCardService {
 
     List<SelectionWordDto> getWordList(String nickname, Boolean shuffle);
 
+    void submitWordList(Member member, List<SelectionWordDto> wordDtoList);
+
     public List<AlaCardDto> getAlaCardDtoList(Member member);
 
     public SentenceWord toSentence(AlaCard alaCard, Member member);
