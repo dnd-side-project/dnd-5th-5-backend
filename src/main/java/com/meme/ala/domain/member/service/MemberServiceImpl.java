@@ -110,7 +110,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public String shareLink(String nickname) {
+    public String shareSelectLink(String nickname) {
         return frontUrl + nickname;
     }
 }
