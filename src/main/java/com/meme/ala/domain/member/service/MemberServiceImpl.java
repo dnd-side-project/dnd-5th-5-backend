@@ -111,6 +111,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true)
     public String shareSelectLink(String nickname) {
-        return frontUrl + nickname;
+        return frontUrl + "select/" + nickname;
+    }
+
+    @Override
+    public String shareMyPageLink(String nickname) {
+        return frontUrl + "mypage/" + nickname;
     }
 }

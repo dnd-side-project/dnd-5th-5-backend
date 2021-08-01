@@ -21,4 +21,6 @@ public interface MemberService {
     void deleteMemberByNickname(String nickname);
 
     String shareSelectLink(String nickname);
+
+    String shareMyPageLink(String nickname);
 }
