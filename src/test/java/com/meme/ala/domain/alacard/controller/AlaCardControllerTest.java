@@ -26,8 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,7 +52,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bigCategory").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].middleCategory").value("testMiddle"))
                 .andDo(print())
-                .andDo(document("api/v1/alacard/wordlist",
+                .andDo(document("api/v1/alacard/wordlist/get",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
@@ -111,12 +110,16 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     @Test
     public void 사용자의_단어_리스트를_제출받는_테스트() throws Exception {
         String sampleRequestBody =
-                "[ {\n" +
-                        "    \"bigCategory\" : \"test\",\n" +
-                        "    \"middleCategory\" : \"testMiddle\",\n" +
-                        "    \"hint\" : \"testHint\",\n" +
-                        "    \"wordName\" : \"testWord\"\n" +
-                        "  } ]";
+                "{\n" +
+                        "  \"words\": [\n" +
+                        "    {\n" +
+                        "      \"bigCategory\": \"test\",\n" +
+                        "      \"middleCategory\": \"testMiddle\",\n" +
+                        "      \"hint\": \"testHint\",\n" +
+                        "      \"wordName\": \"testWord\"\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}";
 
         doNothing().when(alaCardService).submitWordList(any(Member.class), any(Aggregation.class), any(List.class));
         given(aggregationService.findByMember(any(Member.class))).willReturn(EntityFactory.testAggregation());
@@ -127,9 +130,16 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(ResponseMessage.SUBMITTED))
                 .andDo(print())
-                .andDo(document("api/v1/alacard/wordlist",
+                .andDo(document("api/v1/alacard/wordlist/post",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("words").description("선택된 단어들"),
+                                fieldWithPath("words[*].bigCategory").description("대분류"),
+                                fieldWithPath("words[*].middleCategory").description("중분류"),
+                                fieldWithPath("words[*].hint").description("힌트"),
+                                fieldWithPath("words[*].wordName").description("단어명")
+                        ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),

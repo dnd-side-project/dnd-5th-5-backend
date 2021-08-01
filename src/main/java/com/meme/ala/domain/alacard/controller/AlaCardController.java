@@ -6,6 +6,7 @@ import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
+import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
@@ -40,9 +41,9 @@ public class AlaCardController {
     }
 
     @PostMapping("/wordlist")
-    public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody List<SelectionWordDto> selectionWordDtoList) {
+    public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody SubmitWordDto submitWordDto) {
         Aggregation aggregation = aggregationService.findByMember(member);
-        alaCardService.submitWordList(member, aggregation, selectionWordDtoList);
+        alaCardService.submitWordList(member, aggregation, submitWordDto.getWords());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.SUBMITTED));
     }
