@@ -11,12 +11,12 @@ public interface ApiDocumentUtils {
         return preprocessRequest(
                 modifyUris()
                         .scheme("http")
-                        .host("34.64.178.176")
+                        .host("3.37.42.147")
                         .removePort(),
-                prettyPrint()); // (2)
+                prettyPrint());
     }
 
     static OperationResponsePreprocessor getDocumentResponse() {
-        return preprocessResponse(prettyPrint()); // (3)
+        return preprocessResponse(prettyPrint());
     }
 }
