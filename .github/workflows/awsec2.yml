@@ -42,18 +42,26 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Write value to Properties-file
+
+      - name: Properties 파일에 원하는 프로파일 명 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: './src/main/resources/application.properties'
           property: 'spring.profiles.active'
           value: 'prod'
-      - name: Write value to Properties-file
+      - name: Properties 파일에 mongodb uri 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: './src/main/resources/application-prod.properties'
           property: 'spring.data.mongodb.uri'
           value: ${{ secrets.SPRING_DATA_MONGODB_URI }}
+      - name: Properties 파일에 jwt secret 주입
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './src/main/resources/application-prod.properties'
+          property: 'jwt.secret'
+          value: ${{ secrets.JWT_SECRET }}
+
       - name: Build with Gradle test
         run: ./gradlew test
       - name: Publish Test Results
@@ -75,20 +83,15 @@ jobs:
         shell: bash
         working-directory: ./build/libs
 
-        # AWS 서비스를 사용하기 위한 인증 과정이다.
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
-
-        # 배포 zip 파일을 S3에 업로드한다.
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://memealabucket/$GITHUB_SHA.zip
         working-directory: ./build/libs
-
-        # 실제로 코드를 배포한다.
       - name: Code Deploy
         run: aws deploy create-deployment --application-name meme_ala --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name meme_ala_security_group --s3-location bucket=memealabucket,bundleType=zip,key=$GITHUB_SHA.zip
 

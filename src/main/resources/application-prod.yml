@@ -1,5 +1,4 @@
-jwt:
-  secret: alasecret
+server.port = 80
 alacard:
   maxwords: 50
 member:
