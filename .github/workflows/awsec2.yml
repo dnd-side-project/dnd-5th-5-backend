@@ -1,0 +1,97 @@
+name: Build and Deploy to AWS EC2
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
+  push:
+    branches:
+      - develop
+
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Gradle 빌드 캐싱
+      id: gradle-cache
+      uses: actions/cache@v2
+      with:
+        path: |
+           ~/.gradle/caches
+           ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+            ${{ runner.os }}-gradle-
+
+    - name: Build with Gradle test
+      run: ./gradlew test
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: build/test-results/**/*.xml
+        check_name: '[unit-test] Results'
+
+    - name: Build with Gradle copyDocument
+      run: ./gradlew copyDocument
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: 환경변수 치환 
+      uses: danielr1996/envsubst-action@1.0.0
+      env:
+        SPRING_DATA_MONGODB_URI: ${{ secrets.SPRING_DATA_MONGODB_URI }}
+#        SPRING_JWT_SECRET: ${{ secrets.SPRING_JWT_SECRET }}
+      with:
+        input: deployment.yml
+        output: deployment-prod.yml
+  - name: Build with Gradle
+      run: |
+        ./gradlew build -x test
+      # 버전마다 이름을 다르게 하기 위해서 GITHUB_SHA라고 하는 해시이름을 활용하여 zip 파일을 만든다.
+      # CodeDeploy를 사용하기 위해서는 S3를 거쳐야 한다. 따라서 압축된 파일을 만들어주고 이를 옮긴다.
+      - name: cp
+        run: cp appspec.yml ./build/libs/appspec.yml && cp deploy.sh ./build/libs/deploy.sh
+        shell: bash
+      - name: Make zip file
+        run: zip -qq -r ./$GITHUB_SHA.zip .
+        shell: bash
+        working-directory: ./build/libs
+
+        # AWS 서비스를 사용하기 위한 인증 과정이다.
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+        # 배포 zip 파일을 S3에 업로드한다.
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://memealabucket/$GITHUB_SHA.zip
+        working-directory: ./build/libs
+
+        # 실제로 코드를 배포한다.
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name meme_ala --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name meme_ala_security_group --s3-location bucket=memealabucket,bundleType=zip,key=$GITHUB_SHA.zip
+
