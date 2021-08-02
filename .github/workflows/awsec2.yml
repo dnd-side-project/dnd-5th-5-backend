@@ -57,18 +57,18 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-  - name: Write value to Properties-file
-    uses: christian-draeger/write-properties@1.0.1
-    with:
-      path: './src/main/resources/application.properties'
-      property: 'spring.profiles.active'
-      value: 'prod'
-  - name: Write value to Properties-file
-    uses: christian-draeger/write-properties@1.0.1
-    with:
-      path: './src/main/resources/application-prod.properties'
-      property: 'spring.data.mongodb.uri'
-      value: ${{ secrets.SPRING_DATA_MONGODB_URI }}
+    - name: Write value to Properties-file
+      uses: christian-draeger/write-properties@1.0.1
+      with:
+        path: './src/main/resources/application.properties'
+        property: 'spring.profiles.active'
+        value: 'prod'
+    - name: Write value to Properties-file
+      uses: christian-draeger/write-properties@1.0.1
+      with:
+        path: './src/main/resources/application-prod.properties'
+        property: 'spring.data.mongodb.uri'
+        value: ${{ secrets.SPRING_DATA_MONGODB_URI }}
     - name: Build with Gradle
       run: |
         ./gradlew build -x test
