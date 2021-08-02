@@ -46,19 +46,19 @@ jobs:
       - name: Properties 파일에 원하는 프로파일 명 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
-          path: './src/main/resources/application.yaml'
+          path: './src/main/resources/application.properties'
           property: 'spring.profiles.active'
           value: 'prod'
       - name: Properties 파일에 mongodb uri 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
-          path: './src/main/resources/application-prod.yaml'
+          path: './src/main/resources/application-prod.properties'
           property: 'spring.data.mongodb.uri'
           value: ${{ secrets.SPRING_DATA_MONGODB_URI }}
       - name: Properties 파일에 jwt secret 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
-          path: './src/main/resources/application-prod.yaml'
+          path: './src/main/resources/application-prod.properties'
           property: 'jwt.secret'
           value: ${{ secrets.JWT_SECRET }}
 
