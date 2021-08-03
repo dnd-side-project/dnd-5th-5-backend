@@ -100,6 +100,14 @@ public class FriendServiceImpl implements FriendService {
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, friendFriendInfo));
     }
 
+    @Override
+    @Transactional
+    public void initFriendInfo(Member member){
+        FriendInfo friendInfo = FriendInfo.builder().memberId(member.getId()).build();
+
+        friendInfoRepository.save(friendInfo);
+    }
+
     private boolean isFriend(Member member, Member friend){
         FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
                     .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
