@@ -12,15 +12,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.meme.ala.common.message.ResponseMessage.READ_MEMBER_FRIENDS;
-import static com.meme.ala.common.message.ResponseMessage.SUCCESS;
+import static com.meme.ala.common.message.ResponseMessage.*;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -86,6 +84,22 @@ public class FriendControllerTest extends AbstractControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SUCCESS))
                 .andDo(print())
                 .andDo(document("api/v1/friend/accept/nickname",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("nickname").description("친구 닉네임")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @Test
+    public void 사용자_친구_삭제_테스트() throws Exception {
+        mockMvc.perform(delete("/api/v1/friend/{nickname}", "testNickname"))
+                .andExpect(status().isNoContent())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DELETED))
+                .andDo(print())
+                .andDo(document("api/v1/friend/nickname/delete",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
