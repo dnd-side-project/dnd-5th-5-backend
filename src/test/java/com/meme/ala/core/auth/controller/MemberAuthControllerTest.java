@@ -3,10 +3,16 @@ package com.meme.ala.core.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.message.ResponseMessage;
+import com.meme.ala.core.auth.jwt.JwtProvider;
+import com.meme.ala.core.auth.oauth.model.GoogleUser;
+import com.meme.ala.core.auth.oauth.model.NaverUser;
 import com.meme.ala.core.auth.oauth.model.OAuthProvider;
+import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
+import com.meme.ala.core.auth.oauth.service.OAuthService;
 import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -16,6 +22,9 @@ import java.util.Map;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
+import static org.assertj.core.api.BDDAssumptions.given;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -28,6 +37,15 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
     @MockBean
     private MemberService memberService;
+
+    @MockBean
+    private OAuthService oAuthService;
+
+    @MockBean
+    private JwtProvider jwtProvider;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @DisplayName("구글 OAuth 로그인/가입 테스트")
     @Test
@@ -43,11 +61,14 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         "    \"familyName\": \"Jung\"\n" +
                         "  }\n" +
                         "}";
-        when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.GOOGLE))
-                .thenReturn(new HashMap<String, String>() {{
-                    put("jwt", "dummy token");
-                    put("message", ResponseMessage.LOGIN);
-                }});
+
+        Map<String, Object> data = objectMapper.readValue(sampleRequestBody, Map.class);
+
+        when(oAuthService.getMemberByProvider(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.GOOGLE)).thenReturn(new GoogleUser(data));
+
+        when(memberService.existsEmail(any())).thenReturn(Boolean.TRUE);
+
+        when(jwtProvider.createToken(any())).thenReturn("dummy token");
 
         mockMvc.perform(post("/api/v1/oauth/jwt/google")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,11 +105,13 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                         "    \"email\": \"test@gmail.com\",\n" +
                         "    \"name\": \"Jongmin Jung\"}";
 
-        when(memberService.loginOrJoin(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.NAVER))
-                .thenReturn(new HashMap<String, String>() {{
-                    put("jwt", "dummy token");
-                    put("message", ResponseMessage.JOIN);
-                }});
+        Map<String, Object> data = objectMapper.readValue(sampleRequestBody, Map.class);
+
+        when(oAuthService.getMemberByProvider(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.NAVER)).thenReturn(new NaverUser(data));
+
+        when(memberService.existsEmail(any())).thenReturn(Boolean.TRUE);
+
+        when(jwtProvider.createToken(any())).thenReturn("dummy token");
 
         mockMvc.perform(post("/api/v1/oauth/jwt/naver")
                 .contentType(MediaType.APPLICATION_JSON)
