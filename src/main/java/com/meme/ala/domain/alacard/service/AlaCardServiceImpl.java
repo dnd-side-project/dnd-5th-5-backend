@@ -55,17 +55,9 @@ public class AlaCardServiceImpl implements AlaCardService {
         return alaCardSettingPairList.stream()
                 .map(alaCardSettingPair -> alaCardMapper.toDto(
                         alaCardSettingPair.getAlaCard(),
-                        AlaCardSetting.builder()
-                                .background(Background.builder()
-                                        .fontColor("#ffffff")
-                                        .imgUrl("https://user-images.githubusercontent.com/46064193/127431607-cd319904-0147-4ccc-8880-373ca25f2d8a.png")
-                                        .build())
-                                .font(Font.builder()
-                                        .fontName("noto sans")
-                                        .build())
-                                .build(),
-                        this.toSentence(alaCardSettingPair.getAlaCard(), member).getSentence(),
-                        this.toSentence(alaCardSettingPair.getAlaCard(), member).getWordCountList()
+                        alaCardSettingPair.getAlaCardSetting(),
+                        toSentence(alaCardSettingPair.getAlaCard(), member).getSentence(),
+                        toSentence(alaCardSettingPair.getAlaCard(), member).getWordCountList()
                 )).collect(Collectors.toList());
     }
 
