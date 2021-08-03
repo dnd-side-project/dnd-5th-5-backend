@@ -30,8 +30,8 @@ public class EventHandler {
     public void initMember(InitEvent event){
         Member member = memberRepository.findByEmail(event.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-        aggregationService.initAggregation(member);
         memberCardService.assignCard(member, defaultCardNum);
+        aggregationService.initAggregation(member);
         friendService.initFriendInfo(member);
     }
 }

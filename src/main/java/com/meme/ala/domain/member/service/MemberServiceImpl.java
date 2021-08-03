@@ -1,14 +1,10 @@
 package com.meme.ala.domain.member.service;
 
 import com.meme.ala.core.annotation.PublishEvent;
-import com.meme.ala.core.auth.jwt.JwtProvider;
-import com.meme.ala.core.auth.oauth.model.GoogleUser;
-import com.meme.ala.core.auth.oauth.model.NaverUser;
 import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
-import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
@@ -19,8 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
