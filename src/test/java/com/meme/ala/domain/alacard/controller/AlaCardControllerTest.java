@@ -45,7 +45,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     @DisplayName("알라 카드의 단어 리스트를 제공하는 테스트")
     @Test
     public void 알라_카드의_단어_리스트를_제공하는_테스트() throws Exception {
-        given(alaCardService.getWordList(any(String.class), any(Boolean.class))).willReturn(Arrays.asList(DtoFactory.testSelectionWordDto()));
+        given(alaCardService.getWordList(any(String.class))).willReturn(Arrays.asList(DtoFactory.testSelectionWordDto()));
 
         mockMvc.perform(get("/api/v1/alacard/wordlist?nickname=" + testMember.getMemberSetting().getNickname()))
                 .andExpect(status().isOk())

@@ -12,11 +12,14 @@ import java.util.List;
 public interface AlaCardService {
     void save(AlaCard alaCard);
 
-    List<SelectionWordDto> getWordList(String nickname, Boolean shuffle);
+    void setTemporalWordList(String cookieId, String nickname, Boolean shuffle);
+
+    List<SelectionWordDto> getWordList(String cookieId);
 
     void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList);
 
     public List<AlaCardDto> getAlaCardDtoList(Member member);
 
     public SentenceWord toSentence(AlaCard alaCard, Member member);
+
 }

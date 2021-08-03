@@ -13,10 +13,15 @@ import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping(value = "/api/v1/alacard")
@@ -34,10 +39,33 @@ public class AlaCardController {
     }
 
     @GetMapping("/wordlist")
-    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@RequestParam String nickname) {
-        List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname, true);
+    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@CurrentUser Member member, @RequestParam String nickname) {
+        List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<ResponseDto<?>> test(@CookieValue(name = "id", required = false) String cookieId,
+                                               @RequestParam String nickname, HttpServletResponse response){
+
+        if(null == cookieId){
+            boolean shuffle = true;
+
+            cookieId = "temp" + LocalDate.now(); // TODO: 임의의 id 생성
+
+            Cookie cookie = new Cookie("id", cookieId);
+
+            cookie.setMaxAge(10 * 60);
+
+            alaCardService.setTemporalWordList(cookieId, nickname, shuffle);
+        }
+
+        List<SelectionWordDto> wordDtoList = alaCardService.getWordList(cookieId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList)); // wordDto List 추가
     }
 
     @PostMapping("/wordlist")

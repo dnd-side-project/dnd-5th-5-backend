@@ -10,9 +10,11 @@ import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
+import com.meme.ala.domain.alacard.model.entity.TemporalWordList;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
+import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
@@ -38,6 +40,7 @@ public class AlaCardServiceImpl implements AlaCardService {
     private final AggregationService aggregationService;
     private final AlaCardMapper alaCardMapper;
     private final AlaCardSaveMapper alaCardSaveMapper;
+    private final TemporalWordListRepository temporalWordListRepository;
     @Value("${alacard.maxwords}")
     private int maxWords;
 
@@ -48,15 +51,32 @@ public class AlaCardServiceImpl implements AlaCardService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<SelectionWordDto> getWordList(String nickname, Boolean shuffle) {
+    @Transactional
+    public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle){
         Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
         List<AlaCard> alaCardList = memberCardService.getAlaCardListFromMember(member);
-        if (shuffle) {
-            Collections.shuffle(alaCardList);
-        }
+
         List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
-        return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
+
+        if (shuffle) Collections.shuffle(wordDtoList);
+
+        TemporalWordList temporalWordList = TemporalWordList.builder().cookieId(cookieId).wordDtoList(wordDtoList).build();
+
+        temporalWordListRepository.save(temporalWordList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SelectionWordDto> getWordList(String cookieId) {
+        TemporalWordList temporalWordList = temporalWordListRepository.findByCookieId(cookieId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        List<SelectionWordDto> wordDtoList = temporalWordList.getWordDtoList().stream()
+                .limit(maxWords)
+                .collect(Collectors.toList());
+
+        return wordDtoList;
     }
 
     @Override
