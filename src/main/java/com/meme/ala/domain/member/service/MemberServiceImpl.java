@@ -30,7 +30,6 @@ public class MemberServiceImpl implements MemberService {
     private String frontUrl;
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
-    private final AggregationService aggregationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -56,9 +55,7 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-        aggregationService.initAggregation(newMember);
         memberRepository.save(newMember);
-
         return authUserInfo.getEmail();
     }
 
