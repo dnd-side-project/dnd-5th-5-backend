@@ -1,14 +1,13 @@
 package com.meme.ala.domain.member.service;
 
-import com.meme.ala.core.auth.oauth.OAuthUserInfo;
+import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 
-import java.util.Map;
 import java.util.Optional;
 
 public interface MemberService {
-    Map<String, String> loginOrJoin(Map<String, Object> data, String provider);
+    boolean existsEmail(String email);
 
     String join(OAuthUserInfo authUserInfo, String provider);
 

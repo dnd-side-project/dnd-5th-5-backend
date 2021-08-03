@@ -8,10 +8,12 @@ import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.service.MemberCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,7 @@ import java.util.List;
 public class AlaCardController {
     private final AlaCardService alaCardService;
     private final AggregationService aggregationService;
+    private final MemberCardService memberCardService;
 
     @PostMapping
     public ResponseEntity<ResponseDto<AlaCardSaveDto>> alaCardSave(@RequestBody AlaCardSaveDto dto) {
@@ -39,9 +42,8 @@ public class AlaCardController {
     }
 
     @GetMapping("/wordlist")
-    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@CurrentUser Member member, @RequestParam String nickname) {
-        List<SelectionWordDto> wordDtoList = alaCardService.getWordList(nickname);
-
+    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@RequestParam String nickname) {
+        List<SelectionWordDto> wordDtoList = memberCardService.getWordList(nickname);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
     }
@@ -59,10 +61,10 @@ public class AlaCardController {
 
             cookie.setMaxAge(10 * 60);
 
-            alaCardService.setTemporalWordList(cookieId, nickname, shuffle);
+            memberCardService.setTemporalWordList(cookieId, nickname, shuffle);
         }
 
-        List<SelectionWordDto> wordDtoList = alaCardService.getWordList(cookieId);
+        List<SelectionWordDto> wordDtoList = memberCardService.getWordList(cookieId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList)); // wordDto List 추가
@@ -71,7 +73,7 @@ public class AlaCardController {
     @PostMapping("/wordlist")
     public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody SubmitWordDto submitWordDto) {
         Aggregation aggregation = aggregationService.findByMember(member);
-        alaCardService.submitWordList(member, aggregation, submitWordDto.getWords());
+        aggregationService.submitWordList(member, aggregation, submitWordDto.getWords());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.SUBMITTED));
     }
@@ -81,5 +83,18 @@ public class AlaCardController {
         List<AlaCardDto> alaCardDtoList = alaCardService.getAlaCardDtoList(member);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardDtoList));
+    }
+
+    @GetMapping("/backgrounds")
+    public ResponseEntity<ResponseDto<List<String>>> backgrounds() throws Exception {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundImageUrls()));
+    }
+
+    @PostMapping("/alacardsetting")
+    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody AlaCardSettingDto alaCardSettingDto){
+        alaCardService.saveSetting(alaCardSettingDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
     }
 }

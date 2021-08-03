@@ -10,8 +10,10 @@ import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.service.MemberCardService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -35,17 +37,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AlaCardControllerTest extends AbstractControllerTest {
+    @Value("${cloud.aws.s3.bucket.url}")
+    private String s3Url;
+
     @MockBean
     private AlaCardService alaCardService;
     @MockBean
     private AggregationService aggregationService;
+    @MockBean
+    private MemberCardService memberCardService;
 
     private Member testMember = EntityFactory.testMember();
 
     @DisplayName("알라 카드의 단어 리스트를 제공하는 테스트")
     @Test
     public void 알라_카드의_단어_리스트를_제공하는_테스트() throws Exception {
-        given(alaCardService.getWordList(any(String.class))).willReturn(Arrays.asList(DtoFactory.testSelectionWordDto()));
+        given(memberCardService.getWordList(any(String.class))).willReturn(Arrays.asList(DtoFactory.testSelectionWordDto()));
 
         mockMvc.perform(get("/api/v1/alacard/wordlist?nickname=" + testMember.getMemberSetting().getNickname()))
                 .andExpect(status().isOk())
@@ -121,7 +128,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         "  ]\n" +
                         "}";
 
-        doNothing().when(alaCardService).submitWordList(any(Member.class), any(Aggregation.class), any(List.class));
+        doNothing().when(aggregationService).submitWordList(any(Member.class), any(Aggregation.class), any(List.class));
         given(aggregationService.findByMember(any(Member.class))).willReturn(EntityFactory.testAggregation());
 
         mockMvc.perform(post("/api/v1/alacard/wordlist")
@@ -144,6 +151,27 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("사용자 단어 리스트 제출이 성공 메시지"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @DisplayName("배경 리스트를 제공하는 테스트")
+    @Test
+    public void 배경_리스트를_제공하는_테스트() throws Exception {
+        given(alaCardService.getBackgroundImageUrls()).willReturn(Arrays.asList(s3Url + "/static/test.svg", s3Url + "/static/test2.svg"));
+
+        mockMvc.perform(get("/api/v1/alacard/backgrounds"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0]").value(s3Url + "/static/test.svg"))
+                .andDo(print())
+                .andDo(document("api/v1/alacard/backgrounds",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("배경의 URL"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

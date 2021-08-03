@@ -1,25 +1,23 @@
 package com.meme.ala.domain.alacard.service;
 
-import com.meme.ala.core.error.ErrorCode;
-import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.common.utils.AmazonS3ImageUtil;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
-import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
-import com.meme.ala.domain.alacard.model.entity.TemporalWordList;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Font;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
-import com.meme.ala.domain.alacard.repository.AlaCardRepository;
-import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
+import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
+import com.meme.ala.domain.alacard.repository.*;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
-import com.meme.ala.domain.member.model.entity.cardSetting.Background;
-import com.meme.ala.domain.member.model.entity.cardSetting.Font;
 import com.meme.ala.domain.member.service.MemberCardService;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -27,89 +25,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
 public class AlaCardServiceImpl implements AlaCardService {
     private final AlaCardRepository alaCardRepository;
-    private final MemberService memberService;
-    private final MemberCardService memberCardService;
+    private final AlaCardSettingRepository alaCardSettingRepository;
+    private final BackgroundRepository backgroundRepository;
+    private final FontRepository fontRepository;
+
     private final AggregationService aggregationService;
+
+    private final AmazonS3ImageUtil amazonS3ImageUtil;
     private final AlaCardMapper alaCardMapper;
-    private final AlaCardSaveMapper alaCardSaveMapper;
-    private final TemporalWordListRepository temporalWordListRepository;
-    @Value("${alacard.maxwords}")
-    private int maxWords;
+    private final AlaCardSettingMapper alaCardSettingMapper;
 
     @Transactional
     @Override
     public void save(AlaCard alaCard) {
         alaCardRepository.save(alaCard);
-    }
-
-    @Override
-    @Transactional
-    public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle){
-        Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
-        List<AlaCard> alaCardList = memberCardService.getAlaCardListFromMember(member);
-
-        List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
-
-        if (shuffle) Collections.shuffle(wordDtoList);
-
-        TemporalWordList temporalWordList = TemporalWordList.builder().cookieId(cookieId).wordDtoList(wordDtoList).build();
-
-        temporalWordListRepository.save(temporalWordList);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<SelectionWordDto> getWordList(String cookieId) {
-        TemporalWordList temporalWordList = temporalWordListRepository.findByCookieId(cookieId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
-        List<SelectionWordDto> wordDtoList = temporalWordList.getWordDtoList().stream()
-                .limit(maxWords)
-                .collect(Collectors.toList());
-
-        return wordDtoList;
-    }
-
-    @Override
-    @Transactional
-    public void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList) {
-        Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordDtoList);
-        for (Map.Entry<String, List<String>> entry : dtoMap.entrySet()) {
-            String middleCategory = entry.getKey();
-            List<String> wordNameList = entry.getValue();
-            List<WordCount> aggregationList = aggregation.getWordCountList();
-            for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
-                if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory) &&
-                        wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
-                    aggregationList.get(i).setCount(aggregationList.get(i).getCount() + 1);
-                }
-            }
-        }
-        aggregationService.save(aggregation);
-    }
-
-    private Map<String, List<String>> dtoListToMapByMiddleCategory(List<SelectionWordDto> wordDtoList) {
-        Map<String, List<String>> dtoMap = new HashMap();
-        for (SelectionWordDto dto : wordDtoList) {
-            String middleCategory = dto.getMiddleCategory();
-            if (dtoMap.containsKey(middleCategory)) {
-                List<String> dtoList = dtoMap.get(middleCategory);
-                dtoList.add(dto.getWordName());
-            } else {
-                List<String> dtoList = Stream.of(dto).map(SelectionWordDto::getWordName).collect(Collectors.toList());
-                dtoMap.put(middleCategory, dtoList);
-            }
-        }
-        return dtoMap;
     }
 
     @Override
@@ -152,6 +90,27 @@ public class AlaCardServiceImpl implements AlaCardService {
                 .sentence(stringBuilder.toString())
                 .wordCountList(wordCountResultList)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<String> getBackgroundImageUrls() throws Exception {
+        return amazonS3ImageUtil.getObjectItemUrls();
+    }
+
+    @Override
+    @Transactional
+    public void saveSetting(AlaCardSettingDto alaCardSettingDto) {
+        AlaCardSetting alaCardSetting = alaCardSettingMapper.toEntity(alaCardSettingDto);
+        fontRepository.save(alaCardSetting.getFont());
+        backgroundRepository.save(alaCardSetting.getBackground());
+        alaCardSettingRepository.save(alaCardSetting);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AlaCardSetting> getAlaCardSettings() {
+        return alaCardSettingRepository.findAll();
     }
 
     private List<WordCount> toSortedWordCountList(Aggregation aggregation, String middleCategoryName) {

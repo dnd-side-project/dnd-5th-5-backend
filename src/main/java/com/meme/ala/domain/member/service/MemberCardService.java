@@ -1,16 +1,19 @@
 package com.meme.ala.domain.member.service;
 
-import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
+import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
-import com.meme.ala.domain.alacard.model.entity.SentenceWord;
 import com.meme.ala.domain.member.model.entity.Member;
 
 import java.util.List;
 
 public interface MemberCardService {
-    public void assignCard(Member member, int num);
+    List<AlaCard> getAlaCardList();
 
-    public List<AlaCard> getAlaCardList();
+    List<AlaCard> getAlaCardListFromMember(Member member);
 
-    public List<AlaCard> getAlaCardListFromMember(Member member);
+    void assignCard(Member member, int num);
+
+    void setTemporalWordList(String cookieId, String nickname, Boolean shuffle);
+
+    List<SelectionWordDto> getWordList(String cookieId);
 }

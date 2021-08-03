@@ -1,12 +1,11 @@
 package com.meme.ala.domain.member.service;
 
-import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.core.annotation.PublishEvent;
 import com.meme.ala.core.auth.jwt.JwtProvider;
-import com.meme.ala.core.auth.oauth.GoogleUser;
-import com.meme.ala.core.auth.oauth.NaverUser;
-import com.meme.ala.core.auth.oauth.OAuthProvider;
-import com.meme.ala.core.auth.oauth.OAuthUserInfo;
+import com.meme.ala.core.auth.oauth.model.GoogleUser;
+import com.meme.ala.core.auth.oauth.model.NaverUser;
+import com.meme.ala.core.auth.oauth.model.OAuthProvider;
+import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.domain.aggregation.service.AggregationService;
@@ -27,39 +26,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
-    @Value("${member.alacardnum}")
-    private int defaultCardNum;
     @Value("${frontdomain}")
     private String frontUrl;
     private final MemberRepository memberRepository;
-    private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
-    private final MemberCardService memberCardService;
     private final AggregationService aggregationService;
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String, String> loginOrJoin(Map<String, Object> data, String provider) {
-        Map<String, String> resultMap = new HashMap<>();
-        OAuthUserInfo authUserInfo;
-        if (provider.equals(OAuthProvider.GOOGLE)) {
-            authUserInfo = new GoogleUser((Map<String, Object>) data.get("profileObj"));
-        } else if (provider.equals(OAuthProvider.NAVER)) {
-            authUserInfo = new NaverUser(data);
-        } else {
-            throw new BusinessException(ErrorCode.METHOD_NOT_ALLOWED);
-        }
-        Optional<Member> optionalMember =
-                memberRepository.findByEmail(authUserInfo.getEmail());
-        if (!optionalMember.isPresent()) {
-            join(authUserInfo, provider);
-            resultMap.put("message", ResponseMessage.JOIN);
-        } else {
-            resultMap.put("message", ResponseMessage.LOGIN);
-        }
-        String jwt = jwtTokenProvider.createToken(authUserInfo.getEmail());
-        resultMap.put("jwt", jwt);
-        return resultMap;
+    public boolean existsEmail(String email){
+        return memberRepository.existsMemberByEmail(email);
     }
 
     @Override
@@ -80,7 +56,6 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-        memberCardService.assignCard(newMember, defaultCardNum);
         aggregationService.initAggregation(newMember);
         memberRepository.save(newMember);
 

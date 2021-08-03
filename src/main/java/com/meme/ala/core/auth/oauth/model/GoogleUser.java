@@ -1,22 +1,22 @@
-package com.meme.ala.core.auth.oauth;
+package com.meme.ala.core.auth.oauth.model;
 
 import java.util.Map;
 
-public class NaverUser implements OAuthUserInfo {
+public class GoogleUser implements OAuthUserInfo {
     private Map<String, Object> attribute;
 
-    public NaverUser(Map<String, Object> attribute) {
+    public GoogleUser(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 
     @Override
     public String getProviderId() {
-        return (String) attribute.get("id");
+        return (String) attribute.get("googleId");
     }
 
     @Override
     public String getProvider() {
-        return "naver";
+        return "google";
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NaverUser implements OAuthUserInfo {
 
     @Override
     public String getImgUrl() {
-        //TODO: 2021.7.16. DEFAULT 이미지(코알라) 세팅
+        //TODO: 2021.7.15. DEFAULT 이미지(코알라) 세팅
         return null;
     }
 }
