@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Base64;
+
 @Configuration
 public class ConnectionAWSS3Config {
     @Value("${cloud.aws.credentials.accessKey}")
@@ -21,7 +23,8 @@ public class ConnectionAWSS3Config {
 
     @Bean
     public BasicAWSCredentials basicAWSCredentials() {
-        return new BasicAWSCredentials(awsId, awsKey);
+        String decodedKey = new String(Base64.getDecoder().decode(awsKey));
+        return new BasicAWSCredentials(awsId, decodedKey);
     }
     @Bean
     public AmazonS3 amazonS3() {
