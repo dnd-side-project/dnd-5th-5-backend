@@ -56,6 +56,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     compile group: 'com.github.ben-manes.caffeine', name: 'caffeine'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.21'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.5.3'
 }
 
 

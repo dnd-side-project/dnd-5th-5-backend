@@ -17,7 +17,9 @@ public enum ErrorCode {
     EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
 
     // Friend
-    ALREADY_FRIEND(400, "F001", "Already Friend");
+    ALREADY_FRIEND(400, "F001", "Already Friend"),
+    NOT_FRIEND(400, "F002", "Not Friend")
+    ;
 
     private final String code;
     private final String message;
