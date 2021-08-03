@@ -78,6 +78,8 @@ public class FriendServiceImpl implements FriendService {
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, followerFriendInfo));
     }
 
+    @Override
+    @Transactional
     public void deleteMemberFriend(Member member, String friendNickname){
         Member friend = memberRepository.findByMemberSettingNickname(friendNickname)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
