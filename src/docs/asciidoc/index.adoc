@@ -8,7 +8,6 @@
 
 == 설명
 
-
 == POST /api/v1/oauth/jwt/google
 
 .request
@@ -156,6 +155,17 @@ include::{snippets}/api/v1/alacard/alacardlist/http-response.adoc[]
 
 .response fields
 include::{snippets}/api/v1/alacard/alacardlist/response-fields.adoc[]
+
+== GET /api/v1/alacard/backgrounds
+
+.request
+include::{snippets}/api/v1/alacard/backgrounds/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/alacard/backgrounds/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/alacard/backgrounds/response-fields.adoc[]
 
 == GET /api/v1/friend
 

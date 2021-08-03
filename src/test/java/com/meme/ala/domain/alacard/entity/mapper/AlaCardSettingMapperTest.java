@@ -4,7 +4,7 @@ import com.meme.ala.common.DtoFactory;
 import com.meme.ala.common.EntityFactory;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
-import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

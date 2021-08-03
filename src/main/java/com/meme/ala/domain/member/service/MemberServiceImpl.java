@@ -26,14 +26,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
-    @Value("${member.alacardnum}")
-    private int defaultCardNum;
     @Value("${frontdomain}")
     private String frontUrl;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtTokenProvider;
     private final MemberMapper memberMapper;
-    private final MemberCardService memberCardService;
     private final AggregationService aggregationService;
 
     @Override
@@ -78,7 +75,6 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-        memberCardService.assignCard(newMember, defaultCardNum);
         aggregationService.initAggregation(newMember);
         memberRepository.save(newMember);
     }

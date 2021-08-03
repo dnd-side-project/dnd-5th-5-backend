@@ -6,7 +6,7 @@ import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardMapper;
-import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.meme.ala.domain.member.model.entity.cardSetting;
+package com.meme.ala.domain.alacard.model.entity.cardSetting;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Builder
 @AllArgsConstructor
-@Document("BACKGROUND")
-public class Background {
+@Document("FONT")
+public class Font {
     @Id
     private ObjectId id;
 
-    private String imgUrl;
-
-    private String fontColor;
+    private String fontName;
 }

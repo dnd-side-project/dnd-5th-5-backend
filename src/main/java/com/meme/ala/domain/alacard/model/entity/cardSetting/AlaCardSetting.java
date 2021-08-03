@@ -1,4 +1,4 @@
-package com.meme.ala.domain.member.model.entity.cardSetting;
+package com.meme.ala.domain.alacard.model.entity.cardSetting;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
