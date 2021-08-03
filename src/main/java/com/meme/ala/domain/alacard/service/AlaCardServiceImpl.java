@@ -125,7 +125,6 @@ public class AlaCardServiceImpl implements AlaCardService {
             WordCount selectedWordCount = wordCountList.get(0);
             wordCountResultList.add(selectedWordCount);
             stringBuilder.append(toMiddleSentence(middleCategory,
-                    member.getMemberSetting().getNickname(),
                     selectedWordCount.getWord().getWordName(),
                     i, alaCard.getMiddleCategoryList().size()));
         }
@@ -142,14 +141,10 @@ public class AlaCardServiceImpl implements AlaCardService {
                 .collect(Collectors.toList());
     }
 
-    private String toMiddleSentence(MiddleCategory middleCategory, String nickName, String wordName, int idx, int size) {
-        String formPrefix = middleCategory.getPrefix()
-                .replace("???", nickName);
+    private String toMiddleSentence(MiddleCategory middleCategory, String wordName, int idx, int size) {
         String formSentence = middleCategory.getForm()
                 .replace("???", wordName);
-        if (idx == 0) {
-            return formPrefix + formSentence + middleCategory.getSentenceComponent().getJosa();
-        } else if (idx == size - 1) {
+        if (idx == size - 1) {
             return formSentence + middleCategory.getSentenceComponent().getEomi();
         } else {
             return formSentence + middleCategory.getSentenceComponent().getJosa();
