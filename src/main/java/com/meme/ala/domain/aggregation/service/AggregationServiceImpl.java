@@ -5,6 +5,7 @@ import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
+import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -14,8 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -62,5 +66,38 @@ public class AggregationServiceImpl implements AggregationService {
                         .cardId(cardId)
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList) {
+        Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordDtoList);
+        for (Map.Entry<String, List<String>> entry : dtoMap.entrySet()) {
+            String middleCategory = entry.getKey();
+            List<String> wordNameList = entry.getValue();
+            List<WordCount> aggregationList = aggregation.getWordCountList();
+            for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
+                if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory) &&
+                        wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
+                    aggregationList.get(i).setCount(aggregationList.get(i).getCount() + 1);
+                }
+            }
+        }
+        aggregationRepository.save(aggregation);
+    }
+
+    private Map<String, List<String>> dtoListToMapByMiddleCategory(List<SelectionWordDto> wordDtoList) {
+        Map<String, List<String>> dtoMap = new HashMap();
+        for (SelectionWordDto dto : wordDtoList) {
+            String middleCategory = dto.getMiddleCategory();
+            if (dtoMap.containsKey(middleCategory)) {
+                List<String> dtoList = dtoMap.get(middleCategory);
+                dtoList.add(dto.getWordName());
+            } else {
+                List<String> dtoList = Stream.of(dto).map(SelectionWordDto::getWordName).collect(Collectors.toList());
+                dtoMap.put(middleCategory, dtoList);
+            }
+        }
+        return dtoMap;
     }
 }

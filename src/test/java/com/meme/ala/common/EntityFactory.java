@@ -10,9 +10,9 @@ import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
-import com.meme.ala.domain.member.model.entity.cardSetting.AlaCardSetting;
-import com.meme.ala.domain.member.model.entity.cardSetting.Background;
-import com.meme.ala.domain.member.model.entity.cardSetting.Font;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Font;
 import org.bson.types.ObjectId;
 
 import java.util.Arrays;

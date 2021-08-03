@@ -1,7 +1,9 @@
 package com.meme.ala.domain.member.service;
 
+import com.meme.ala.common.EntityFactory;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
+import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +33,8 @@ public class MemberCardServiceTest {
     private AlaCardRepository alaCardRepository;
     @Autowired
     private MemberCardService memberCardService;
+    @MockBean
+    private AlaCardService alaCardService;
     @Value("${member.alacardnum}")
     private int defaultCardNum;
 
@@ -43,6 +49,8 @@ public class MemberCardServiceTest {
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
         when(memberRepository.existsMemberByMemberSettingNickname(any(String.class))).thenReturn(false);
         when(alaCardRepository.findAll()).thenReturn(alaCardList);
+        when(alaCardService.getAlaCardSettings()).thenReturn(Arrays.asList(EntityFactory.testAlaCardSetting()));
+
 
         Member testMember = Member.builder().build();
         memberCardService.assignCard(testMember, defaultCardNum);
