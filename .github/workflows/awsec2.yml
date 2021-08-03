@@ -61,7 +61,18 @@ jobs:
           path: './src/main/resources/application-prod.properties'
           property: 'jwt.secret'
           value: ${{ secrets.JWT_SECRET }}
-
+      - name: Properties 파일에 AWS_ACCESS_KEY 주입
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './src/main/resources/application-prod.properties'
+          property: 'cloud.aws.credentials.accessKey'
+          value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      - name: Properties 파일에 AWS_SECRET_ACCESS_KEY 주입
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './src/main/resources/application-prod.properties'
+          property: 'cloud.aws.credentials.secretKey'
+          value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Build with Gradle test
         run: ./gradlew test
       - name: Publish Test Results
