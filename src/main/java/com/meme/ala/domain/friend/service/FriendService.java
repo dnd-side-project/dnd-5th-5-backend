@@ -9,4 +9,5 @@ public interface FriendService {
     void addMemberFriend(Member member, String followingNickname);
     void acceptMemberFriend(Member member, String followerNickname);
     void deleteMemberFriend(Member member, String friendNickname);
+    void initFriendInfo(Member member);
 }
