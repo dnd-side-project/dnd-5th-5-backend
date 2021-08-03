@@ -3,7 +3,7 @@ package com.meme.ala.core.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.message.ResponseMessage;
-import com.meme.ala.core.auth.oauth.OAuthProvider;
+import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
