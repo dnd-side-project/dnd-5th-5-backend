@@ -73,6 +73,7 @@ jobs:
           path: './src/main/resources/application-prod.properties'
           property: 'cloud.aws.credentials.secretKey'
           value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Build with Gradle test
         run: ./gradlew test
       - name: Publish Test Results
