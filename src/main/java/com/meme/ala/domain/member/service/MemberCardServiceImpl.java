@@ -52,8 +52,8 @@ public class MemberCardServiceImpl implements MemberCardService {
                             .alaCard(selectedAlaCardList.get(i))
                             .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size()))
                             .build());
-            memberRepository.save(member);
         }
+        memberRepository.save(member);
     }
 
     @Cacheable
@@ -74,10 +74,10 @@ public class MemberCardServiceImpl implements MemberCardService {
     public List<SelectionWordDto> getWordList(String nickname, Boolean shuffle) {
         Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
         List<AlaCard> alaCardList = getAlaCardListFromMember(member);
-        if (shuffle) {
-            Collections.shuffle(alaCardList);
-        }
         List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
+        if (shuffle) {
+            Collections.shuffle(wordDtoList);
+        }
         return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
     }
 }
