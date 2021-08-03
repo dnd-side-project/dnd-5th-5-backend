@@ -27,14 +27,22 @@ public interface AlaCardSaveMapper {
     }
 
     default List<SelectionWordDto> alaCardToSelectionWordDtoList(AlaCard alaCard) {
-        return
-                alaCard.getMiddleCategoryList()
-                        .stream().map(middleCategory -> middleCategory.getWordList()
-                        .stream().map(word -> SelectionWordDto.builder()
+        return alaCard.getMiddleCategoryList()
+                .stream()
+                .map(middleCategory -> middleCategory
+                        .getWordList()
+                        .stream()
+                        .map(word -> SelectionWordDto.
+                                builder()
                                 .bigCategory(alaCard.getBigCategory())
                                 .hint(middleCategory.getHint())
                                 .middleCategory(middleCategory.getMiddleCategoryName())
-                                .wordName(word.getWordName()).build()).collect(Collectors.toList()))
-                        .flatMap(Collection::stream).collect(Collectors.toList());
+                                .wordName(word.getWordName())
+                                .build()
+                        )
+                        .collect(Collectors.toList())
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 }
