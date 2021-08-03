@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface MemberService {
     Map<String, String> loginOrJoin(Map<String, Object> data, String provider);
 
-    void join(OAuthUserInfo authUserInfo, String provider);
+    String join(OAuthUserInfo authUserInfo, String provider);
 
     void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto);
 

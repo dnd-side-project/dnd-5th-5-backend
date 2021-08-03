@@ -48,4 +48,13 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
     }
+
+    @DeleteMapping("/{nickname}")
+    public ResponseEntity<ResponseDto> deleteMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
+
+        friendService.deleteMemberFriend(member, nickname);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.DELETED));
+    }
 }

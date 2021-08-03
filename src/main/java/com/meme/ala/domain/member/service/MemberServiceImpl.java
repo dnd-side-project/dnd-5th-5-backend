@@ -1,6 +1,7 @@
 package com.meme.ala.domain.member.service;
 
 import com.meme.ala.common.message.ResponseMessage;
+import com.meme.ala.core.annotation.PublishEvent;
 import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.GoogleUser;
 import com.meme.ala.core.auth.oauth.NaverUser;
@@ -59,8 +60,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @PublishEvent
     @Transactional
-    public void join(OAuthUserInfo authUserInfo, String provider) {
+    public String join(OAuthUserInfo authUserInfo, String provider) {
         Member newMember = Member.builder()
                 .email(authUserInfo.getEmail())
                 .memberSetting(
@@ -77,6 +79,8 @@ public class MemberServiceImpl implements MemberService {
         }
         aggregationService.initAggregation(newMember);
         memberRepository.save(newMember);
+
+        return authUserInfo.getEmail();
     }
 
     @Override

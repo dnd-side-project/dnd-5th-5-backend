@@ -200,4 +200,15 @@ include::{snippets}/api/v1/friend/accept/nickname/path-parameters.adoc[]
 .response
 include::{snippets}/api/v1/friend/accept/nickname/http-response.adoc[]
 
+== DELETE /api/v1/friend/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/nickname/delete/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/nickname/delete/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/nickname/delete/http-response.adoc[]
+
 

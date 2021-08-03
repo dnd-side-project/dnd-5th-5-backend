@@ -78,11 +78,41 @@ public class FriendServiceImpl implements FriendService {
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, followerFriendInfo));
     }
 
-    public boolean isFriend(Member member, Member following){
+    @Override
+    @Transactional
+    public void deleteMemberFriend(Member member, String friendNickname){
+        Member friend = memberRepository.findByMemberSettingNickname(friendNickname)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        FriendInfo friendFriendInfo = friendInfoRepository.findById(friend.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        if(!isFriend(member, friend))
+            throw new BusinessException(ErrorCode.NOT_FRIEND);
+
+        memberFriendInfo.getFriends().remove(friend.getId());
+
+        friendFriendInfo.getFriends().remove(member.getId());
+
+        friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, friendFriendInfo));
+    }
+
+    @Override
+    @Transactional
+    public void initFriendInfo(Member member){
+        FriendInfo friendInfo = FriendInfo.builder().memberId(member.getId()).build();
+
+        friendInfoRepository.save(friendInfo);
+    }
+
+    private boolean isFriend(Member member, Member friend){
         FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
                     .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
-        return memberFriendInfo.getFriends().contains(following.getId());
+        return memberFriendInfo.getFriends().contains(friend.getId());
     }
 
 }
