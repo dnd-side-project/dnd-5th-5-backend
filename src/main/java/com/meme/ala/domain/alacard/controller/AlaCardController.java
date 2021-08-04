@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +54,7 @@ public class AlaCardController {
         if (null == cookieId) {
             boolean shuffle = true;
 
-            cookieId = "temp" + LocalDate.now(); // TODO: 임의의 id 생성
+            cookieId = "temp" + LocalDateTime.now(); // TODO: 임의의 id 생성 반드시 고쳐야함. 버그생성됨
 
             Cookie cookie = new Cookie("id", cookieId);
 
