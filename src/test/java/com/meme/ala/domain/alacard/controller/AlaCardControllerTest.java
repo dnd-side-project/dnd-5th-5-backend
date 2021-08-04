@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
@@ -52,9 +53,13 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     @DisplayName("알라 카드의 단어 리스트를 제공하는 테스트")
     @Test
     public void 알라_카드의_단어_리스트를_제공하는_테스트() throws Exception {
+
         given(memberCardService.getWordList(any(String.class))).willReturn(Arrays.asList(DtoFactory.testSelectionWordDto()));
 
-        mockMvc.perform(get("/api/v1/alacard/wordlist?nickname=" + testMember.getMemberSetting().getNickname()))
+        mockMvc.perform(get("/api/v1/alacard/wordlist")
+                .param("nickname", testMember.getMemberSetting().getNickname())
+                .param("offset", "0")
+                )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bigCategory").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].middleCategory").value("testMiddle"))
@@ -63,7 +68,8 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
-                                parameterWithName("nickname").description("닉네임")
+                                parameterWithName("nickname").description("닉네임"),
+                                parameterWithName("offset").description("오프셋")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),

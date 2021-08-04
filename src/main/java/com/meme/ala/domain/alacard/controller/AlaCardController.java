@@ -15,6 +15,7 @@ import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/alacard")
 @RequiredArgsConstructor
@@ -34,6 +36,10 @@ public class AlaCardController {
     private final AggregationService aggregationService;
     private final MemberCardService memberCardService;
 
+    @Value("${alacard.maxwords}")
+    private int maxWords;
+
+
     @PostMapping
     public ResponseEntity<ResponseDto<AlaCardSaveDto>> alaCardSave(@RequestBody AlaCardSaveDto dto) {
         alaCardService.save(AlaCardSaveMapper.INSTANCE.toEntity(dto));
@@ -42,15 +48,8 @@ public class AlaCardController {
     }
 
     @GetMapping("/wordlist")
-    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@RequestParam String nickname) {
-        List<SelectionWordDto> wordDtoList = memberCardService.getWordList(nickname);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<ResponseDto<?>> test(@CookieValue(name = "id", required = false) String cookieId,
-                                               @RequestParam String nickname, HttpServletResponse response){
+    public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@CookieValue(name = "id", required = false) String cookieId,
+                                               @RequestParam String nickname, @RequestParam long offset, HttpServletResponse response){
 
         if(null == cookieId){
             boolean shuffle = true;
@@ -61,15 +60,18 @@ public class AlaCardController {
 
             cookie.setMaxAge(10 * 60);
 
+            response.addCookie(cookie);
+
             memberCardService.setTemporalWordList(cookieId, nickname, shuffle);
         }
 
-        List<SelectionWordDto> wordDtoList = memberCardService.getWordList(cookieId);
+        List<SelectionWordDto> wordDtoList = memberCardService.getWordList(cookieId).stream().skip(offset).limit(maxWords).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList)); // wordDto List 추가
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
     }
 
+    // TODO: 제출하는데, 대상이 없음
     @PostMapping("/wordlist")
     public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody SubmitWordDto submitWordDto) {
         Aggregation aggregation = aggregationService.findByMember(member);

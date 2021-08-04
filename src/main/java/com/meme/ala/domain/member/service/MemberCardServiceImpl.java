@@ -36,9 +36,6 @@ public class MemberCardServiceImpl implements MemberCardService {
     private final MemberService memberService;
     private final AlaCardService alaCardService;
 
-    @Value("${alacard.maxwords}")
-    private int maxWords;
-
     @Override
     @Transactional
     public void assignCard(Member member, int num) {
@@ -67,17 +64,11 @@ public class MemberCardServiceImpl implements MemberCardService {
         return alaCardRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
-    public List<AlaCard> getAlaCardListFromMember(Member member) {
-        return member.getAlaCardSettingPairList()
-                .stream().map(AlaCardSettingPair::getAlaCard)
-                .collect(Collectors.toList());
-    }
-
     @Override
     @Transactional
     public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle){
-        Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        Member member = memberService.findByNickname(nickname)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
         List<AlaCard> alaCardList = getAlaCardListFromMember(member);
 
@@ -90,16 +81,19 @@ public class MemberCardServiceImpl implements MemberCardService {
         temporalWordListRepository.save(temporalWordList);
     }
 
+    public List<AlaCard> getAlaCardListFromMember(Member member) {
+        return member.getAlaCardSettingPairList()
+                .stream().map(AlaCardSettingPair::getAlaCard)
+                .collect(Collectors.toList());
+    }
+
     @Override
+    @Cacheable(key = "#cookieId")
     @Transactional(readOnly = true)
     public List<SelectionWordDto> getWordList(String cookieId) {
         TemporalWordList temporalWordList = temporalWordListRepository.findByCookieId(cookieId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
-        List<SelectionWordDto> wordDtoList = temporalWordList.getWordDtoList().stream()
-                .limit(maxWords)
-                .collect(Collectors.toList());
-
-        return wordDtoList;
+        return temporalWordList.getWordDtoList();
     }
 }
