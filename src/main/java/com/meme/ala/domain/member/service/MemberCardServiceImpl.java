@@ -14,12 +14,10 @@ import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,9 +64,8 @@ public class MemberCardServiceImpl implements MemberCardService {
 
     @Override
     @Transactional
-    public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle){
-        Member member = memberService.findByNickname(nickname)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+    public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle) {
+        Member member = memberService.findByNickname(nickname);
 
         List<AlaCard> alaCardList = getAlaCardListFromMember(member);
 

@@ -14,15 +14,14 @@ import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
+import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.List;
@@ -35,6 +34,7 @@ public class AlaCardController {
     private final AlaCardService alaCardService;
     private final AggregationService aggregationService;
     private final MemberCardService memberCardService;
+    private final MemberService memberService;
 
     @Value("${alacard.maxwords}")
     private int maxWords;
@@ -49,9 +49,9 @@ public class AlaCardController {
 
     @GetMapping("/wordlist")
     public ResponseEntity<ResponseDto<List<SelectionWordDto>>> getWordList(@CookieValue(name = "id", required = false) String cookieId,
-                                               @RequestParam String nickname, @RequestParam long offset, HttpServletResponse response){
+                                                                           @RequestParam String nickname, @RequestParam long offset, HttpServletResponse response) {
 
-        if(null == cookieId){
+        if (null == cookieId) {
             boolean shuffle = true;
 
             cookieId = "temp" + LocalDate.now(); // TODO: 임의의 id 생성
@@ -71,9 +71,9 @@ public class AlaCardController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
     }
 
-    // TODO: 제출하는데, 대상이 없음
-    @PostMapping("/wordlist")
-    public ResponseEntity<ResponseDto<String>> submitWordList(@CurrentUser Member member, @RequestBody SubmitWordDto submitWordDto) {
+    @PatchMapping("/wordlist")
+    public ResponseEntity<ResponseDto<String>> submitWordList(@RequestParam String nickname, @RequestBody SubmitWordDto submitWordDto) {
+        Member member = memberService.findByNickname(nickname);
         Aggregation aggregation = aggregationService.findByMember(member);
         aggregationService.submitWordList(member, aggregation, submitWordDto.getWords());
         return ResponseEntity.status(HttpStatus.OK)
@@ -94,7 +94,7 @@ public class AlaCardController {
     }
 
     @PostMapping("/alacardsetting")
-    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody AlaCardSettingDto alaCardSettingDto){
+    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody AlaCardSettingDto alaCardSettingDto) {
         alaCardService.saveSetting(alaCardSettingDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));

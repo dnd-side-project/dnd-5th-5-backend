@@ -131,19 +131,19 @@ include::{snippets}/api/v1/alacard/wordlist/get/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/wordlist/get/response-fields.adoc[]
 
-== POST /api/v1/alacard/wordlist
+== PATCH /api/v1/alacard/wordlist
 
 .request
-include::{snippets}/api/v1/alacard/wordlist/post/http-request.adoc[]
+include::{snippets}/api/v1/alacard/wordlist/patch/http-request.adoc[]
 
 .request fields
-include::{snippets}/api/v1/alacard/wordlist/post/request-fields.adoc[]
+include::{snippets}/api/v1/alacard/wordlist/patch/request-fields.adoc[]
 
 .response
-include::{snippets}/api/v1/alacard/wordlist/post/http-response.adoc[]
+include::{snippets}/api/v1/alacard/wordlist/patch/http-response.adoc[]
 
 .response fields
-include::{snippets}/api/v1/alacard/wordlist/post/response-fields.adoc[]
+include::{snippets}/api/v1/alacard/wordlist/patch/response-fields.adoc[]
 
 == GET /api/v1/alacard/alacardlist
 
