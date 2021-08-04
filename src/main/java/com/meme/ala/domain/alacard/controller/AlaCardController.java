@@ -3,6 +3,7 @@ package com.meme.ala.domain.alacard.controller;
 import com.meme.ala.common.annotation.CurrentUser;
 import com.meme.ala.common.dto.ResponseDto;
 import com.meme.ala.common.message.ResponseMessage;
+import com.meme.ala.common.utils.CookieGenerator;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/alacard")
@@ -35,6 +38,7 @@ public class AlaCardController {
     private final AggregationService aggregationService;
     private final MemberCardService memberCardService;
     private final MemberService memberService;
+    private final CookieGenerator cookieGenerator;
 
     @Value("${alacard.maxwords}")
     private int maxWords;
@@ -54,13 +58,9 @@ public class AlaCardController {
         if (null == cookieId) {
             boolean shuffle = true;
 
-            cookieId = "temp" + LocalDateTime.now(); // TODO: 임의의 id 생성 반드시 고쳐야함. 버그생성됨
+            cookieId = nickname + cookieGenerator.randomString();
 
-            Cookie cookie = new Cookie("id", cookieId);
-
-            cookie.setMaxAge(10 * 60);
-
-            response.addCookie(cookie);
+            response.addCookie(cookieGenerator.generate(cookieId));
 
             memberCardService.setTemporalWordList(cookieId, nickname, shuffle);
         }
