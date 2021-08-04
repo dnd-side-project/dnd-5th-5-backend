@@ -11,6 +11,7 @@ import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
+import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
@@ -33,7 +33,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,6 +47,8 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     private AggregationService aggregationService;
     @MockBean
     private MemberCardService memberCardService;
+    @MockBean
+    private MemberService memberService;
 
     private Member testMember = EntityFactory.testMember();
 
@@ -59,7 +61,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
         mockMvc.perform(get("/api/v1/alacard/wordlist")
                 .param("nickname", testMember.getMemberSetting().getNickname())
                 .param("offset", "0")
-                )
+        )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bigCategory").value("test"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].middleCategory").value("testMiddle"))
@@ -119,7 +121,6 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 ));
     }
 
-    @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자의 단어 리스트를 제출받는 테스트")
     @Test
     public void 사용자의_단어_리스트를_제출받는_테스트() throws Exception {
@@ -136,17 +137,22 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         "}";
 
         doNothing().when(aggregationService).submitWordList(any(Member.class), any(Aggregation.class), any(List.class));
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
         given(aggregationService.findByMember(any(Member.class))).willReturn(EntityFactory.testAggregation());
 
-        mockMvc.perform(post("/api/v1/alacard/wordlist")
+        mockMvc.perform(patch("/api/v1/alacard/wordlist")
+                .param("nickname", testMember.getMemberSetting().getNickname())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(sampleRequestBody))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(ResponseMessage.SUBMITTED))
                 .andDo(print())
-                .andDo(document("api/v1/alacard/wordlist/post",
+                .andDo(document("api/v1/alacard/wordlist/patch",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("nickname").description("닉네임")
+                        ),
                         requestFields(
                                 fieldWithPath("words").description("선택된 단어들"),
                                 fieldWithPath("words[*].bigCategory").description("대분류"),

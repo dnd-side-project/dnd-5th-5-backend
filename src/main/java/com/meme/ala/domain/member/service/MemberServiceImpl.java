@@ -5,6 +5,7 @@ import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
+import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
@@ -14,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -27,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existsEmail(String email){
+    public boolean existsEmail(String email) {
         return memberRepository.existsMemberByEmail(email);
     }
 
@@ -68,8 +67,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Member> findByNickname(String nickname) {
-        return memberRepository.findByMemberSettingNickname(nickname);
+    public Member findByNickname(String nickname) {
+        return memberRepository.findByMemberSettingNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
     @Override

@@ -4,8 +4,6 @@ import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 
-import java.util.Optional;
-
 public interface MemberService {
     boolean existsEmail(String email);
 
@@ -15,7 +13,7 @@ public interface MemberService {
 
     boolean existsNickname(String nickname);
 
-    Optional<Member> findByNickname(String nickname);
+    Member findByNickname(String nickname);
 
     void deleteMemberByNickname(String nickname);
 
