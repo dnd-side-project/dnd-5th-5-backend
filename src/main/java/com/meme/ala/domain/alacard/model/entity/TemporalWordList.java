@@ -24,6 +24,7 @@ public class TemporalWordList {
 
     private List<SelectionWordDto> wordDtoList;
 
+    @Builder.Default
     @Indexed(expireAfterSeconds = 600)
-    private Date expireAt;
+    private Date expireAt = new Date();
 }
