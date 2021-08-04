@@ -71,7 +71,6 @@ public class AlaCardController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, wordDtoList));
     }
 
-    // TODO: 제출하는데, 대상이 없음
     @PatchMapping("/wordlist")
     public ResponseEntity<ResponseDto<String>> submitWordList(@RequestParam String nickname, @RequestBody SubmitWordDto submitWordDto) {
         Member member = memberService.findByNickname(nickname);
