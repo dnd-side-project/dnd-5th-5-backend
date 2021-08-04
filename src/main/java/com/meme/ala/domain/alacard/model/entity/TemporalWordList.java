@@ -6,10 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -24,7 +24,6 @@ public class TemporalWordList {
 
     private List<SelectionWordDto> wordDtoList;
 
-    @Builder.Default
-    private LocalDateTime expireAt = LocalDateTime.now().plusMinutes(10L);
-
+    @Indexed(expireAfterSeconds = 600)
+    private Date expireAt;
 }
