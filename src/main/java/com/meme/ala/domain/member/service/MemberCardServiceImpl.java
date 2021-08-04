@@ -4,9 +4,11 @@ import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
+import com.meme.ala.domain.alacard.model.entity.TemporalWordList;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
+import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -25,14 +27,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MemberCardServiceImpl implements MemberCardService {
-    private final MemberRepository memberRepository;
-    private final AlaCardRepository alaCardRepository;
-    private final MemberService memberService;
-    private final AlaCardService alaCardService;
     private final AlaCardSaveMapper alaCardSaveMapper;
 
-    @Value("${alacard.maxwords}")
-    private int maxWords;
+    private final MemberRepository memberRepository;
+    private final AlaCardRepository alaCardRepository;
+    private final TemporalWordListRepository temporalWordListRepository;
+
+    private final MemberService memberService;
+    private final AlaCardService alaCardService;
 
     @Override
     @Transactional
@@ -62,7 +64,23 @@ public class MemberCardServiceImpl implements MemberCardService {
         return alaCardRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Override
+    @Transactional
+    public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle){
+        Member member = memberService.findByNickname(nickname)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        List<AlaCard> alaCardList = getAlaCardListFromMember(member);
+
+        List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
+
+        if (shuffle) Collections.shuffle(wordDtoList);
+
+        TemporalWordList temporalWordList = TemporalWordList.builder().cookieId(cookieId).wordDtoList(wordDtoList).build();
+
+        temporalWordListRepository.save(temporalWordList);
+    }
+
     public List<AlaCard> getAlaCardListFromMember(Member member) {
         return member.getAlaCardSettingPairList()
                 .stream().map(AlaCardSettingPair::getAlaCard)
@@ -70,14 +88,12 @@ public class MemberCardServiceImpl implements MemberCardService {
     }
 
     @Override
+    @Cacheable(key = "#cookieId")
     @Transactional(readOnly = true)
-    public List<SelectionWordDto> getWordList(String nickname, Boolean shuffle) {
-        Member member = memberService.findByNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-        List<AlaCard> alaCardList = getAlaCardListFromMember(member);
-        List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
-        if (shuffle) {
-            Collections.shuffle(wordDtoList);
-        }
-        return new ArrayList<>(wordDtoList.subList(0, Math.min(maxWords, wordDtoList.size())));
+    public List<SelectionWordDto> getWordList(String cookieId) {
+        TemporalWordList temporalWordList = temporalWordListRepository.findByCookieId(cookieId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        return temporalWordList.getWordDtoList();
     }
 }

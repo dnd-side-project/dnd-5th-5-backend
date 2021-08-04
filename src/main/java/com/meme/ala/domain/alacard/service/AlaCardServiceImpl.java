@@ -10,15 +10,18 @@ import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Font;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardMapper;
+import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
-import com.meme.ala.domain.alacard.repository.AlaCardRepository;
-import com.meme.ala.domain.alacard.repository.AlaCardSettingRepository;
-import com.meme.ala.domain.alacard.repository.BackgroundRepository;
-import com.meme.ala.domain.alacard.repository.FontRepository;
+import com.meme.ala.domain.alacard.repository.*;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
+import com.meme.ala.domain.member.service.MemberCardService;
+import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +37,9 @@ public class AlaCardServiceImpl implements AlaCardService {
     private final AlaCardSettingRepository alaCardSettingRepository;
     private final BackgroundRepository backgroundRepository;
     private final FontRepository fontRepository;
+
     private final AggregationService aggregationService;
+
     private final AmazonS3ImageUtil amazonS3ImageUtil;
     private final AlaCardMapper alaCardMapper;
     private final AlaCardSettingMapper alaCardSettingMapper;
@@ -44,7 +49,6 @@ public class AlaCardServiceImpl implements AlaCardService {
     public void save(AlaCard alaCard) {
         alaCardRepository.save(alaCard);
     }
-
 
     @Override
     @Transactional(readOnly = true)

@@ -7,11 +7,13 @@ import com.meme.ala.domain.member.model.entity.Member;
 import java.util.List;
 
 public interface MemberCardService {
-    public List<AlaCard> getAlaCardList();
+    List<AlaCard> getAlaCardList();
 
-    public List<AlaCard> getAlaCardListFromMember(Member member);
+    List<AlaCard> getAlaCardListFromMember(Member member);
 
-    List<SelectionWordDto> getWordList(String nickname, Boolean shuffle);
+    void assignCard(Member member, int num);
 
-    public void assignCard(Member member, int num);
+    void setTemporalWordList(String cookieId, String nickname, Boolean shuffle);
+
+    List<SelectionWordDto> getWordList(String cookieId);
 }
