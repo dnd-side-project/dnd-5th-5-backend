@@ -8,6 +8,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -21,4 +23,8 @@ public class TemporalWordList {
     private String cookieId;
 
     private List<SelectionWordDto> wordDtoList;
+
+    @Builder.Default
+    private LocalDateTime expireAt = LocalDateTime.now().plusMinutes(10L);
+
 }
