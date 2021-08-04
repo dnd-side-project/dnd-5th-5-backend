@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AlaCardDto {
     private String sentence;
+    private Boolean isCompleted;
     private List<WordCountDto> selectedWordList;
     private AlaCardSettingDto alaCardSettingDto;
 }

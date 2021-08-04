@@ -57,25 +57,26 @@ public class AlaCardServiceImpl implements AlaCardService {
         return alaCardSettingPairList.stream()
                 .map(alaCardSettingPair -> alaCardMapper.toDto(
                         alaCardSettingPair.getAlaCard(),
-                        AlaCardSetting.builder()
-                                .background(Background.builder()
-                                        .fontColor("#ffffff")
-                                        .imgUrl("https://user-images.githubusercontent.com/46064193/127431607-cd319904-0147-4ccc-8880-373ca25f2d8a.png")
-                                        .build())
-                                .font(Font.builder()
-                                        .fontName("noto sans")
-                                        .build())
-                                .build(),
-                        this.toSentence(alaCardSettingPair.getAlaCard(), member).getSentence(),
-                        this.toSentence(alaCardSettingPair.getAlaCard(), member).getWordCountList()
+                        alaCardSettingPair.getAlaCardSetting(),
+                        toSentence(alaCardSettingPair.getAlaCard(), member).getSentence(),
+                        toSentence(alaCardSettingPair.getAlaCard(), member).getWordCountList(),
+                        toSentence(alaCardSettingPair.getAlaCard(), member).getIsCompleted()
                 )).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public SentenceWord toSentence(AlaCard alaCard, Member member) {
-        List<WordCount> wordCountResultList = new ArrayList<>();
         Aggregation aggregation = aggregationService.findByMember(member);
+        if (isCompletable(alaCard, aggregation)) {
+            return buildSentence(alaCard, aggregation);
+        } else {
+            return buildEmptySentence(alaCard);
+        }
+    }
+
+    private SentenceWord buildSentence(AlaCard alaCard, Aggregation aggregation) {
+        List<WordCount> wordCountResultList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < alaCard.getMiddleCategoryList().size(); i++) {
             MiddleCategory middleCategory = alaCard.getMiddleCategoryList().get(i);
@@ -89,7 +90,38 @@ public class AlaCardServiceImpl implements AlaCardService {
         return SentenceWord.builder()
                 .sentence(stringBuilder.toString())
                 .wordCountList(wordCountResultList)
+                .isCompleted(true)
                 .build();
+    }
+
+    private SentenceWord buildEmptySentence(AlaCard alaCard) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < alaCard.getMiddleCategoryList().size(); i++) {
+            MiddleCategory middleCategory = alaCard.getMiddleCategoryList().get(i);
+            stringBuilder.append(middleCategory.getForm());
+            if (i != alaCard.getMiddleCategoryList().size() - 1)
+                stringBuilder.append(middleCategory.getSentenceComponent().getJosa());
+            else
+                stringBuilder.append(middleCategory.getSentenceComponent().getEomi());
+        }
+        return SentenceWord.builder()
+                .sentence(stringBuilder.toString())
+                .wordCountList(new ArrayList<>())
+                .isCompleted(false)
+                .build();
+    }
+
+    private Boolean isCompletable(AlaCard alaCard, Aggregation aggregation) {
+        Boolean status = true;
+        for (int i = 0; i < alaCard.getMiddleCategoryList().size(); i++) {
+            MiddleCategory middleCategory = alaCard.getMiddleCategoryList().get(i);
+            List<WordCount> wordCountList = toSortedWordCountList(aggregation, middleCategory.getMiddleCategoryName());
+            WordCount selectedWordCount = wordCountList.get(0);
+            if (selectedWordCount.getCount() == 0) {
+                return false;
+            }
+        }
+        return status;
     }
 
     @Override
