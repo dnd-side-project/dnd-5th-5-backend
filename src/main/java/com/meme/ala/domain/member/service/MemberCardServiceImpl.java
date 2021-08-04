@@ -85,7 +85,6 @@ public class MemberCardServiceImpl implements MemberCardService {
     }
 
     @Override
-    @Cacheable(key = "#cookieId")
     @Transactional(readOnly = true)
     public List<SelectionWordDto> getWordList(String cookieId) {
         TemporalWordList temporalWordList = temporalWordListRepository.findByCookieId(cookieId)
