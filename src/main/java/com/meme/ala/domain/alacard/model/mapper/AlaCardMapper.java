@@ -16,12 +16,13 @@ import java.util.stream.Collectors;
 public interface AlaCardMapper {
     AlaCardMapper INSTANCE = Mappers.getMapper(AlaCardMapper.class);
 
-    default AlaCardDto toDto(AlaCard alaCard, AlaCardSetting alaCardSetting, String sentence, List<WordCount> selectedWordList) {
+    default AlaCardDto toDto(AlaCard alaCard, AlaCardSetting alaCardSetting, String sentence, List<WordCount> selectedWordList, Boolean isCompleted) {
         return AlaCardDto.builder()
                 .alaCardSettingDto(AlaCardSettingMapper.INSTANCE.toDto(alaCardSetting))
                 .selectedWordList(selectedWordList.stream()
                         .map(WordCountMapper.INSTANCE::toDto)
                         .collect(Collectors.toList()))
+                .isCompleted(isCompleted)
                 .sentence(sentence).build();
     }
 }

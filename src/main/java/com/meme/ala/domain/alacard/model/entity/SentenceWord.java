@@ -13,4 +13,5 @@ import java.util.List;
 public class SentenceWord {
     private String sentence;
     List<WordCount> wordCountList;
+    Boolean isCompleted;
 }
