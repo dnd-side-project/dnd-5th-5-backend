@@ -105,6 +105,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("사용자의 문장리스트와 단어 카운트"),
                                 fieldWithPath("data[*].sentence").description("문장"),
+                                fieldWithPath("data[*].isCompleted").description("완성 여부"),
                                 fieldWithPath("data[*].selectedWordList").description("문장에서 선택된 단어카운트"),
                                 fieldWithPath("data[*].selectedWordList[*].wordName").description("선택된단어"),
                                 fieldWithPath("data[*].selectedWordList[*].count").description("선택된단어횟수"),
