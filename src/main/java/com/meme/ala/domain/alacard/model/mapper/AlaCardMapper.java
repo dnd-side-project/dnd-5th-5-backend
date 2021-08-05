@@ -17,6 +17,8 @@ public interface AlaCardMapper {
     AlaCardMapper INSTANCE = Mappers.getMapper(AlaCardMapper.class);
 
     default AlaCardDto toDto(AlaCard alaCard, AlaCardSetting alaCardSetting, String sentence, List<WordCount> selectedWordList, Boolean isCompleted) {
+        if(!isCompleted)
+            alaCardSetting.getBackground().setFontColor("#B9FF46");
         return AlaCardDto.builder()
                 .alaCardSettingDto(AlaCardSettingMapper.INSTANCE.toDto(alaCardSetting))
                 .selectedWordList(selectedWordList.stream()
