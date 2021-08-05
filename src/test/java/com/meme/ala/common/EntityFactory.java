@@ -12,7 +12,6 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
-import com.meme.ala.domain.alacard.model.entity.cardSetting.Font;
 import org.bson.types.ObjectId;
 
 import java.util.Arrays;
@@ -66,11 +65,11 @@ public class EntityFactory {
     public static AlaCardSetting testAlaCardSetting() {
         return AlaCardSetting.builder()
                 .background(Background.builder()
-                        .fontColor("FFFFFF")
+                        .fontColor("#FFFFFF")
                         .imgUrl("http://test/background.jpg")
+                        .category("solid")
                         .build()
                 )
-                .font(Font.builder().fontName("sans").build())
                 .isOpen(true)
                 .build();
     }

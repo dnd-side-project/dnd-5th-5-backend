@@ -114,7 +114,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].alaCardSettingDto").description("알라카드 세팅정보"),
                                 fieldWithPath("data[*].alaCardSettingDto.backgroundImgUrl").description("배경 이미지"),
                                 fieldWithPath("data[*].alaCardSettingDto.fontColor").description("글씨 색"),
-                                fieldWithPath("data[*].alaCardSettingDto.font").description("글씨체"),
+                                fieldWithPath("data[*].alaCardSettingDto.category").description("배경 카테고리"),
                                 fieldWithPath("data[*].alaCardSettingDto.isOpen").description("카드 공개 여부"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
