@@ -39,7 +39,12 @@ public class MemberCardServiceImpl implements MemberCardService {
     public void assignCard(Member member, int num) {
         List<AlaCard> memberAlaCardList = getAlaCardListFromMember(member);
         List<AlaCard> alaCardList = getAlaCardList();
-        List<AlaCardSetting> alaCardSettingList = alaCardService.getAlaCardSettings();
+        List<AlaCardSetting> alaCardSettingList = alaCardService.getBackgrounds().stream()
+                .map(background -> AlaCardSetting.builder()
+                        .background(background)
+                        .isOpen(true)
+                        .build())
+                .collect(Collectors.toList());
         Collections.shuffle(alaCardList);
         Collections.shuffle(alaCardSettingList);
         List<AlaCard> selectedAlaCardList =

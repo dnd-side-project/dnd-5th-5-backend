@@ -11,12 +11,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Builder
 @AllArgsConstructor
-@Document("ALACARDSETTING")
 public class AlaCardSetting {
     @Id
     private ObjectId id;
 
-    @DBRef
     private Background background;
 
     @Builder.Default

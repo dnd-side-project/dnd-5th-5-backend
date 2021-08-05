@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +39,7 @@ public class MemberCardServiceTest {
 
     @DisplayName("멤버 카드 할당 테스트")
     @Test
-    public void 멤버_카드_할당_테스트() throws Exception {
+    public void 멤버_카드_할당_테스트(){
         List<AlaCard> alaCardList = new ArrayList<>();
         for (int i = 0; i < defaultCardNum * 2; i++) {
             AlaCard alaCard = AlaCard.builder().bigCategory("test" + i).build();
@@ -49,7 +48,7 @@ public class MemberCardServiceTest {
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
         when(memberRepository.existsMemberByMemberSettingNickname(any(String.class))).thenReturn(false);
         when(alaCardRepository.findAll()).thenReturn(alaCardList);
-        when(alaCardService.getAlaCardSettings()).thenReturn(Arrays.asList(EntityFactory.testAlaCardSetting()));
+        when(alaCardService.getBackgrounds()).thenReturn(Arrays.asList(EntityFactory.testAlaCardSetting().getBackground()));
 
 
         Member testMember = Member.builder().build();

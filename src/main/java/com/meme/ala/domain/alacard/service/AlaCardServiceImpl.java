@@ -10,10 +10,10 @@ import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
-import com.meme.ala.domain.alacard.repository.AlaCardSettingRepository;
 import com.meme.ala.domain.alacard.repository.BackgroundRepository;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 @Service
 public class AlaCardServiceImpl implements AlaCardService {
     private final AlaCardRepository alaCardRepository;
-    private final AlaCardSettingRepository alaCardSettingRepository;
     private final BackgroundRepository backgroundRepository;
 
     private final AggregationService aggregationService;
@@ -131,13 +130,13 @@ public class AlaCardServiceImpl implements AlaCardService {
         alaCardSettingDto.setBackgroundImgUrl(alaCardSettingDto.getBackgroundImgUrl().replace(' ','+'));
         AlaCardSetting alaCardSetting = alaCardSettingMapper.toEntity(alaCardSettingDto);
         backgroundRepository.save(alaCardSetting.getBackground());
-        alaCardSettingRepository.save(alaCardSetting);
+        //TODO: Background mapper로 변환
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<AlaCardSetting> getAlaCardSettings() {
-        return alaCardSettingRepository.findAll();
+    public List<Background> getBackgrounds() {
+        return backgroundRepository.findAll();
     }
 
     private List<WordCount> toSortedWordCountList(Aggregation aggregation, String middleCategoryName) {
