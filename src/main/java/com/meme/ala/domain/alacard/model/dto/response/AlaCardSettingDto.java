@@ -12,6 +12,6 @@ import lombok.Setter;
 public class AlaCardSettingDto {
     private String backgroundImgUrl;
     private String fontColor;
-    private String font;
+    private String category;
     private Boolean isOpen;
 }

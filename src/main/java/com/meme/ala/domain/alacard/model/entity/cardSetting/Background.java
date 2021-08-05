@@ -17,5 +17,7 @@ public class Background {
 
     private String imgUrl;
 
+    private String category;
+
     private String fontColor;
 }

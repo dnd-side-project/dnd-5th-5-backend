@@ -19,9 +19,6 @@ public class AlaCardSetting {
     @DBRef
     private Background background;
 
-    @DBRef
-    private Font font;
-
     @Builder.Default
     private Boolean isOpen = true;
 }

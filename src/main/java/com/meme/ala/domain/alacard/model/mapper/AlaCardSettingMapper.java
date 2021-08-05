@@ -13,11 +13,11 @@ public interface AlaCardSettingMapper {
 
     @Mapping(target = "backgroundImgUrl", source = "background.imgUrl")
     @Mapping(target = "fontColor", source = "background.fontColor")
-    @Mapping(target = "font", source = "font.fontName")
+    @Mapping(target = "category", source = "background.category")
     AlaCardSettingDto toDto(AlaCardSetting alaCardSetting);
 
     @Mapping(target = "background.imgUrl", source = "backgroundImgUrl")
     @Mapping(target = "background.fontColor", source = "fontColor")
-    @Mapping(target = "font.fontName", source = "font")
+    @Mapping(target = "background.category", source = "category")
     AlaCardSetting toEntity(AlaCardSettingDto alaCardSettingDto);
 }

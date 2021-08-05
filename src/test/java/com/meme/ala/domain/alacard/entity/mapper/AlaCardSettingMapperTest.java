@@ -23,7 +23,7 @@ public class AlaCardSettingMapperTest {
     void 엔티티에서_DTO변환_테스트() {
         AlaCardSettingDto mappedDto = alaCardSettingMapper.toDto(alaCardSetting);
         assertEquals(mappedDto.getBackgroundImgUrl(), alaCardSettingDto.getBackgroundImgUrl());
-        assertEquals(mappedDto.getFont(), alaCardSettingDto.getFont());
+        assertEquals(mappedDto.getCategory(), alaCardSettingDto.getCategory());
         assertEquals(mappedDto.getFontColor(), alaCardSettingDto.getFontColor());
         assertEquals(mappedDto.getIsOpen(), alaCardSettingDto.getIsOpen());
     }

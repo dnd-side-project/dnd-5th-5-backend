@@ -25,7 +25,7 @@ public class AmazonS3ImageUtil {
         List<String> objectList = new ArrayList<>();
         ObjectListing objects = s3.listObjects(new ListObjectsRequest().withBucketName(bucketName).withPrefix(folderName));
         for (S3ObjectSummary s : objects.getObjectSummaries()) {
-            objectList.add(s3Url + "/" + s.getKey());
+            objectList.add(s3Url + "/" + s.getKey().replace(' ','+'));
         }
         objectList.remove(0);
         return objectList;
