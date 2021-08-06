@@ -11,7 +11,7 @@ import org.bson.types.ObjectId;
 @Builder
 @AllArgsConstructor
 public class AlaCardSettingDto {
-    private ObjectId AlaCardId;
+    private ObjectId alaCardId;
     private String backgroundImgUrl;
     private String fontColor;
     private String category;

@@ -2,11 +2,13 @@ package com.meme.ala.domain.member.service;
 
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.TemporalWordList;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
+import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
 import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
 import com.meme.ala.domain.alacard.service.AlaCardService;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 public class MemberCardServiceImpl implements MemberCardService {
     private final AlaCardSaveMapper alaCardSaveMapper;
+    private final AlaCardSettingMapper alaCardSettingMapper;
 
     private final MemberRepository memberRepository;
     private final AlaCardRepository alaCardRepository;
@@ -96,5 +99,18 @@ public class MemberCardServiceImpl implements MemberCardService {
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
         return temporalWordList.getWordDtoList();
+    }
+
+    @Override
+    @Transactional
+    public void saveSetting(Member member, AlaCardSettingDto alaCardSettingDto) {
+        for (AlaCardSettingPair alaCardSettingPair : member.getAlaCardSettingPairList()) {
+            if (alaCardSettingPair.getAlaCard().getId()
+                    .equals(alaCardSettingDto.getAlaCardId())) {
+                alaCardSettingPair.setAlaCardSetting(alaCardSettingMapper.toEntity(alaCardSettingDto));
+                break;
+            }
+        }
+        memberRepository.save(member);
     }
 }

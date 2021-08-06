@@ -8,6 +8,7 @@ import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
@@ -186,6 +187,49 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("배경의 URL"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @DisplayName("사용자의 카드 세팅을 변경하는 테스트")
+    @Test
+    public void 사용자의_카드_세팅을_변경하는_테스트() throws Exception {
+        String sampleRequestBody =
+                "{\n" +
+                        "  \"alaCardId\": {\n" +
+                        "    \"timestamp\": 1627403267,\n" +
+                        "    \"date\": \"2021-07-27T16:27:47.000+00:00\"\n" +
+                        "  },\n" +
+                        "  \"backgroundImgUrl\": \"https:test.save.png\",\n" +
+                        "  \"fontColor\": \"#FF0000\",\n" +
+                        "  \"category\": \"Solid\",\n" +
+                        "  \"isOpen\": false\n" +
+                        "}";
+
+        doNothing().when(memberCardService).saveSetting(any(Member.class), any(AlaCardSettingDto.class));
+
+        mockMvc.perform(patch("/api/v1/alacard/alacardsetting")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(sampleRequestBody))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(document("api/v1/alacard/alacardsetting",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("alaCardId").description("매칭될 알라카드의 ObjectID"),
+                                fieldWithPath("alaCardId.timestamp").description("ObjecId의 구성1(timestamp)"),
+                                fieldWithPath("alaCardId.date").description("ObjectId의 구성2(date)"),
+                                fieldWithPath("backgroundImgUrl").description("배경 이미지"),
+                                fieldWithPath("fontColor").description("폰트 색깔"),
+                                fieldWithPath("category").description("이미지 카테고리"),
+                                fieldWithPath("isOpen").description("공개 여부")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

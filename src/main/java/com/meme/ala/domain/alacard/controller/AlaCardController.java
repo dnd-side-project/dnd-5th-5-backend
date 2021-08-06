@@ -9,6 +9,7 @@ import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
@@ -89,10 +90,18 @@ public class AlaCardController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundImageUrls()));
     }
 
-    @PostMapping("/alacardsetting")
+    @PostMapping("/background")
     public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody BackgroundDto backgroundDto) {
         alaCardService.saveBackground(backgroundDto);
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
+    }
+
+    @PatchMapping("/alacardsetting")
+    public ResponseEntity<ResponseDto> patchAlaCardSetting(@CurrentUser Member member,
+                                                           @RequestBody AlaCardSettingDto alaCardSettingDto) {
+        memberCardService.saveSetting(member, alaCardSettingDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
     }
 }
