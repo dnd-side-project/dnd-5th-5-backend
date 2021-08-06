@@ -22,7 +22,7 @@ public interface AlaCardService {
 
     List<String> getBackgroundImageUrls() throws Exception;
 
-    void saveSetting(BackgroundDto backgroundDto);
+    void saveBackground(BackgroundDto backgroundDto);
 
     List<Background> getBackgrounds();
 }

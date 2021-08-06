@@ -125,7 +125,7 @@ public class AlaCardServiceImpl implements AlaCardService {
 
     @Override
     @Transactional
-    public void saveSetting(BackgroundDto backgroundDto) {
+    public void saveBackground(BackgroundDto backgroundDto) {
         Background background = backgroundMapper.toEntity(backgroundDto);
         background.setImgUrl(background.getImgUrl().replace(' ', '+'));
         backgroundRepository.save(background);

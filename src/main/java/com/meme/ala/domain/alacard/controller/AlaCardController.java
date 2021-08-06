@@ -9,7 +9,6 @@ import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
-import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
@@ -23,12 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/alacard")
@@ -96,7 +91,7 @@ public class AlaCardController {
 
     @PostMapping("/alacardsetting")
     public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody BackgroundDto backgroundDto) {
-        alaCardService.saveSetting(backgroundDto);
+        alaCardService.saveBackground(backgroundDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
     }
