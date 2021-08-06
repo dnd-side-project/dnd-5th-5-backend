@@ -10,6 +10,7 @@ import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
@@ -94,8 +95,8 @@ public class AlaCardController {
     }
 
     @PostMapping("/alacardsetting")
-    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody AlaCardSettingDto alaCardSettingDto) {
-        alaCardService.saveSetting(alaCardSettingDto);
+    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody BackgroundDto backgroundDto) {
+        alaCardService.saveSetting(backgroundDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
     }

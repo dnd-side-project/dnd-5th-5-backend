@@ -3,6 +3,7 @@ package com.meme.ala.domain.alacard.service;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
@@ -21,7 +22,7 @@ public interface AlaCardService {
 
     List<String> getBackgroundImageUrls() throws Exception;
 
-    void saveSetting(AlaCardSettingDto alaCardSettingDto);
+    void saveSetting(BackgroundDto backgroundDto);
 
     List<Background> getBackgrounds();
 }

@@ -19,12 +19,15 @@ public interface AlaCardMapper {
     default AlaCardDto toDto(AlaCard alaCard, AlaCardSetting alaCardSetting, String sentence, List<WordCount> selectedWordList, Boolean isCompleted) {
         if(!isCompleted)
             alaCardSetting.getBackground().setFontColor("#B9FF46");
-        return AlaCardDto.builder()
+        AlaCardDto alaCardDto=AlaCardDto.builder()
                 .alaCardSettingDto(AlaCardSettingMapper.INSTANCE.toDto(alaCardSetting))
                 .selectedWordList(selectedWordList.stream()
                         .map(WordCountMapper.INSTANCE::toDto)
                         .collect(Collectors.toList()))
                 .isCompleted(isCompleted)
-                .sentence(sentence).build();
+                .sentence(sentence)
+                .build();
+        alaCardDto.getAlaCardSettingDto().setAlaCardId(alaCard.getId());
+        return alaCardDto;
     }
 }
