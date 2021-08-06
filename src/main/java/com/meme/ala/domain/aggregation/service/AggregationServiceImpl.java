@@ -4,8 +4,10 @@ import com.meme.ala.core.annotation.PublishEvent;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
+import com.meme.ala.domain.aggregation.model.entity.UserCount;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
+import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
@@ -26,6 +28,7 @@ import java.util.stream.Stream;
 @Service
 public class AggregationServiceImpl implements AggregationService {
     private final AggregationRepository aggregationRepository;
+    private final UserCountRepository userCountRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -86,6 +89,12 @@ public class AggregationServiceImpl implements AggregationService {
             }
         }
         aggregationRepository.save(aggregation);
+    }
+
+    @Override
+    public Integer getUserCount() {
+        UserCount userCount = userCountRepository.findAll().get(0);
+        return userCount.getCount();
     }
 
     private Map<String, List<String>> dtoListToMapByMiddleCategory(List<SelectionWordDto> wordDtoList) {

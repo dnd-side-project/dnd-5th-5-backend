@@ -225,4 +225,15 @@ include::{snippets}/api/v1/friend/nickname/delete/path-parameters.adoc[]
 .response
 include::{snippets}/api/v1/friend/nickname/delete/http-response.adoc[]
 
+== GET /api/v1/aggregation/usercount
+
+.request
+include::{snippets}/api/v1/aggregation/usercount/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/aggregation/usercount/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/aggregation/usercount/response-fields.adoc[]
+
 

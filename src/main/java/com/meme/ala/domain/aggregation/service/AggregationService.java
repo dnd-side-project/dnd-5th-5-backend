@@ -14,4 +14,6 @@ public interface AggregationService {
     public void save(Aggregation aggregation);
 
     public void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList);
+
+    public Integer getUserCount();
 }
