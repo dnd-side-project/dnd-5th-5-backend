@@ -167,6 +167,20 @@ include::{snippets}/api/v1/alacard/backgrounds/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/backgrounds/response-fields.adoc[]
 
+== PATCH /api/v1/alacard/alacardsetting
+
+.request
+include::{snippets}/api/v1/alacard/alacardsetting/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/alacard/alacardsetting/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/alacard/alacardsetting/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/alacard/alacardsetting/response-fields.adoc[]
+
 == GET /api/v1/friend
 
 .request

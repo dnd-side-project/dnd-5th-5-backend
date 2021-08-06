@@ -5,14 +5,13 @@ import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
-import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
-import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardMapper;
-import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
+import com.meme.ala.domain.alacard.model.mapper.BackgroundMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
 import com.meme.ala.domain.alacard.repository.BackgroundRepository;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
@@ -36,7 +35,7 @@ public class AlaCardServiceImpl implements AlaCardService {
 
     private final AmazonS3ImageUtil amazonS3ImageUtil;
     private final AlaCardMapper alaCardMapper;
-    private final AlaCardSettingMapper alaCardSettingMapper;
+    private final BackgroundMapper backgroundMapper;
 
     @Transactional
     @Override
@@ -126,11 +125,10 @@ public class AlaCardServiceImpl implements AlaCardService {
 
     @Override
     @Transactional
-    public void saveSetting(AlaCardSettingDto alaCardSettingDto) {
-        alaCardSettingDto.setBackgroundImgUrl(alaCardSettingDto.getBackgroundImgUrl().replace(' ','+'));
-        AlaCardSetting alaCardSetting = alaCardSettingMapper.toEntity(alaCardSettingDto);
-        backgroundRepository.save(alaCardSetting.getBackground());
-        //TODO: Background mapper로 변환
+    public void saveBackground(BackgroundDto backgroundDto) {
+        Background background = backgroundMapper.toEntity(backgroundDto);
+        background.setImgUrl(background.getImgUrl().replace(' ', '+'));
+        backgroundRepository.save(background);
     }
 
     @Override

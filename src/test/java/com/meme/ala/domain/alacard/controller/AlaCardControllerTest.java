@@ -8,6 +8,7 @@ import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
+import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
@@ -112,6 +113,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].selectedWordList[*].wordName").description("선택된단어"),
                                 fieldWithPath("data[*].selectedWordList[*].count").description("선택된단어횟수"),
                                 fieldWithPath("data[*].alaCardSettingDto").description("알라카드 세팅정보"),
+                                fieldWithPath("data[*].alaCardSettingDto.alaCardId").description("알라카드의 Id"),
                                 fieldWithPath("data[*].alaCardSettingDto.backgroundImgUrl").description("배경 이미지"),
                                 fieldWithPath("data[*].alaCardSettingDto.fontColor").description("글씨 색"),
                                 fieldWithPath("data[*].alaCardSettingDto.category").description("배경 카테고리"),
@@ -185,6 +187,44 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("배경의 URL"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @DisplayName("사용자의 카드 세팅을 변경하는 테스트")
+    @Test
+    public void 사용자의_카드_세팅을_변경하는_테스트() throws Exception {
+        String sampleRequestBody =
+                "{\n" +
+                        "  \"alaCardId\": \"610034b5a221f126a4e7f500\",\n" +
+                        "  \"backgroundImgUrl\": \"https://s3.ap-northeast-2.amazonaws.com/meme-ala-background/static/BG+Gradient+04.png\",\n" +
+                        "  \"fontColor\": \"#FF0000F\",\n" +
+                        "  \"category\": \"Gradient\",\n" +
+                        "  \"isOpen\": false\n" +
+                        "}";
+
+        doNothing().when(memberCardService).saveSetting(any(Member.class), any(AlaCardSettingDto.class));
+
+        mockMvc.perform(patch("/api/v1/alacard/alacardsetting")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(sampleRequestBody))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andDo(document("api/v1/alacard/alacardsetting",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("alaCardId").description("매칭될 알라카드의 ObjectID"),
+                                fieldWithPath("backgroundImgUrl").description("배경 이미지"),
+                                fieldWithPath("fontColor").description("폰트 색깔"),
+                                fieldWithPath("category").description("이미지 카테고리"),
+                                fieldWithPath("isOpen").description("공개 여부")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

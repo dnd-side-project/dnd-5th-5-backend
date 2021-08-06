@@ -10,6 +10,7 @@ import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
@@ -22,12 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/alacard")
@@ -93,10 +90,18 @@ public class AlaCardController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundImageUrls()));
     }
 
-    @PostMapping("/alacardsetting")
-    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody AlaCardSettingDto alaCardSettingDto) {
-        alaCardService.saveSetting(alaCardSettingDto);
-        return ResponseEntity.status(HttpStatus.OK)
+    @PostMapping("/background")
+    public ResponseEntity<ResponseDto> postAlaCardSetting(@RequestBody BackgroundDto backgroundDto) {
+        alaCardService.saveBackground(backgroundDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
+    }
+
+    @PatchMapping("/alacardsetting")
+    public ResponseEntity<ResponseDto> patchAlaCardSetting(@CurrentUser Member member,
+                                                           @RequestBody AlaCardSettingDto alaCardSettingDto) {
+        memberCardService.saveSetting(member, alaCardSettingDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
     }
 }
