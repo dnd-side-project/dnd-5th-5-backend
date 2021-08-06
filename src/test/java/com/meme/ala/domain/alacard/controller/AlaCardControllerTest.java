@@ -87,15 +87,18 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 ));
     }
 
-    @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자의 문장 리스트와 단어 카운트를 제공하는 테스트")
     @Test
     public void 사용자의_문장_리스트와_단어_카운트를_제공하는_테스트() throws Exception {
+        Member member = EntityFactory.testMember();
         List<AlaCardDto> alaCardDtoList = new LinkedList<>(Arrays.asList(DtoFactory.testAlaCardDto()));
 
         given(alaCardService.getAlaCardDtoList(any(Member.class))).willReturn(alaCardDtoList);
+        given(memberService.findByNickname(any(String.class))).willReturn(member);
 
-        mockMvc.perform(get("/api/v1/alacard/alacardlist"))
+        mockMvc.perform(get("/api/v1/alacard/alacardlist")
+                .param("nickname", EntityFactory.testMember().getMemberSetting().getNickname())
+        )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].sentence").value("testSentence"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].selectedWordList[0].wordName").value("testWord"))
@@ -103,6 +106,9 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 .andDo(document("api/v1/alacard/alacardlist",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("nickname").description("닉네임")
+                        ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),

@@ -78,7 +78,8 @@ public class AlaCardController {
     }
 
     @GetMapping("/alacardlist")
-    public ResponseEntity<ResponseDto<List<AlaCardDto>>> alacardlist(@CurrentUser Member member) {
+    public ResponseEntity<ResponseDto<List<AlaCardDto>>> alacardlist(@RequestParam String nickname) {
+        Member member = memberService.findByNickname(nickname);
         List<AlaCardDto> alaCardDtoList = alaCardService.getAlaCardDtoList(member);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardDtoList));
