@@ -1,6 +1,7 @@
 package com.meme.ala.core.aop;
 
 import com.meme.ala.domain.event.model.entity.InitEvent;
+import com.meme.ala.domain.event.model.entity.SubmitEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -26,6 +27,10 @@ public class PublishEventAspect implements ApplicationEventPublisherAware {
         log.info(method + "가 실행됩니다.");
         if(method.equals("join")){
             InitEvent event = new InitEvent((String) returnObj);
+            eventPublisher.publishEvent(event);
+        }
+        else if(method.equals("submitWordList")){
+            SubmitEvent event = new SubmitEvent();
             eventPublisher.publishEvent(event);
         }
     }
