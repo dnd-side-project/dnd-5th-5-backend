@@ -1,5 +1,6 @@
 package com.meme.ala.domain.aggregation.service;
 
+import com.meme.ala.core.annotation.PublishEvent;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
@@ -69,6 +70,7 @@ public class AggregationServiceImpl implements AggregationService {
     }
 
     @Override
+    @PublishEvent
     @Transactional
     public void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList) {
         Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordDtoList);

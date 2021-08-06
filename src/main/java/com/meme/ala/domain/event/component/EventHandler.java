@@ -2,8 +2,11 @@ package com.meme.ala.domain.event.component;
 
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.aggregation.model.entity.UserCount;
+import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.event.model.entity.InitEvent;
+import com.meme.ala.domain.event.model.entity.SubmitEvent;
 import com.meme.ala.domain.friend.service.FriendService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
@@ -24,14 +27,27 @@ public class EventHandler {
     private final AggregationService aggregationService;
     private final MemberCardService memberCardService;
     private final MemberRepository memberRepository;
+    private final UserCountRepository userCountRepository;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void initMember(InitEvent event){
+    public void initMember(InitEvent event) {
         Member member = memberRepository.findByEmail(event.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
         memberCardService.assignCard(member, defaultCardNum);
         aggregationService.initAggregation(member);
         friendService.initFriendInfo(member);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void countUser(SubmitEvent event) {
+        if (userCountRepository.count() == 0) {
+            userCountRepository.save(UserCount.builder().count(1).build());
+        } else {
+            UserCount userCount = userCountRepository.findAll().get(0);
+            userCount.setCount(userCount.getCount() + 1);
+            userCountRepository.save(userCount);
+        }
     }
 }
