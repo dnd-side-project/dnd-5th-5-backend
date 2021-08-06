@@ -49,6 +49,7 @@ public class EntityFactory {
 
     public static AlaCard testAlaCard() {
         return AlaCard.builder()
+                .id(new ObjectId())
                 .bigCategory("test")
                 .middleCategoryItem(MiddleCategory.builder()
                         .middleCategoryName("testMiddle")

@@ -198,13 +198,10 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     public void 사용자의_카드_세팅을_변경하는_테스트() throws Exception {
         String sampleRequestBody =
                 "{\n" +
-                        "  \"alaCardId\": {\n" +
-                        "    \"timestamp\": 1627403267,\n" +
-                        "    \"date\": \"2021-07-27T16:27:47.000+00:00\"\n" +
-                        "  },\n" +
-                        "  \"backgroundImgUrl\": \"https:test.save.png\",\n" +
-                        "  \"fontColor\": \"#FF0000\",\n" +
-                        "  \"category\": \"Solid\",\n" +
+                        "  \"alaCardId\": \"610034b5a221f126a4e7f500\",\n" +
+                        "  \"backgroundImgUrl\": \"https://s3.ap-northeast-2.amazonaws.com/meme-ala-background/static/BG+Gradient+04.png\",\n" +
+                        "  \"fontColor\": \"#FF0000F\",\n" +
+                        "  \"category\": \"Gradient\",\n" +
                         "  \"isOpen\": false\n" +
                         "}";
 
@@ -220,8 +217,6 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("alaCardId").description("매칭될 알라카드의 ObjectID"),
-                                fieldWithPath("alaCardId.timestamp").description("ObjecId의 구성1(timestamp)"),
-                                fieldWithPath("alaCardId.date").description("ObjectId의 구성2(date)"),
                                 fieldWithPath("backgroundImgUrl").description("배경 이미지"),
                                 fieldWithPath("fontColor").description("폰트 색깔"),
                                 fieldWithPath("category").description("이미지 카테고리"),

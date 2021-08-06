@@ -105,7 +105,7 @@ public class MemberCardServiceImpl implements MemberCardService {
     @Transactional
     public void saveSetting(Member member, AlaCardSettingDto alaCardSettingDto) {
         for (AlaCardSettingPair alaCardSettingPair : member.getAlaCardSettingPairList()) {
-            if (alaCardSettingPair.getAlaCard().getId()
+            if (alaCardSettingPair.getAlaCard().getId().toHexString()
                     .equals(alaCardSettingDto.getAlaCardId())) {
                 alaCardSettingPair.setAlaCardSetting(alaCardSettingMapper.toEntity(alaCardSettingDto));
                 break;

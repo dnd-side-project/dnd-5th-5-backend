@@ -27,7 +27,7 @@ public interface AlaCardMapper {
                 .isCompleted(isCompleted)
                 .sentence(sentence)
                 .build();
-        alaCardDto.getAlaCardSettingDto().setAlaCardId(alaCard.getId());
+        alaCardDto.getAlaCardSettingDto().setAlaCardId(alaCard.getId().toHexString());
         return alaCardDto;
     }
 }
