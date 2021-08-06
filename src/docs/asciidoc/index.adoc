@@ -150,6 +150,9 @@ include::{snippets}/api/v1/alacard/wordlist/patch/response-fields.adoc[]
 .request
 include::{snippets}/api/v1/alacard/alacardlist/http-request.adoc[]
 
+.request parameters
+include::{snippets}/api/v1/alacard/alacardlist/request-parameters.adoc[]
+
 .response
 include::{snippets}/api/v1/alacard/alacardlist/http-response.adoc[]
 
