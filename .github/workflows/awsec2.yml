@@ -55,6 +55,12 @@ jobs:
           path: './src/main/resources/application-prod.properties'
           property: 'spring.data.mongodb.uri'
           value: ${{ secrets.SPRING_DATA_MONGODB_URI }}
+      - name: Properties 파일에 mongodb 세팅 주입
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './src/main/resources/application-prod.properties'
+          property: 'spring.data.mongodb.auto-index-creation'
+          value: 'true'
       - name: Properties 파일에 jwt secret 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
