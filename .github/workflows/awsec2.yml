@@ -73,7 +73,12 @@ jobs:
           path: './src/main/resources/application-prod.properties'
           property: 'cloud.aws.credentials.secretKey'
           value: ${{ secrets.INJECT_SECRET }}
-
+      - name: Properties 파일에 원하는 프로파일 명 주입
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './src/main/resources/application.properties'
+          property: 'spring.profiles.active'
+          value: 'prod'
       - name: Build with Gradle test
         run: ./gradlew test
       - name: Publish Test Results
@@ -82,14 +87,6 @@ jobs:
         with:
           files: build/test-results/**/*.xml
           check_name: '[unit-test] Results'
-      - name: Properties 파일에 원하는 프로파일 명 주입
-        uses: christian-draeger/write-properties@1.0.1
-        with:
-          path: './src/main/resources/application.properties'
-          property: 'spring.profiles.active'
-          value: 'prod'
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.6.0
       - name: Build with Gradle copyDocument
         run: ./gradlew copyDocument
       - name: Build with Gradle
