@@ -88,6 +88,8 @@ jobs:
           path: './src/main/resources/application.properties'
           property: 'spring.profiles.active'
           value: 'prod'
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.6.0
       - name: Build with Gradle copyDocument
         run: ./gradlew copyDocument
       - name: Build with Gradle
