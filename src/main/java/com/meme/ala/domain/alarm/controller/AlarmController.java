@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-
 @RequestMapping(value = "/api/v1/alarm")
 @RestController
 @RequiredArgsConstructor
@@ -21,21 +19,17 @@ public class AlarmController {
 
     //TODO: 테스트 코드는 지울 예정
     @GetMapping("/test")
-    public void saveTest(){
+    public void saveTest() {
         Alarm friendAlarm = FriendAlarm.builder().friendId(new ObjectId())
                 .memberId(new ObjectId())
                 .data("testFriendData")
                 .category(AlarmCategory.FRIEND_ALARM)
-                .createdAt(LocalDateTime.now())
-                .expireAt(LocalDateTime.now().plusDays(30))
                 .build();
 
         Alarm noticeAlarm = NoticeAlarm.builder().redirectUrl("http://testurl.com")
                 .memberId(new ObjectId())
                 .data("testNoticeData")
-                .category(AlarmCategory.FRIEND_ALARM)
-                .createdAt(LocalDateTime.now())
-                .expireAt(LocalDateTime.now().plusDays(30))
+                .category(AlarmCategory.NOTICE_ALARM)
                 .build();
         alarmRepository.save(friendAlarm);
         alarmRepository.save(noticeAlarm);

@@ -1,16 +1,17 @@
 package com.meme.ala.domain.alarm.model.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
+@SuperBuilder
 @Document(collection = "ALARM")
 public class Alarm {
     @Id
@@ -20,9 +21,12 @@ public class Alarm {
 
     private String data;
 
-    private LocalDateTime createdAt;
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime expireAt;
+    @Builder.Default
+    @Indexed(expireAfterSeconds = 60)
+    private LocalDateTime expireAt = LocalDateTime.now().plusSeconds(60);
 
     private AlarmCategory category;
 }
