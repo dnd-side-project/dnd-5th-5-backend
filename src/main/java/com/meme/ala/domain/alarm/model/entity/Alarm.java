@@ -22,7 +22,7 @@ public class Alarm {
     private String data;
 
     @Builder.Default
-    @Indexed(expireAfterSeconds = 60 * 60 * 24 * 30)
+    @Indexed(expireAfter = "30d")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Builder.Default
