@@ -22,11 +22,11 @@ public class Alarm {
     private String data;
 
     @Builder.Default
+    @Indexed(expireAfterSeconds = 60 * 60 * 24 * 30)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Builder.Default
-    @Indexed(expireAfterSeconds = 60)
-    private LocalDateTime expireAt = LocalDateTime.now().plusSeconds(60);
+    private LocalDateTime expireAt = LocalDateTime.now().plusDays(30);
 
     private AlarmCategory category;
 }
