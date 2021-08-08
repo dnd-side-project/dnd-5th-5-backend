@@ -43,12 +43,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Properties 파일에 원하는 프로파일 명 주입
-        uses: christian-draeger/write-properties@1.0.1
-        with:
-          path: './src/main/resources/application.properties'
-          property: 'spring.profiles.active'
-          value: 'prod'
       - name: Properties 파일에 mongodb uri 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
@@ -88,7 +82,12 @@ jobs:
         with:
           files: build/test-results/**/*.xml
           check_name: '[unit-test] Results'
-
+      - name: Properties 파일에 원하는 프로파일 명 주입
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: './src/main/resources/application.properties'
+          property: 'spring.profiles.active'
+          value: 'prod'
       - name: Build with Gradle copyDocument
         run: ./gradlew copyDocument
       - name: Build with Gradle
