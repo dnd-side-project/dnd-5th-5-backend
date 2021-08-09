@@ -6,14 +6,18 @@ import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceComponent;
 import com.meme.ala.domain.alacard.model.entity.Word;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
+import com.meme.ala.domain.alarm.model.entity.AlarmCategory;
+import com.meme.ala.domain.alarm.model.entity.FriendAlarm;
+import com.meme.ala.domain.alarm.model.entity.NoticeAlarm;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
-import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
-import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,6 +102,25 @@ public class EntityFactory {
     public static Aggregation testAggregation() {
         return Aggregation.builder()
                 .wordCountList(Arrays.asList(EntityFactory.testWordCount()))
+                .build();
+    }
+
+    public static FriendAlarm testFriendAlarm(){
+        return FriendAlarm.builder()
+                .friendId(testMember().getId())
+                .category(AlarmCategory.FRIEND_ALARM)
+                .memberId(testMember().getId())
+                .createdAt(LocalDateTime.of(2021,1,1,18,18,50))
+                .data("testFriendData")
+                .build();
+    }
+
+    public static NoticeAlarm testNoticeAlarm(){
+        return NoticeAlarm.builder().redirectUrl("http://testurl.com")
+                .memberId(testMember().getId())
+                .data("testNoticeData")
+                .createdAt(LocalDateTime.of(2021,1,2,18,18,50))
+                .category(AlarmCategory.NOTICE_ALARM)
                 .build();
     }
 }

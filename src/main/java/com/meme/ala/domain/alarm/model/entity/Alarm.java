@@ -2,6 +2,7 @@ package com.meme.ala.domain.alarm.model.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @SuperBuilder
+@NoArgsConstructor
 @Document(collection = "ALARM")
 public class Alarm {
     @Id
