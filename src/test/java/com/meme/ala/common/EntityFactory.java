@@ -82,7 +82,7 @@ public class EntityFactory {
         return FriendInfo.builder()
                 .memberId(new ObjectId(testObjectId() + "1"))
                 .friends(friends)
-                .pendings(pendings)
+                .myAcceptancePendingList(pendings)
                 .build();
     }
 

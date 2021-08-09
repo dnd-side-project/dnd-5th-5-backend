@@ -6,7 +6,7 @@ import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.domain.friend.model.dto.FriendDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.friend.model.mapper.FriendMapper;
-import com.meme.ala.domain.friend.service.FriendService;
+import com.meme.ala.domain.friend.service.FriendInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class FriendController {
-    private final FriendService friendService;
+    private final FriendInfoService friendInfoService;
     private final FriendMapper friendMapper;
 
     @GetMapping
     public ResponseEntity<ResponseDto<List<FriendDto>>> getMemberFriends(@CurrentUser Member member) {
-        List<Member> memberFriendList = friendService.getMemberFriend(member);
+        List<Member> memberFriendList = friendInfoService.getMemberFriend(member);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.READ_MEMBER_FRIENDS,
@@ -32,10 +32,9 @@ public class FriendController {
                 );
     }
 
-
     @PostMapping("/{nickname}")
     public ResponseEntity<ResponseDto> addMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
-        friendService.addMemberFriend(member, nickname);
+        friendInfoService.followingFriend(member, nickname);
 
         return ResponseEntity.status(HttpStatus.OK)
                     .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
@@ -43,7 +42,7 @@ public class FriendController {
 
     @PostMapping("/accept/{nickname}")
     public ResponseEntity<ResponseDto> acceptMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
-        friendService.acceptMemberFriend(member, nickname);
+        friendInfoService.acceptFollowerToFriend(member, nickname);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
@@ -52,7 +51,7 @@ public class FriendController {
     @DeleteMapping("/{nickname}")
     public ResponseEntity<ResponseDto> deleteMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
 
-        friendService.deleteMemberFriend(member, nickname);
+        friendInfoService.cutOffFriend(member, nickname);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.DELETED));

@@ -18,7 +18,10 @@ public enum ErrorCode {
 
     // Friend
     ALREADY_FRIEND(400, "F001", "Already Friend"),
-    NOT_FRIEND(400, "F002", "Not Friend")
+    NOT_FRIEND(400, "F002", "Not Friend"),
+    NOT_FOLLOWING(400, "F003", "Not Following"),
+    NOT_FOLLOWER(400, "F004", "Not Follower"),
+    NOT_DEFAULT(400, "F005", "Not Default")
     ;
 
     private final String code;

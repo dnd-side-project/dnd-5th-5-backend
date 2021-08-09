@@ -4,7 +4,7 @@ import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.friend.service.FriendService;
+import com.meme.ala.domain.friend.service.FriendInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private FriendService memberFriendService;
+    private FriendInfoService memberFriendInfoService;
 
     @AlaWithAccount("test@gmail.com")
     @Test
@@ -37,7 +37,7 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         List<Member> friends = Arrays.asList(EntityFactory.testMember());
 
-        given(memberFriendService.getMemberFriend(any(Member.class))).willReturn(friends);
+        given(memberFriendInfoService.getMemberFriend(any(Member.class))).willReturn(friends);
 
         mockMvc.perform(get("/api/v1/friend"))
                 .andExpect(status().isOk())

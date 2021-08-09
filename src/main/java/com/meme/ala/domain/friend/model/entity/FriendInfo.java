@@ -1,5 +1,8 @@
 package com.meme.ala.domain.friend.model.entity;
 
+import com.meme.ala.core.error.ErrorCode;
+import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.member.model.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +27,19 @@ public class FriendInfo {
     private List<ObjectId> friends = new LinkedList<>();
 
     @Builder.Default
-    private List<ObjectId> pendings = new LinkedList<>();
+    private List<ObjectId> myAcceptancePendingList = new LinkedList<>();
+
+    @Builder.Default
+    private List<ObjectId> friendAcceptancePendingList = new LinkedList<>();
+
+    public FriendRelation getRelation(ObjectId friendId){
+        if(friends.contains(friendId))
+            return FriendRelation.FRIEND;
+        else if(myAcceptancePendingList.contains(friendId))
+            return FriendRelation.FOLLOWER;
+        else if(friendAcceptancePendingList.contains(friendId))
+            return FriendRelation.FOLLOWING;
+        else
+            return FriendRelation.DEFAULT;
+    }
 }
