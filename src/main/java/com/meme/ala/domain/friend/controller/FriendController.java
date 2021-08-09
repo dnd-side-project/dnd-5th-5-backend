@@ -66,7 +66,7 @@ public class FriendController {
     public ResponseEntity<ResponseDto> deleteMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
         Member friend = memberService.findByNickname(nickname);
 
-        friendInfoService.cutOffFriend(member, friend);
+        friendInfoService.unFriend(member, friend);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.DELETED));

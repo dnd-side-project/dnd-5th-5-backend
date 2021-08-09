@@ -9,7 +9,6 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,14 +83,14 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void cutOffFriend(Member member, Member friend){
+    public void unFriend(Member member, Member friend){
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo friendFriendInfo = getFriendInfo(friend);
 
         if(memberFriendInfo.getRelation(friend.getId()) != FriendRelation.FRIEND)
             throw new BusinessException(ErrorCode.NOT_FRIEND);
 
-        friendService.cutOff(memberFriendInfo, friendFriendInfo);
+        friendService.unFriend(memberFriendInfo, friendFriendInfo);
 
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, friendFriendInfo));
     }

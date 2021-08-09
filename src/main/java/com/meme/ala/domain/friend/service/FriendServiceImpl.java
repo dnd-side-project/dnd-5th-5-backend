@@ -34,7 +34,7 @@ public class FriendServiceImpl implements FriendService{
     }
 
     @Override
-    public void cutOff(FriendInfo a, FriendInfo b) {
+    public void unFriend(FriendInfo a, FriendInfo b) {
         a.getFriends().remove(b.getMemberId());
         b.getFriends().remove(a.getMemberId());
     }
