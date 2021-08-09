@@ -11,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.LinkedList;
 import java.util.Optional;
@@ -19,21 +22,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class FriendInfoServiceTest {
 
-    @InjectMocks
-    private FriendInfoServiceImpl friendService;
+    @Autowired
+    private FriendInfoService friendInfoService;
 
-    @Mock
+    @MockBean
     private FriendInfoRepository friendInfoRepository;
 
-    @Mock
+    @MockBean
     private MemberRepository memberRepository;
 
     @Test
-    void addMemberFriend() {
+    void followFriend() {
         Member member = EntityFactory.testMember(); // objectId : 60f3f89c9f21ff292724eb38
 
         FriendInfo memberFriendInfo = EntityFactory.testFriendInfo();
@@ -51,7 +53,7 @@ class FriendInfoServiceTest {
         given(friendInfoRepository.findById(eq(following.getId()))).willReturn(Optional.of(followingFriendInfo));
         given(friendInfoRepository.findById(eq(member.getId()))).willReturn(Optional.of(memberFriendInfo));
 
-        friendService.followingFriend(member, "friendNickname");
+        friendInfoService.followingFriend(member, following);
 
         assertEquals(followingFriendInfo.getMyAcceptancePendingList().size(), 3);
         assertEquals(followingFriendInfo.getMyAcceptancePendingList().get(2), member.getId());
@@ -77,7 +79,7 @@ class FriendInfoServiceTest {
         given(friendInfoRepository.findById(eq(member.getId()))).willReturn(Optional.of(memberFriendInfo));
         given(friendInfoRepository.findById(eq(follower.getId()))).willReturn(Optional.of(followerFriendInfo));
 
-        friendService.acceptFollowerToFriend(member, "testNickname");
+        friendInfoService.acceptFollowerToFriend(member, follower);
 
         assertEquals(memberFriendInfo.getMyAcceptancePendingList().size(), 2);
         assertEquals(memberFriendInfo.getFriends().size(), 3);

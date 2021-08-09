@@ -11,7 +11,7 @@ public enum FriendRelation {
 
     private final String krRelation;
 
-    private FriendRelation(String krRelation){
+    FriendRelation(String krRelation){
         this.krRelation = krRelation;
     }
 }

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 메서드의 3줄이 비슷한데 개선할 수 있나?
+public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 메서드의 처음 4줄이 비슷한데 개선할 수 있나?
     private final FriendInfoRepository friendInfoRepository;
     private final MemberRepository memberRepository;
     private final FriendService friendService;
@@ -46,11 +46,16 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
     }
 
     @Override
-    @Transactional
-    public void followingFriend(Member member, String followingNickname){
-        Member following = memberRepository.findByMemberSettingNickname(followingNickname)
+    public FriendRelation getRelation(Member member, Member person) {
+        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
+        return memberFriendInfo.getRelation(person.getId());
+    }
+
+    @Override
+    @Transactional
+    public void followingFriend(Member member, Member following){
         FriendInfo followingFriendInfo = friendInfoRepository.findById(following.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
@@ -67,10 +72,7 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
 
     @Override
     @Transactional
-    public void acceptFollowerToFriend(Member member, String followerNickname){
-        Member follower = memberRepository.findByMemberSettingNickname(followerNickname)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
+    public void acceptFollowerToFriend(Member member, Member follower){
         FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 
@@ -87,10 +89,7 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
 
     @Override
     @Transactional
-    public void cutOffFriend(Member member, String friendNickname){
-        Member friend = memberRepository.findByMemberSettingNickname(friendNickname)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
+    public void cutOffFriend(Member member, Member friend){
         FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
 

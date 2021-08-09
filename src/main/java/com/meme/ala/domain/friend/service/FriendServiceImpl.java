@@ -1,7 +1,10 @@
 package com.meme.ala.domain.friend.service;
 
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FriendServiceImpl implements FriendService{
     @Override
     public void follow(FriendInfo a, FriendInfo b) {
