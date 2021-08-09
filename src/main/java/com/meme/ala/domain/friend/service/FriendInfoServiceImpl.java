@@ -9,6 +9,7 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 메서드의 처음 4줄이 비슷한데 개선할 수 있나?
+public class FriendInfoServiceImpl implements FriendInfoService {
     private final FriendInfoRepository friendInfoRepository;
     private final MemberRepository memberRepository;
     private final FriendService friendService;
@@ -56,11 +57,8 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
     @Override
     @Transactional
     public void followingFriend(Member member, Member following){
-        FriendInfo followingFriendInfo = friendInfoRepository.findById(following.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
-        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        FriendInfo memberFriendInfo = getFriendInfo(member);
+        FriendInfo followingFriendInfo = getFriendInfo(following);
 
         if(memberFriendInfo.getRelation(following.getId()) != FriendRelation.DEFAULT)
             throw new BusinessException(ErrorCode.NOT_DEFAULT);
@@ -73,11 +71,8 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
     @Override
     @Transactional
     public void acceptFollowerToFriend(Member member, Member follower){
-        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
-        FriendInfo followerFriendInfo = friendInfoRepository.findById(follower.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        FriendInfo memberFriendInfo = getFriendInfo(member);
+        FriendInfo followerFriendInfo = getFriendInfo(follower);
 
         if(memberFriendInfo.getRelation(follower.getId()) != FriendRelation.FOLLOWER)
             throw new BusinessException(ErrorCode.NOT_FOLLOWER);
@@ -90,11 +85,8 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
     @Override
     @Transactional
     public void cutOffFriend(Member member, Member friend){
-        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
-
-        FriendInfo friendFriendInfo = friendInfoRepository.findById(friend.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        FriendInfo memberFriendInfo = getFriendInfo(member);
+        FriendInfo friendFriendInfo = getFriendInfo(friend);
 
         if(memberFriendInfo.getRelation(friend.getId()) != FriendRelation.FRIEND)
             throw new BusinessException(ErrorCode.NOT_FRIEND);
@@ -102,6 +94,11 @@ public class FriendInfoServiceImpl implements FriendInfoService { // TODO: 각 �
         friendService.cutOff(memberFriendInfo, friendFriendInfo);
 
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, friendFriendInfo));
+    }
+
+    private FriendInfo getFriendInfo(Member member){
+        return friendInfoRepository.findById(member.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
 }
