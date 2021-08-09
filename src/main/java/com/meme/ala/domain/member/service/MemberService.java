@@ -3,6 +3,7 @@ package com.meme.ala.domain.member.service;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
+import org.bson.types.ObjectId;
 
 public interface MemberService {
     boolean existsEmail(String email);
@@ -14,6 +15,8 @@ public interface MemberService {
     boolean existsNickname(String nickname);
 
     Member findByNickname(String nickname);
+
+    Member findByMemberId(ObjectId memberId);
 
     void deleteMemberByNickname(String nickname);
 

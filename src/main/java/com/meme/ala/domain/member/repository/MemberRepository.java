@@ -18,4 +18,6 @@ public interface MemberRepository extends MongoRepository<Member, ObjectId> {
     void deleteMemberByMemberSettingNickname(String nickname);
 
     boolean existsMemberByEmail(String email);
+
+    Optional<Member> findById(ObjectId id);
 }

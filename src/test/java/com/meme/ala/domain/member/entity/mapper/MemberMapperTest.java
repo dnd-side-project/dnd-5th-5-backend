@@ -8,7 +8,8 @@ import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class MemberMapperTest {
@@ -29,7 +30,7 @@ class MemberMapperTest {
     }
 
     @Test
-    void DTO로부터_엔티티_업데이트_테스트(){
+    void DTO로부터_엔티티_업데이트_테스트() {
         MemberPrincipalDto updateDto = MemberPrincipalDto.builder().nickname("test").build();
         memberMapper.updateMemberSettingFromDto(updateDto, member.getMemberSetting());
         assertEquals(member.getMemberSetting().getNickname(), updateDto.getNickname());
@@ -39,5 +40,4 @@ class MemberMapperTest {
         assertEquals(member.getMemberSetting().getNickname(), updateDto2.getNickname());
         assertEquals(member.getMemberSetting().getStatusMessage(), updateDto2.getStatusMessage());
     }
-
 }

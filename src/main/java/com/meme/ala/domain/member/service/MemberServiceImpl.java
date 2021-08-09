@@ -12,6 +12,7 @@ import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +70,11 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(readOnly = true)
     public Member findByNickname(String nickname) {
         return memberRepository.findByMemberSettingNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+    }
+
+    @Override
+    public Member findByMemberId(ObjectId memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
     @Override
