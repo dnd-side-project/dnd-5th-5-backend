@@ -18,6 +18,7 @@ import com.meme.ala.domain.member.model.entity.Member;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class DtoFactory {
@@ -85,11 +86,15 @@ public class DtoFactory {
     }
 
     public static SelectionWordDto testSelectionWordDto() {
+        String bigCategory = "test";
+        String middleCategory = "testMiddle";
+        String wordName = "testWord";
+        String hint = "testHint";
+        String id = Base64.getEncoder().encodeToString((bigCategory + "-" + middleCategory + "-" + hint + "-" + wordName).getBytes());
         return SelectionWordDto.builder()
                 .wordName("testWord")
-                .middleCategory("testMiddle")
                 .hint("testHint")
-                .bigCategory("test")
+                .id(id)
                 .build();
     }
 
