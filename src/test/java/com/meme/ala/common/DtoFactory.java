@@ -9,6 +9,8 @@ import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alarm.model.dto.AlarmDto;
+import com.meme.ala.domain.alarm.model.dto.FriendAddInfo;
+import com.meme.ala.domain.alarm.model.dto.NoticeAddInfo;
 import com.meme.ala.domain.alarm.model.entity.AlarmCategory;
 import com.meme.ala.domain.friend.model.dto.FriendDto;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
@@ -16,9 +18,7 @@ import com.meme.ala.domain.member.model.entity.Member;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DtoFactory {
     public static MemberPrincipalDto testMemberPrincipalDto() {
@@ -95,25 +95,27 @@ public class DtoFactory {
 
     public static AlarmDto testFriendAlarmDto() {
         Member member = EntityFactory.testMember();
-        Map<String, String> addInfoMap = new HashMap<>();
-        addInfoMap.put("nickname", member.getMemberSetting().getNickname());
-        addInfoMap.put("imgUrl", member.getMemberSetting().getImgUrl());
-        addInfoMap.put("statusMessage", member.getMemberSetting().getStatusMessage());
+        FriendAddInfo friendAddInfo = FriendAddInfo.builder()
+                .imgUrl(member.getMemberSetting().getImgUrl())
+                .nickname(member.getMemberSetting().getNickname())
+                .statusMessage(member.getMemberSetting().getStatusMessage())
+                .build();
         return AlarmDto.builder()
                 .string("testFriendData")
                 .category(AlarmCategory.FRIEND_ALARM.name())
-                .addInfo(addInfoMap)
+                .addInfo(friendAddInfo)
                 .createdAt(LocalDateTime.of(2021, 1, 1, 18, 18, 50))
                 .build();
     }
 
     public static AlarmDto testNoticeAlarmDto() {
-        Map<String, String> addInfoMap = new HashMap<>();
-        addInfoMap.put("redirectUrl", "http://testurl.com");
+        NoticeAddInfo noticeAddInfo = NoticeAddInfo.builder()
+                .redirectUrl("http://testurl.com")
+                .build();
         return AlarmDto.builder()
                 .string("testNoticeData")
                 .category(AlarmCategory.NOTICE_ALARM.name())
-                .addInfo(addInfoMap)
+                .addInfo(noticeAddInfo)
                 .createdAt(LocalDateTime.of(2021, 1, 2, 18, 18, 18, 50))
                 .build();
     }

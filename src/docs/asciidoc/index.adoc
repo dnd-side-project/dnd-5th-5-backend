@@ -284,6 +284,8 @@ include::{snippets}/api/v1/aggregation/usercount/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/aggregation/usercount/response-fields.adoc[]
 
+= 알람
+
 == GET /api/v1/alarm
 
 .request
