@@ -7,7 +7,7 @@ import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.event.model.entity.InitEvent;
 import com.meme.ala.domain.event.model.entity.SubmitEvent;
-import com.meme.ala.domain.friend.service.FriendService;
+import com.meme.ala.domain.friend.service.FriendInfoService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberCardService;
@@ -23,7 +23,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class EventHandler {
     @Value("${member.alacardnum}")
     private int defaultCardNum;
-    private final FriendService friendService;
+    private final FriendInfoService friendInfoService;
     private final AggregationService aggregationService;
     private final MemberCardService memberCardService;
     private final MemberRepository memberRepository;
@@ -36,7 +36,7 @@ public class EventHandler {
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
         memberCardService.assignCard(member, defaultCardNum);
         aggregationService.initAggregation(member);
-        friendService.initFriendInfo(member);
+        friendInfoService.initFriendInfo(member);
     }
 
     @Async

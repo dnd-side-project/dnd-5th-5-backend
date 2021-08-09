@@ -3,8 +3,10 @@ package com.meme.ala.domain.friend.controller;
 import com.meme.ala.common.AbstractControllerTest;
 import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.config.AlaWithAccount;
+import com.meme.ala.domain.friend.model.entity.FriendRelation;
 import com.meme.ala.domain.member.model.entity.Member;
-import com.meme.ala.domain.friend.service.FriendService;
+import com.meme.ala.domain.friend.service.FriendInfoService;
+import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -29,7 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FriendControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private FriendService memberFriendService;
+    private FriendInfoService friendInfoService;
+
+    @MockBean
+    private MemberService memberService;
 
     @AlaWithAccount("test@gmail.com")
     @Test
@@ -37,7 +42,8 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         List<Member> friends = Arrays.asList(EntityFactory.testMember());
 
-        given(memberFriendService.getMemberFriend(any(Member.class))).willReturn(friends);
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
+        given(friendInfoService.getMemberFriend(any(Member.class))).willReturn(friends);
 
         mockMvc.perform(get("/api/v1/friend"))
                 .andExpect(status().isOk())
@@ -60,7 +66,38 @@ public class FriendControllerTest extends AbstractControllerTest {
 
     @AlaWithAccount("test@gmail.com")
     @Test
+    public void 사용자와_상대방_관계_조회() throws Exception{
+
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
+        given(friendInfoService.getRelation(any(Member.class), any(Member.class))).willReturn(FriendRelation.FRIEND);
+
+        mockMvc.perform(get("/api/v1/friend/relation/{nickname}", "testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(READ_MEMBER_AND_PERSON_RELATION))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("testNickname"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.relation").value(FriendRelation.FRIEND.getKrRelation()))
+                .andDo(print())
+                .andDo(document("api/v1/friend/relation/nickname",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("nickname").description("친구 닉네임")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data.nickname").description("상대방 닉네임"),
+                                fieldWithPath("data.relation").description("상대방과의 관계(일반, 팔로잉, 팔로워, 친구)"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @Test
     public void 사용자_친구_추가_테스트() throws Exception{
+
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
 
         mockMvc.perform(post("/api/v1/friend/{nickname}", "testNickname"))
                 .andExpect(status().isOk())
@@ -78,6 +115,8 @@ public class FriendControllerTest extends AbstractControllerTest {
     @AlaWithAccount("test@gmail.com")
     @Test
     public void 사용자_친구_수락_테스트() throws Exception{
+
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
 
         mockMvc.perform(post("/api/v1/friend/accept/{nickname}", "testNickname"))
                 .andExpect(status().isOk())
