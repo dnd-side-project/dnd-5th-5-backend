@@ -56,10 +56,10 @@ public class AlarmControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].category").description("알람 종류"),
                                 fieldWithPath("data[*].createdAt").description("알람 생성 시간"),
                                 fieldWithPath("data[*].addInfo").description("부가적인 알람 정보 Map"),
-                                fieldWithPath("data[*].addInfo.redirectUrl").description("[공지]리다이렉션 URL").optional(),
-                                fieldWithPath("data[*].addInfo.imgUrl").description("[친구]친구의 사진").optional(),
-                                fieldWithPath("data[*].addInfo.nickname").description("[친구]친구의 닉네임").optional(),
-                                fieldWithPath("data[*].addInfo.statusMessage").description("[친구]친구의 상태메시지").optional(),
+                                fieldWithPath("data[*].addInfo.redirectUrl").description("[공지]리다이렉션 URL - optional").optional(),
+                                fieldWithPath("data[*].addInfo.imgUrl").description("[친구]친구의 사진 - optional").optional(),
+                                fieldWithPath("data[*].addInfo.nickname").description("[친구]친구의 닉네임 - optional").optional(),
+                                fieldWithPath("data[*].addInfo.statusMessage").description("[친구]친구의 상태메시지 - optional").optional(),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

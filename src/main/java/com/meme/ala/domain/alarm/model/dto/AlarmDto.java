@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Getter
 @Builder
@@ -15,5 +14,5 @@ public class AlarmDto {
 
     private String category;
 
-    private Map<String, String> addInfo;
+    private AddInfo addInfo;
 }
