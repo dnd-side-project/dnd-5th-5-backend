@@ -44,8 +44,8 @@ public class FriendController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.READ_MEMBER_AND_PERSON_RELATION, new FriendRelationDto(nickname, relation.getKrRelation())));
     }
 
-    @PostMapping("/{nickname}")
-    public ResponseEntity<ResponseDto> addMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
+    @PatchMapping("/{nickname}")
+    public ResponseEntity<ResponseDto> following(@CurrentUser Member member, @PathVariable String nickname){
         Member following = memberService.findByNickname(nickname);
         friendInfoService.followingFriend(member, following);
 
@@ -53,7 +53,7 @@ public class FriendController {
                     .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
     }
 
-    @PostMapping("/accept/{nickname}")
+    @PatchMapping("/accept/{nickname}")
     public ResponseEntity<ResponseDto> acceptMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
         Member follower = memberService.findByNickname(nickname);
         friendInfoService.acceptFollowerToFriend(member, follower);

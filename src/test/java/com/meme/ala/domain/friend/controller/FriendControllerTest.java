@@ -99,7 +99,7 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
 
-        mockMvc.perform(post("/api/v1/friend/{nickname}", "testNickname"))
+        mockMvc.perform(patch("/api/v1/friend/{nickname}", "testNickname"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SUCCESS))
                 .andDo(print())
@@ -118,7 +118,7 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
 
-        mockMvc.perform(post("/api/v1/friend/accept/{nickname}", "testNickname"))
+        mockMvc.perform(patch("/api/v1/friend/accept/{nickname}", "testNickname"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SUCCESS))
                 .andDo(print())
