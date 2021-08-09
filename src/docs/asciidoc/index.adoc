@@ -6,7 +6,8 @@
 :icons: font
 :source-highlighter: highlightjs
 
-== 설명
+
+= 인증
 
 == POST /api/v1/oauth/jwt/google
 
@@ -35,6 +36,8 @@ include::{snippets}/api/v1/oauth/jwt/naver/http-response.adoc[]
 
 .response fields
 include::{snippets}/api/v1/oauth/jwt/naver/response-fields.adoc[]
+
+= 사용자
 
 == GET /api/v1/member/me
 
@@ -117,6 +120,8 @@ include::{snippets}/api/v1/member/mypagelink/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/member/mypagelink/response-fields.adoc[]
 
+= 알라카드
+
 == GET /api/v1/alacard/wordlist
 
 .request
@@ -184,6 +189,8 @@ include::{snippets}/api/v1/alacard/alacardsetting/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/alacardsetting/response-fields.adoc[]
 
+= 친구
+
 == GET /api/v1/friend
 
 .request
@@ -195,7 +202,21 @@ include::{snippets}/api/v1/friend/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/friend/response-fields.adoc[]
 
-== POST /api/v1/friend/{nickname}
+== GET /api/v1/friend/relation/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/relation/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/relation/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/relation/nickname/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/friend/relation/nickname/response-fields.adoc[]
+
+== PATCH /api/v1/friend/{nickname}
 
 .request
 include::{snippets}/api/v1/friend/nickname/http-request.adoc[]
@@ -206,7 +227,7 @@ include::{snippets}/api/v1/friend/nickname/path-parameters.adoc[]
 .response
 include::{snippets}/api/v1/friend/nickname/http-response.adoc[]
 
-== POST /api/v1/friend/accept/{nickname}
+== PATCH /api/v1/friend/accept/{nickname}
 
 .request
 include::{snippets}/api/v1/friend/accept/nickname/http-request.adoc[]
@@ -216,6 +237,28 @@ include::{snippets}/api/v1/friend/accept/nickname/path-parameters.adoc[]
 
 .response
 include::{snippets}/api/v1/friend/accept/nickname/http-response.adoc[]
+
+== PATCH /api/v1/friend/decline/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/decline/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/decline/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/decline/nickname/http-response.adoc[]
+
+== PATCH /api/v1/friend/cancel/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/cancel/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/cancel/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/cancel/nickname/http-response.adoc[]
 
 == DELETE /api/v1/friend/{nickname}
 
@@ -227,6 +270,8 @@ include::{snippets}/api/v1/friend/nickname/delete/path-parameters.adoc[]
 
 .response
 include::{snippets}/api/v1/friend/nickname/delete/http-response.adoc[]
+
+= 집계
 
 == GET /api/v1/aggregation/usercount
 

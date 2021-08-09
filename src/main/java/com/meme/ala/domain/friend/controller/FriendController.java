@@ -44,22 +44,40 @@ public class FriendController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.READ_MEMBER_AND_PERSON_RELATION, new FriendRelationDto(nickname, relation.getKrRelation())));
     }
 
-    @PostMapping("/{nickname}")
-    public ResponseEntity<ResponseDto> addMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
+    @PatchMapping("/{nickname}")
+    public ResponseEntity<ResponseDto> following(@CurrentUser Member member, @PathVariable String nickname){
         Member following = memberService.findByNickname(nickname);
         friendInfoService.followingFriend(member, following);
 
         return ResponseEntity.status(HttpStatus.OK)
-                    .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
+                    .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.FOLLOWED));
     }
 
-    @PostMapping("/accept/{nickname}")
+    @PatchMapping("/accept/{nickname}")
     public ResponseEntity<ResponseDto> acceptMemberFriend(@CurrentUser Member member, @PathVariable String nickname){
         Member follower = memberService.findByNickname(nickname);
         friendInfoService.acceptFollowerToFriend(member, follower);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.ACCEPTED));
+    }
+
+    @PatchMapping("/decline/{nickname}")
+    public ResponseEntity<ResponseDto> decline(@CurrentUser Member member, @PathVariable String nickname){
+        Member following = memberService.findByNickname(nickname);
+        friendInfoService.declineFriend(member, following);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.DECLINED));
+    }
+
+    @PatchMapping("/cancel/{nickname}")
+    public ResponseEntity<ResponseDto> cancelFollowing(@CurrentUser Member member, @PathVariable String nickname){
+        Member following = memberService.findByNickname(nickname);
+        friendInfoService.cancelFollowing(member, following);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.CANCELED));
     }
 
     @DeleteMapping("/{nickname}")
