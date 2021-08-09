@@ -101,7 +101,7 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(patch("/api/v1/friend/{nickname}", "testNickname"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SUCCESS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(FOLLOWED))
                 .andDo(print())
                 .andDo(document("api/v1/friend/nickname",
                         getDocumentRequest(),
@@ -120,9 +120,28 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         mockMvc.perform(patch("/api/v1/friend/accept/{nickname}", "testNickname"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SUCCESS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ACCEPTED))
                 .andDo(print())
                 .andDo(document("api/v1/friend/accept/nickname",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("nickname").description("친구 닉네임")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @Test
+    public void 사용자_팔로잉_취소_테스트() throws Exception{
+
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
+
+        mockMvc.perform(patch("/api/v1/friend/cancel/{nickname}", "testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(CANCELED))
+                .andDo(print())
+                .andDo(document("api/v1/friend/cancel/nickname",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(

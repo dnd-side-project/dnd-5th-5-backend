@@ -50,7 +50,7 @@ public class FriendController {
         friendInfoService.followingFriend(member, following);
 
         return ResponseEntity.status(HttpStatus.OK)
-                    .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
+                    .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.FOLLOWED));
     }
 
     @PatchMapping("/accept/{nickname}")
@@ -59,7 +59,16 @@ public class FriendController {
         friendInfoService.acceptFollowerToFriend(member, follower);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS));
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.ACCEPTED));
+    }
+
+    @PatchMapping("/cancel/{nickname}")
+    public ResponseEntity<ResponseDto> cancelFollowing(@CurrentUser Member member, @PathVariable String nickname){
+        Member following = memberService.findByNickname(nickname);
+        friendInfoService.cancelFollowing(member, following);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.CANCELED));
     }
 
     @DeleteMapping("/{nickname}")

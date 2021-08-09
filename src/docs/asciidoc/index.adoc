@@ -238,6 +238,17 @@ include::{snippets}/api/v1/friend/accept/nickname/path-parameters.adoc[]
 .response
 include::{snippets}/api/v1/friend/accept/nickname/http-response.adoc[]
 
+== PATCH /api/v1/friend/cancel/{nickname}
+
+.request
+include::{snippets}/api/v1/friend/cancel/nickname/http-request.adoc[]
+
+.path parameters
+include::{snippets}/api/v1/friend/cancel/nickname/path-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/cancel/nickname/http-response.adoc[]
+
 == DELETE /api/v1/friend/{nickname}
 
 .request
