@@ -62,6 +62,15 @@ public class FriendController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.ACCEPTED));
     }
 
+    @PatchMapping("/decline/{nickname}")
+    public ResponseEntity<ResponseDto> decline(@CurrentUser Member member, @PathVariable String nickname){
+        Member following = memberService.findByNickname(nickname);
+        friendInfoService.declineFriend(member, following);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.DECLINED));
+    }
+
     @PatchMapping("/cancel/{nickname}")
     public ResponseEntity<ResponseDto> cancelFollowing(@CurrentUser Member member, @PathVariable String nickname){
         Member following = memberService.findByNickname(nickname);

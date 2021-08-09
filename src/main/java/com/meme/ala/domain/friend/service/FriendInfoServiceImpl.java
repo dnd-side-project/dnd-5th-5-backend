@@ -83,6 +83,20 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
+    public void declineFriend(Member member, Member follower){
+        FriendInfo memberFriendInfo = getFriendInfo(member);
+        FriendInfo followerFriendInfo = getFriendInfo(follower);
+
+        if(memberFriendInfo.getRelation(follower.getId()) != FriendRelation.FOLLOWER)
+            throw new BusinessException(ErrorCode.NOT_FOLLOWER);
+
+        friendService.decline(memberFriendInfo, followerFriendInfo);
+
+        friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, followerFriendInfo));
+    }
+
+    @Override
+    @Transactional
     public void cancelFollowing(Member member, Member following){
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followingFriendInfo = getFriendInfo(following);

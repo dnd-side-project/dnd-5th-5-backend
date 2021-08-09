@@ -133,6 +133,25 @@ public class FriendControllerTest extends AbstractControllerTest {
 
     @AlaWithAccount("test@gmail.com")
     @Test
+    public void 사용자_친구_거절_테스트() throws Exception{
+
+        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
+
+        mockMvc.perform(patch("/api/v1/friend/decline/{nickname}", "testNickname"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(DECLINED))
+                .andDo(print())
+                .andDo(document("api/v1/friend/decline/nickname",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("nickname").description("친구 닉네임")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @Test
     public void 사용자_팔로잉_취소_테스트() throws Exception{
 
         given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
