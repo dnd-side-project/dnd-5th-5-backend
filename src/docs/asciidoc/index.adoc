@@ -239,4 +239,13 @@ include::{snippets}/api/v1/aggregation/usercount/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/aggregation/usercount/response-fields.adoc[]
 
+== GET /api/v1/alarm
 
+.request
+include::{snippets}/api/v1/alarm/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/alarm/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/alarm/response-fields.adoc[]
