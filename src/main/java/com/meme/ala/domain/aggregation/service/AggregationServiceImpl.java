@@ -8,7 +8,6 @@ import com.meme.ala.domain.aggregation.model.entity.UserCount;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
 import com.meme.ala.domain.aggregation.repository.UserCountRepository;
-import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -17,12 +16,9 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -75,8 +71,8 @@ public class AggregationServiceImpl implements AggregationService {
     @Override
     @PublishEvent
     @Transactional
-    public void submitWordList(Member member, Aggregation aggregation, List<SelectionWordDto> wordDtoList) {
-        Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordDtoList);
+    public void submitWordList(Member member, Aggregation aggregation, List<String> wordIdList) throws UnsupportedEncodingException {
+        Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordIdList);
         for (Map.Entry<String, List<String>> entry : dtoMap.entrySet()) {
             String middleCategory = entry.getKey();
             List<String> wordNameList = entry.getValue();
@@ -97,18 +93,22 @@ public class AggregationServiceImpl implements AggregationService {
         return userCount.getCount();
     }
 
-    private Map<String, List<String>> dtoListToMapByMiddleCategory(List<SelectionWordDto> wordDtoList) {
-        Map<String, List<String>> dtoMap = new HashMap();
-        for (SelectionWordDto dto : wordDtoList) {
-            String middleCategory = dto.getMiddleCategory();
-            if (dtoMap.containsKey(middleCategory)) {
-                List<String> dtoList = dtoMap.get(middleCategory);
-                dtoList.add(dto.getWordName());
+    private Map<String, List<String>> dtoListToMapByMiddleCategory(List<String> wordIdList) throws UnsupportedEncodingException {
+        Map<String, List<String>> wordMap = new HashMap();
+        for (String id : wordIdList) {
+            byte[] decodedIdBytes = Base64.getDecoder().decode(id.getBytes());
+            String decodedId = new String(decodedIdBytes, "UTF-8");
+            String[] tokens = decodedId.split("-");
+            String middleCategory = tokens[1];
+            String wordName = tokens[3];
+            if (wordMap.containsKey(middleCategory)) {
+                List<String> wordList = wordMap.get(middleCategory);
+                wordList.add(wordName);
             } else {
-                List<String> dtoList = Stream.of(dto).map(SelectionWordDto::getWordName).collect(Collectors.toList());
-                dtoMap.put(middleCategory, dtoList);
+                List<String> wordList = Arrays.asList(wordName);
+                wordMap.put(middleCategory, wordList);
             }
         }
-        return dtoMap;
+        return wordMap;
     }
 }

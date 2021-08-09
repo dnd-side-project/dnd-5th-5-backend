@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +35,14 @@ public interface AlaCardSaveMapper {
                         .stream()
                         .map(word -> SelectionWordDto.
                                 builder()
-                                .bigCategory(alaCard.getBigCategory())
+                                .id(Base64.getEncoder()
+                                        .encodeToString((
+                                                alaCard.getBigCategory() + "-" +
+                                                        middleCategory.getMiddleCategoryName() + "-" +
+                                                        middleCategory.getHint() + "-" +
+                                                        word.getWordName())
+                                                .getBytes()))
                                 .hint(middleCategory.getHint())
-                                .middleCategory(middleCategory.getMiddleCategoryName())
                                 .wordName(word.getWordName())
                                 .build()
                         )
