@@ -104,7 +104,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
-                                parameterWithName("nickname").description("닉네임")
+                                parameterWithName("nickname").description("평가 대상 닉네임")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
@@ -153,7 +153,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
-                                parameterWithName("nickname").description("닉네임")
+                                parameterWithName("nickname").description("평가 대상 닉네임")
                         ),
                         requestFields(
                                 fieldWithPath("idList").description("선택된 단어의 id들")
