@@ -21,6 +21,7 @@ public class MemberController {
 
     @GetMapping("/me")
     public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@CurrentUser Member member) {
+        System.out.println(member.getEmail());
         MemberPrincipalDto memberPrincipalDto = memberMapper.toPrincipalDto(member);
         System.out.println(memberPrincipalDto.getEmail());
         System.out.println(memberPrincipalDto.getImgUrl());
