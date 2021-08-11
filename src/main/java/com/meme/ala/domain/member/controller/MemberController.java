@@ -21,8 +21,14 @@ public class MemberController {
 
     @GetMapping("/me")
     public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@CurrentUser Member member) {
+        MemberPrincipalDto memberPrincipalDto = memberMapper.toPrincipalDto(member);
+        System.out.println(memberPrincipalDto.getEmail());
+        System.out.println(memberPrincipalDto.getImgUrl());
+        System.out.println(memberPrincipalDto.getNickname());
+        System.out.println(memberPrincipalDto.getIsOpen());
+        System.out.println(memberPrincipalDto.getStatusMessage());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberPrincipalDto));
     }
 
     @PatchMapping("/me")
