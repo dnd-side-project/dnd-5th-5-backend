@@ -141,6 +141,9 @@ include::{snippets}/api/v1/alacard/wordlist/get/response-fields.adoc[]
 .request
 include::{snippets}/api/v1/alacard/wordlist/patch/http-request.adoc[]
 
+.request parameters
+include::{snippets}/api/v1/alacard/wordlist/patch/request-parameters.adoc[]
+
 .request fields
 include::{snippets}/api/v1/alacard/wordlist/patch/request-fields.adoc[]
 

@@ -35,7 +35,6 @@ public class AlaCardSaveMapperTest {
     void 엔티티로부터_SelectionWordDto리스트_변환_테스트() {
         List<SelectionWordDto> dtoList = alaCardSaveMapper.alaCardToSelectionWordDtoList(alaCard);
         assertEquals(dtoList.get(0).getWordName(), alaCard.getMiddleCategoryList().get(0).getWordList().get(0).getWordName());
-        assertEquals(dtoList.get(0).getBigCategory(), alaCard.getBigCategory());
         assertEquals(dtoList.get(0).getHint(), alaCard.getMiddleCategoryList().get(0).getHint());
     }
 }

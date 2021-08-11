@@ -64,8 +64,6 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 .param("offset", "0")
         )
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].bigCategory").value("test"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].middleCategory").value("testMiddle"))
                 .andDo(print())
                 .andDo(document("api/v1/alacard/wordlist/get",
                         getDocumentRequest(),
@@ -78,8 +76,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("선택된 카드"),
-                                fieldWithPath("data[*].bigCategory").description("대분류"),
-                                fieldWithPath("data[*].middleCategory").description("중분류"),
+                                fieldWithPath("data[*].id").description("단어 고유 id"),
                                 fieldWithPath("data[*].hint").description("힌트"),
                                 fieldWithPath("data[*].wordName").description("단어"),
                                 fieldWithPath("timestamp").description("타임스탬프")
@@ -107,7 +104,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
-                                parameterWithName("nickname").description("닉네임")
+                                parameterWithName("nickname").description("평가 대상 닉네임")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
@@ -134,13 +131,10 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     public void 사용자의_단어_리스트를_제출받는_테스트() throws Exception {
         String sampleRequestBody =
                 "{\n" +
-                        "  \"words\": [\n" +
-                        "    {\n" +
-                        "      \"bigCategory\": \"test\",\n" +
-                        "      \"middleCategory\": \"testMiddle\",\n" +
-                        "      \"hint\": \"testHint\",\n" +
-                        "      \"wordName\": \"testWord\"\n" +
-                        "    }\n" +
+                        "  \"idList\": [\n" +
+                        "    \"6rKM7J6ELeuwsO2LgOq3uOudvOyatOuTnC3rsLDqt7gg7ZSM66CI7J20Le2UhOuhnOq4sOygiOufrA==\",\n" +
+                        "    \"7Jyg66i4LeyghOyDnS3soITsg50tMTTshLjquLAg7ZSE656R7IqkIOq3gOyhsQ==\",\n" +
+                        "    \"6rKM7J6ELeyYpOuyhOybjOy5mC3slrTsmrjrpqzripQg7LGU7ZS87Ja4Le2VnOyhsA==\"\n" +
                         "  ]\n" +
                         "}";
 
@@ -159,14 +153,10 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
-                                parameterWithName("nickname").description("닉네임")
+                                parameterWithName("nickname").description("평가 대상 닉네임")
                         ),
                         requestFields(
-                                fieldWithPath("words").description("선택된 단어들"),
-                                fieldWithPath("words[*].bigCategory").description("대분류"),
-                                fieldWithPath("words[*].middleCategory").description("중분류"),
-                                fieldWithPath("words[*].hint").description("힌트"),
-                                fieldWithPath("words[*].wordName").description("단어명")
+                                fieldWithPath("idList").description("선택된 단어의 id들")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),

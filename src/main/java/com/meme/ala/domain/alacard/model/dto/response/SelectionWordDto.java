@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class SelectionWordDto {
-    private String bigCategory;
-    private String middleCategory;
+    private String id;
     private String hint;
     private String wordName;
 }
