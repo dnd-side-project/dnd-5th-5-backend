@@ -72,8 +72,8 @@ public class AggregationServiceImpl implements AggregationService {
     @PublishEvent
     @Transactional
     public void submitWordList(Member member, Aggregation aggregation, List<String> wordIdList) throws UnsupportedEncodingException {
-        Map<String, List<String>> dtoMap = dtoListToMapByMiddleCategory(wordIdList);
-        for (Map.Entry<String, List<String>> entry : dtoMap.entrySet()) {
+        Map<String, LinkedList<String>> dtoMap = dtoListToMapByMiddleCategory(wordIdList);
+        for (Map.Entry<String, LinkedList<String>> entry : dtoMap.entrySet()) {
             String middleCategory = entry.getKey();
             List<String> wordNameList = entry.getValue();
             List<WordCount> aggregationList = aggregation.getWordCountList();
@@ -93,8 +93,8 @@ public class AggregationServiceImpl implements AggregationService {
         return userCount.getCount();
     }
 
-    private Map<String, List<String>> dtoListToMapByMiddleCategory(List<String> wordIdList) throws UnsupportedEncodingException {
-        Map<String, List<String>> wordMap = new HashMap();
+    private Map<String, LinkedList<String>> dtoListToMapByMiddleCategory(List<String> wordIdList) throws UnsupportedEncodingException {
+        Map<String, LinkedList<String>> wordMap = new HashMap();
         for (String id : wordIdList) {
             byte[] decodedIdBytes = Base64.getDecoder().decode(id.getBytes());
             String decodedId = new String(decodedIdBytes, "UTF-8");
@@ -105,7 +105,7 @@ public class AggregationServiceImpl implements AggregationService {
                 List<String> wordList = wordMap.get(middleCategory);
                 wordList.add(wordName);
             } else {
-                List<String> wordList = Arrays.asList(wordName);
+                LinkedList<String> wordList = new LinkedList<>(Arrays.asList(wordName));
                 wordMap.put(middleCategory, wordList);
             }
         }
