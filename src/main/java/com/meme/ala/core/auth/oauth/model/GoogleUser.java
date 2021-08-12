@@ -31,7 +31,6 @@ public class GoogleUser implements OAuthUserInfo {
 
     @Override
     public String getImgUrl() {
-        //TODO: 2021.7.15. DEFAULT 이미지(코알라) 세팅
-        return null;
+        return "https://meme-ala-background.s3.ap-northeast-2.amazonaws.com/img/defaultprofile.svg";
     }
 }
