@@ -15,8 +15,8 @@ public class MemberSetting {
     @Builder.Default
     private String statusMessage = "너 자신을 '알라'";
 
-    //TODO: 2021.07.16 이미지 URL 나오면 기본값 세팅
-    private String imgUrl;
+    @Builder.Default
+    private String imgUrl = "https://meme-ala-background.s3.ap-northeast-2.amazonaws.com/img/defaultprofile.svg";
 
     @Builder.Default
     private Boolean isAlarmed = true;
