@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,4 +35,7 @@ public class Member {
 
     @Builder.Default
     private List<AlaCardSettingPair> alaCardSettingPairList = new LinkedList<>();
+
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

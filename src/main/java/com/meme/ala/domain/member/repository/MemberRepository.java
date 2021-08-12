@@ -20,4 +20,6 @@ public interface MemberRepository extends MongoRepository<Member, ObjectId> {
     boolean existsMemberByEmail(String email);
 
     Optional<Member> findById(ObjectId id);
+
+    Member findTop1ByMemberSettingNicknameRegexOrderByCreatedAtDesc(String regex);
 }
