@@ -35,11 +35,17 @@ public class MemberServiceImpl implements MemberService {
     @PublishEvent
     @Transactional
     public String join(OAuthUserInfo authUserInfo, String provider) {
+        int newNumber = 0;
+        if (memberRepository.count() != 0) {
+            Member lastMember = memberRepository.findTop1ByMemberSettingNicknameRegexOrderByCreatedAtDesc("ala_[0-9]+");
+            String lastNumber = lastMember.getMemberSetting().getNickname().split("_")[1];
+            newNumber = Integer.parseInt(lastNumber) + 1;
+        }
         Member newMember = Member.builder()
                 .email(authUserInfo.getEmail())
                 .memberSetting(
                         MemberSetting.builder()
-                                .nickname("ala_" + memberRepository.count())
+                                .nickname("ala_" + newNumber)
                                 .build())
                 .build();
         if (provider.equals(OAuthProvider.GOOGLE)) {
