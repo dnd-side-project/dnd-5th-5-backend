@@ -20,11 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final String[] EXCLUDED_URLS = {
+    private final String[] AUTHENTICATED_URIS = {
             "/api/v1/member/me",
-            "/api/v1/member/mypagelink",
             "/api/v1/alacard/alacardsetting",
-            "/api/v1/alacard/alacardlist",
             "/api/v1/friend/**",
             "/api/v1/alarm/**"
     };
@@ -46,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(EXCLUDED_URLS).authenticated()
+                .antMatchers(AUTHENTICATED_URIS).authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
