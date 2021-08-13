@@ -21,7 +21,11 @@ public enum ErrorCode {
     NOT_FRIEND(400, "F002", "Not Friend"),
     NOT_FOLLOWING(400, "F003", "Not Following"),
     NOT_FOLLOWER(400, "F004", "Not Follower"),
-    NOT_DEFAULT(400, "F005", "Not Default")
+    NOT_DEFAULT(400, "F005", "Not Default"),
+
+    // AlaCard
+    ALACARD_NOT_FOUND(400, "A001", "AlaCard Not Found"),
+    BACKGROUND_NOT_FOUND(400, "A002", "Background Not Found")
     ;
 
     private final String code;
