@@ -13,6 +13,12 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(400, "C005", " Invalid Type Value"),
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 
+    // JWT
+    EXPIRED_JWT(403,"J001", "Expired Jwt"),
+    UNSUPPORTED_JWT(403,"J002", "Unsupported Jwt"),
+    SIGNATURE_INVALID_JWT(403, "JOO3", "Signature Invalid Jwt"),
+    JWT_NOT_FOUND(403,"J004", "Jwt Not Found"),
+
     // Member
     EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
 
@@ -21,7 +27,10 @@ public enum ErrorCode {
     NOT_FRIEND(400, "F002", "Not Friend"),
     NOT_FOLLOWING(400, "F003", "Not Following"),
     NOT_FOLLOWER(400, "F004", "Not Follower"),
-    NOT_DEFAULT(400, "F005", "Not Default")
+    NOT_DEFAULT(400, "F005", "Not Default"),
+
+    // Alacard
+    INVALID_COOKIE(400, "A001", "Invalid Cookie")
     ;
 
     private final String code;
