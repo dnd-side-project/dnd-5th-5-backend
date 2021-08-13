@@ -33,7 +33,6 @@ public class MemberCardServiceImpl implements MemberCardService {
     private final MemberRepository memberRepository;
     private final AlaCardRepository alaCardRepository;
     private final TemporalWordListRepository temporalWordListRepository;
-
     private final MemberService memberService;
     private final AlaCardService alaCardService;
 
@@ -107,7 +106,7 @@ public class MemberCardServiceImpl implements MemberCardService {
         for (AlaCardSettingPair alaCardSettingPair : member.getAlaCardSettingPairList()) {
             if (alaCardSettingPair.getAlaCard().getId().toHexString()
                     .equals(alaCardSettingDto.getAlaCardId())) {
-                alaCardSettingPair.setAlaCardSetting(alaCardSettingMapper.toEntity(alaCardSettingDto));
+                alaCardSettingMapper.updateAlaCardSettingFromDto(alaCardSettingDto, alaCardSettingPair.getAlaCardSetting());
                 break;
             }
         }

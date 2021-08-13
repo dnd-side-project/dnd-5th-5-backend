@@ -1,9 +1,6 @@
 package com.meme.ala.domain.alacard.model.entity.cardSetting;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Document("BACKGROUND")
 public class Background {
     @Id

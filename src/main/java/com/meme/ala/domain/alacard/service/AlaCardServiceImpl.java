@@ -20,9 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -135,6 +133,25 @@ public class AlaCardServiceImpl implements AlaCardService {
     @Transactional(readOnly = true)
     public List<Background> getBackgrounds() {
         return backgroundRepository.findAll();
+    }
+
+    @Override
+    public Map<String, List<String>> getBackgroundCategory() {
+        Map<String, List<String>> backgroundMap = new HashMap<>();
+        List<Background> backgrounds = backgroundRepository.findAll();
+
+        for (Background background : backgrounds) {
+            String key = background.getCategory();
+            String value = background.getImgUrl();
+            if (backgroundMap.containsKey(key)) {
+                backgroundMap.get(key).add(value);
+            } else {
+                List<String> newList = new ArrayList<>();
+                newList.add(value);
+                backgroundMap.put(key, newList);
+            }
+        }
+        return backgroundMap;
     }
 
     private List<WordCount> toSortedWordCountList(Aggregation aggregation, String middleCategoryName) {

@@ -178,6 +178,17 @@ include::{snippets}/api/v1/alacard/backgrounds/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/backgrounds/response-fields.adoc[]
 
+== GET /api/v1/alacard/background
+
+.request
+include::{snippets}/api/v1/alacard/background/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/alacard/background/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/alacard/background/response-fields.adoc[]
+
 == PATCH /api/v1/alacard/alacardsetting
 
 .request

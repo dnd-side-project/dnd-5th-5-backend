@@ -79,7 +79,6 @@ public class DtoFactory {
     public static AlaCardSettingDto testAlaCardSettingDto() {
         return AlaCardSettingDto.builder()
                 .backgroundImgUrl("http://test/background.jpg")
-                .category("solid")
                 .fontColor("#FFFFFF")
                 .isOpen(true)
                 .build();

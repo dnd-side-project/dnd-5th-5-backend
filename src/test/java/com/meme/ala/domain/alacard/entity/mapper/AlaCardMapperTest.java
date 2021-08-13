@@ -31,7 +31,6 @@ public class AlaCardMapperTest {
     void 엔티티에서_DTO변환_테스트() {
         AlaCardDto mappedDto = alaCardMapper.toDto(alaCard, alaCardSetting, "testSentence", wordCountList, true);
         assertEquals(mappedDto.getSelectedWordList().get(0).getWordName(), alaCardDto.getSelectedWordList().get(0).getWordName());
-        assertEquals(mappedDto.getAlaCardSettingDto().getCategory(), alaCardDto.getAlaCardSettingDto().getCategory());
         assertEquals(mappedDto.getAlaCardSettingDto().getFontColor(), alaCardDto.getAlaCardSettingDto().getFontColor());
         assertEquals(mappedDto.getAlaCardSettingDto().getBackgroundImgUrl(), alaCardDto.getAlaCardSettingDto().getBackgroundImgUrl());
     }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequestMapping(value = "/api/v1/alacard")
@@ -90,6 +91,12 @@ public class AlaCardController {
     public ResponseEntity<ResponseDto<List<String>>> backgrounds() throws Exception {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundImageUrls()));
+    }
+
+    @GetMapping("/background")
+    public ResponseEntity<ResponseDto<Map<String, List<String>>>> background() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundCategory()));
     }
 
     @PostMapping("/background")
