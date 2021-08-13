@@ -10,8 +10,8 @@ public interface ApiDocumentUtils {
     static OperationRequestPreprocessor getDocumentRequest() {
         return preprocessRequest(
                 modifyUris()
-                        .scheme("http")
-                        .host("3.37.42.147")
+                        .scheme("https")
+                        .host("www.alaback.net")
                         .removePort(),
                 prettyPrint());
     }
