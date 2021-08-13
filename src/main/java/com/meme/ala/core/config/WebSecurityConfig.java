@@ -1,5 +1,6 @@
 package com.meme.ala.core.config;
 
+import com.meme.ala.core.auth.jwt.JwtAuthenticationEntryPoint;
 import com.meme.ala.core.auth.jwt.JwtAuthenticationFilter;
 import com.meme.ala.core.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final String[] EXCLUDED_URLS = {
+            "/api/v1/member/me",
+            "/api/v1/member/mypagelink",
+            "/api/v1/alacard/alacardsetting",
+            "/api/v1/alacard/alacardlist",
+            "/api/v1/friend/**",
+            "/api/v1/alarm/**"
+    };
 
     @Bean
     @Override
@@ -30,10 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/oauth/**").permitAll()
+                .antMatchers(EXCLUDED_URLS).authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),

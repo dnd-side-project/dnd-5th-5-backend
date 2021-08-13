@@ -172,6 +172,7 @@ public class MemberControllerTest extends AbstractControllerTest {
                 ));
     }
 
+    @AlaWithAccount("")
     @DisplayName("사용자 닉네임으로 마이페이지 공유 링크")
     @Test
     public void 사용자_닉네임으로_마이페이지_공유_링크() throws Exception{

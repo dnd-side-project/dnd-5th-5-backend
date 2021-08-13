@@ -84,6 +84,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                 ));
     }
 
+    @AlaWithAccount("")
     @DisplayName("사용자의 문장 리스트와 단어 카운트를 제공하는 테스트")
     @Test
     public void 사용자의_문장_리스트와_단어_카운트를_제공하는_테스트() throws Exception {
