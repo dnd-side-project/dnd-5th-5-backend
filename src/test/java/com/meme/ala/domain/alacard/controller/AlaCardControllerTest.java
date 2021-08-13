@@ -223,7 +223,6 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         "  \"alaCardId\": \"610034b5a221f126a4e7f500\",\n" +
                         "  \"backgroundImgUrl\": \"https://s3.ap-northeast-2.amazonaws.com/meme-ala-background/static/BG+Gradient+04.png\",\n" +
                         "  \"fontColor\": \"#FF0000F\",\n" +
-                        "  \"category\": \"Gradient\",\n" +
                         "  \"isOpen\": false\n" +
                         "}";
 
@@ -238,11 +237,10 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
-                                fieldWithPath("alaCardId").description("매칭될 알라카드의 ObjectID"),
-                                fieldWithPath("backgroundImgUrl").description("배경 이미지"),
-                                fieldWithPath("fontColor").description("폰트 색깔"),
-                                fieldWithPath("category").description("이미지 카테고리"),
-                                fieldWithPath("isOpen").description("공개 여부")
+                                fieldWithPath("alaCardId").description("매칭될 알라카드의 ObjectID - Essential"),
+                                fieldWithPath("backgroundImgUrl").description("배경 이미지 - Optional"),
+                                fieldWithPath("fontColor").description("폰트 색깔 - Optional"),
+                                fieldWithPath("isOpen").description("공개 여부 - Optional")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
