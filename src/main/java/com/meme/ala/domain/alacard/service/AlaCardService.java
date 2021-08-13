@@ -8,6 +8,7 @@ import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import com.meme.ala.domain.member.model.entity.Member;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AlaCardService {
     void save(AlaCard alaCard);
@@ -21,4 +22,6 @@ public interface AlaCardService {
     void saveBackground(BackgroundDto backgroundDto);
 
     List<Background> getBackgrounds();
+
+    Map<String,List<String>> getBackgroundCategory();
 }

@@ -20,9 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
@@ -183,6 +181,35 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("배경의 URL"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @DisplayName("배경 리스트와 카테고리를 제공하는 테스트")
+    @Test
+    public void 배경_리스트와_카테고리를_제공하는_테스트() throws Exception {
+        Map<String, List<String>> sampleMap = new HashMap<>();
+        sampleMap.put("Gradient", Arrays.asList(s3Url + "/static/test.svg", s3Url + "/static/test2.svg", s3Url + "/static/test.svg", s3Url + "/static/test3.svg"));
+        sampleMap.put("Photo", Arrays.asList(s3Url + "/static/test4.svg", s3Url + "/static/test5.svg", s3Url + "/static/test6.svg", s3Url + "/static/test7.svg"));
+        sampleMap.put("Solid", Arrays.asList());
+
+        given(alaCardService.getBackgroundCategory()).willReturn(sampleMap);
+
+        mockMvc.perform(get("/api/v1/alacard/background"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.Gradient[0]").value(s3Url + "/static/test.svg"))
+                .andDo(print())
+                .andDo(document("api/v1/alacard/background",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data").description("배경들"),
+                                fieldWithPath("data.Gradient").description("Gradient URL들"),
+                                fieldWithPath("data.Photo").description("Photo URL들"),
+                                fieldWithPath("data.Solid").description("Solid URL들"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));
