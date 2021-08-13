@@ -96,7 +96,7 @@ public class AlaCardController {
     @GetMapping("/background")
     public ResponseEntity<ResponseDto<Map<String, List<String>>>> background() {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundCategory()));
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundThumbCategory()));
     }
 
     @PostMapping("/background")
