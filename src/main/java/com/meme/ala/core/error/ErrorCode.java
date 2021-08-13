@@ -29,8 +29,10 @@ public enum ErrorCode {
     NOT_FOLLOWER(400, "F004", "Not Follower"),
     NOT_DEFAULT(400, "F005", "Not Default"),
 
-    // Alacard
-    INVALID_COOKIE(400, "A001", "Invalid Cookie")
+    // AlaCard
+    INVALID_COOKIE(400, "A001", "Invalid Cookie"),
+    BACKGROUND_NOT_FOUND(400, "A002", "Background Not Found"),
+    ALACARD_NOT_FOUND(400, "A003", "AlaCard Not Found")
     ;
 
     private final String code;
