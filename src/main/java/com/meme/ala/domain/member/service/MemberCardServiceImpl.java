@@ -7,9 +7,11 @@ import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.TemporalWordList;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
+import com.meme.ala.domain.alacard.repository.BackgroundRepository;
 import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
@@ -32,6 +34,7 @@ public class MemberCardServiceImpl implements MemberCardService {
 
     private final MemberRepository memberRepository;
     private final AlaCardRepository alaCardRepository;
+    private final BackgroundRepository backgroundRepository;
     private final TemporalWordListRepository temporalWordListRepository;
     private final MemberService memberService;
     private final AlaCardService alaCardService;
@@ -107,6 +110,14 @@ public class MemberCardServiceImpl implements MemberCardService {
             if (alaCardSettingPair.getAlaCard().getId().toHexString()
                     .equals(alaCardSettingDto.getAlaCardId())) {
                 alaCardSettingMapper.updateAlaCardSettingFromDto(alaCardSettingDto, alaCardSettingPair.getAlaCardSetting());
+                if (alaCardSettingDto.getBackgroundImgUrl() != null) {
+                    Background background = backgroundRepository.findByImgUrl(alaCardSettingDto.getBackgroundImgUrl())
+                            .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+                    alaCardSettingPair.getAlaCardSetting().getBackground()
+                            .setFontColor(background.getFontColor());
+                    alaCardSettingPair.getAlaCardSetting().getBackground()
+                            .setCategory(background.getCategory());
+                }
                 break;
             }
         }
