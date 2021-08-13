@@ -1,9 +1,7 @@
 package com.meme.ala.core.auth.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.meme.ala.core.error.ErrorCode;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,8 +62,32 @@ public class JwtProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
+        } catch (Exception e){
             return false;
         }
     }
+
+    /**
+     * Throws:
+     * UnsupportedJwtException – if the claimsJws argument does not represent an Claims JWS
+     * MalformedJwtException – if the claimsJws string is not a valid JWS
+     * SignatureException – if the claimsJws JWS signature validation fails
+     * ExpiredJwtException – if the specified JWT is a Claims JWT and the Claims has an expiration time before the time this method is invoked.
+     * IllegalArgumentException – if the claimsJws string is null or empty or only whitespace
+     */
+    public String setInvalidAuthenticationMessage(String jwt){
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt);
+            return "Logic Error : Should Tell to Backend";
+        } catch (UnsupportedJwtException | MalformedJwtException e) {
+            return ErrorCode.UNSUPPORTED_JWT.getMessage();
+        } catch (ExpiredJwtException e) {
+            return ErrorCode.EXPIRED_JWT.getMessage();
+        } catch (SignatureException e) {
+            return ErrorCode.SIGNATURE_INVALID_JWT.getMessage();
+        } catch (IllegalArgumentException e) {
+            return ErrorCode.JWT_NOT_FOUND.getMessage();
+        }
+    }
+
 }

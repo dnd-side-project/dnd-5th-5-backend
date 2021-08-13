@@ -98,7 +98,7 @@ public class MemberCardServiceImpl implements MemberCardService {
     @Transactional(readOnly = true)
     public List<SelectionWordDto> getWordList(String cookieId) {
         TemporalWordList temporalWordList = temporalWordListRepository.findByCookieId(cookieId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.INVALID_COOKIE));
 
         return temporalWordList.getWordDtoList();
     }
