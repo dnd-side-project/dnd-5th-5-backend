@@ -10,7 +10,6 @@ import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
-import com.meme.ala.domain.alacard.repository.BackgroundRepository;
 import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
@@ -34,7 +33,6 @@ public class MemberCardServiceImpl implements MemberCardService {
     private final MemberRepository memberRepository;
     private final AlaCardRepository alaCardRepository;
     private final TemporalWordListRepository temporalWordListRepository;
-    private final BackgroundRepository backgroundRepository;
     private final MemberService memberService;
     private final AlaCardService alaCardService;
 
@@ -108,7 +106,7 @@ public class MemberCardServiceImpl implements MemberCardService {
         for (AlaCardSettingPair alaCardSettingPair : member.getAlaCardSettingPairList()) {
             if (alaCardSettingPair.getAlaCard().getId().toHexString()
                     .equals(alaCardSettingDto.getAlaCardId())) {
-                alaCardSettingPair.setAlaCardSetting(alaCardSettingMapper.toEntity(alaCardSettingDto));
+                alaCardSettingMapper.updateAlaCardSettingFromDto(alaCardSettingDto, alaCardSettingPair.getAlaCardSetting());
                 break;
             }
         }
