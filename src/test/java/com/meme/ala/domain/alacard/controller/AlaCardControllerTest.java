@@ -193,7 +193,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
         sampleMap.put("Photo", Arrays.asList(s3Url + "/static/test4.svg", s3Url + "/static/test5.svg", s3Url + "/static/test6.svg", s3Url + "/static/test7.svg"));
         sampleMap.put("Solid", Arrays.asList());
 
-        given(alaCardService.getBackgroundCategory()).willReturn(sampleMap);
+        given(alaCardService.getBackgroundThumbCategory()).willReturn(sampleMap);
 
         mockMvc.perform(get("/api/v1/alacard/background"))
                 .andExpect(status().isOk())

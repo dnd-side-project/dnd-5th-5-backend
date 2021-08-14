@@ -136,13 +136,13 @@ public class AlaCardServiceImpl implements AlaCardService {
     }
 
     @Override
-    public Map<String, List<String>> getBackgroundCategory() {
+    public Map<String, List<String>> getBackgroundThumbCategory() {
         Map<String, List<String>> backgroundMap = new HashMap<>();
         List<Background> backgrounds = backgroundRepository.findAll();
 
         for (Background background : backgrounds) {
             String key = background.getCategory();
-            String value = background.getImgUrl();
+            String value = background.getImgUrl().replace("/static/", "/thumb/");
             if (backgroundMap.containsKey(key)) {
                 backgroundMap.get(key).add(value);
             } else {

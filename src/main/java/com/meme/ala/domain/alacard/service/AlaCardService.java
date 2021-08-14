@@ -23,5 +23,5 @@ public interface AlaCardService {
 
     List<Background> getBackgrounds();
 
-    Map<String,List<String>> getBackgroundCategory();
+    Map<String, List<String>> getBackgroundThumbCategory();
 }

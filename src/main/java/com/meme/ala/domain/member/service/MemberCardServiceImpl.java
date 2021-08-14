@@ -111,7 +111,9 @@ public class MemberCardServiceImpl implements MemberCardService {
                     .equals(alaCardSettingDto.getAlaCardId())) {
                 alaCardSettingMapper.updateAlaCardSettingFromDto(alaCardSettingDto, alaCardSettingPair.getAlaCardSetting());
                 if (alaCardSettingDto.getBackgroundImgUrl() != null) {
-                    Background background = backgroundRepository.findByImgUrl(alaCardSettingDto.getBackgroundImgUrl())
+                    String backgroundImgUrl = alaCardSettingDto.getBackgroundImgUrl().replace("/thumb/", "/static/");
+                    alaCardSettingPair.getAlaCardSetting().getBackground().setImgUrl(backgroundImgUrl);
+                    Background background = backgroundRepository.findByImgUrl(backgroundImgUrl)
                             .orElseThrow(() -> new EntityNotFoundException(ErrorCode.BACKGROUND_NOT_FOUND));
                     alaCardSettingPair.getAlaCardSetting().getBackground()
                             .setFontColor(background.getFontColor());
