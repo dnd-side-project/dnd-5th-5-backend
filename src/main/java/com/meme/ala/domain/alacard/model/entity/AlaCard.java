@@ -20,6 +20,9 @@ public class AlaCard {
 
     private String bigCategory;
 
+    @Builder.Default
+    private Boolean special = false;
+
     @Singular("middleCategoryItem")
     private List<MiddleCategory> middleCategoryList;
 }

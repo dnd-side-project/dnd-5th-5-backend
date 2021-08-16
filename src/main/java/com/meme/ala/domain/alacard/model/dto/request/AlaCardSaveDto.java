@@ -12,5 +12,7 @@ import java.util.List;
 public class AlaCardSaveDto {
     private String bigCategory;
 
+    private boolean special;
+
     private List<MiddleCategoryDto> middleCategoryList;
 }
