@@ -231,6 +231,17 @@ include::{snippets}/api/v1/friend/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/friend/response-fields.adoc[]
 
+== GET /api/v1/friend/info/followers
+
+.request
+include::{snippets}/api/v1/friend/info/followers/http-request.adoc[]
+
+.response
+include::{snippets}/api/v1/friend/info/followers/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/friend/info/followers/response-fields.adoc[]
+
 == GET /api/v1/friend/relation/{nickname}
 
 .request
