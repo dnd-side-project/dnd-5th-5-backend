@@ -10,12 +10,6 @@
 
     <!-- The actual AwsLogsAppender (asynchronous mode because of maxFlushTimeMillis > 0) -->
     <appender name="ASYNC_AWS_LOGS" class="ca.pjer.logback.AwsLogsAppender">
-
-        <!-- Send only WARN and above -->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
-        </filter>
-
         <!-- Nice layout pattern -->
         <layout>
             <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>
@@ -60,6 +54,14 @@
 
     <!-- Root with a threshold to INFO and above -->
     <root level="INFO">
+        <!-- Append to the console -->
+        <appender-ref ref="STDOUT"/>
+        <!-- Append also to the (async) AwsLogsAppender -->
+        <appender-ref ref="ASYNC_AWS_LOGS"/>
+    </root>
+
+    <!-- Root with a threshold to INFO and above -->
+    <root level="ERROR">
         <!-- Append to the console -->
         <appender-ref ref="STDOUT"/>
         <!-- Append also to the (async) AwsLogsAppender -->
