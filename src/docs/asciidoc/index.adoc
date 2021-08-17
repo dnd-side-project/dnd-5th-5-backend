@@ -136,6 +136,21 @@ include::{snippets}/api/v1/alacard/wordlist/get/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/alacard/wordlist/get/response-fields.adoc[]
 
+== GET /api/v2/alacard/wordlist
+
+.request
+include::{snippets}/api/v2/alacard/wordlist/get/http-request.adoc[]
+
+.request parameters
+include::{snippets}/api/v2/alacard/wordlist/get/request-parameters.adoc[]
+
+.response
+include::{snippets}/api/v2/alacard/wordlist/get/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v2/alacard/wordlist/get/response-fields.adoc[]
+
+
 == PATCH /api/v1/alacard/wordlist
 
 .request
