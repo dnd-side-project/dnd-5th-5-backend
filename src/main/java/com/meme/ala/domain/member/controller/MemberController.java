@@ -20,7 +20,15 @@ public class MemberController {
     private final MemberMapper memberMapper;
 
     @GetMapping("/me")
-    public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@CurrentUser Member member) {
+    public ResponseEntity<ResponseDto<MemberPrincipalDto>> myPrincipal(@CurrentUser Member member) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto<MemberPrincipalDto>> memberPrincipal(@RequestParam String nickname) {
+        Member member = memberService.findByNickname(nickname);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberMapper.toPrincipalDto(member)));
     }
