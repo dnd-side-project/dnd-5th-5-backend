@@ -65,13 +65,13 @@ jobs:
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: './src/main/resources/application-prod.properties'
-          property: 'cloud.aws.credentials.accessKey'
+          property: 'accessKey'
           value: ${{ secrets.AWS_ACCESS_KEY_ID }}
       - name: Properties 파일에 AWS_SECRET_ACCESS_KEY 주입
         uses: christian-draeger/write-properties@1.0.1
         with:
           path: './src/main/resources/application-prod.properties'
-          property: 'cloud.aws.credentials.secretKey'
+          property: 'secretKey'
           value: ${{ secrets.INJECT_SECRET }}
       - name: Properties 파일에 원하는 프로파일 명 주입
         uses: christian-draeger/write-properties@1.0.1

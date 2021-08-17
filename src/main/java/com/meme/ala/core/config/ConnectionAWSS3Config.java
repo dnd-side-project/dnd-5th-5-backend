@@ -12,10 +12,10 @@ import java.util.Base64;
 
 @Configuration
 public class ConnectionAWSS3Config {
-    @Value("${cloud.aws.credentials.accessKey}")
+    @Value("${accessKey}")
     private String awsId;
 
-    @Value("${cloud.aws.credentials.secretKey}")
+    @Value("${secretKey}")
     private String awsKey;
 
     @Value("${cloud.aws.region.static}")
