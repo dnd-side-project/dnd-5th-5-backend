@@ -5,13 +5,14 @@ import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
-import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.*;
 import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Optional;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
@@ -31,9 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberControllerTest extends AbstractControllerTest {
     @MockBean
     private MemberRepository memberRepository;
-
-    @MockBean
-    private MemberService memberService;
 
     @Value("${frontdomain}")
     private String frontUrl;
@@ -67,7 +65,7 @@ public class MemberControllerTest extends AbstractControllerTest {
     @DisplayName("사용자 세팅 정보를 읽어오는 테스트")
     @Test
     public void 사용자_세팅_정보를_읽기_유닛테스트() throws Exception{
-        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
+        given(memberRepository.findByMemberSettingNickname(any(String.class))).willReturn(Optional.of(EntityFactory.testMember()));
 
         mockMvc.perform(get("/api/v1/member").param("nickname", "testNickname"))
                 .andExpect(status().isOk())
