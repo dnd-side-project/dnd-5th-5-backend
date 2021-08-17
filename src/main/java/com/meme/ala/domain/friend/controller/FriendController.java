@@ -36,6 +36,16 @@ public class FriendController {
                 );
     }
 
+    @GetMapping("/info/followers")
+    public ResponseEntity<ResponseDto<List<FriendDto>>> getMemberFollowers(@CurrentUser Member member) {
+        List<Member> memberFollowerList = friendInfoService.getMemberFollower(member);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.READ_MEMBER_FOLLOWERS,
+                        memberFollowerList.stream().map(friendMapper::toMemberFriendDtoFromMember).collect(Collectors.toList()))
+                );
+    }
+
     @GetMapping("/relation/{nickname}")
     public ResponseEntity<ResponseDto<FriendRelationDto>> getRelationWithFriend(@CurrentUser Member member, @PathVariable String nickname){
         Member person =  memberService.findByNickname(nickname);

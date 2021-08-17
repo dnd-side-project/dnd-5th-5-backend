@@ -14,6 +14,7 @@ public class ResponseMessage {
 
     // friend
     public static final String READ_MEMBER_FRIENDS = "사용자 친구 목록을 조회합니다.";
+    public static final String READ_MEMBER_FOLLOWERS = "사용자 팔로워 목록을 조회합니다.";
     public static final String READ_MEMBER_AND_PERSON_RELATION = "사용자와 상대방의 관계를 조회합니다.";
     public static final String CANCELED = "canceled";
     public static final String DECLINED = "declined";

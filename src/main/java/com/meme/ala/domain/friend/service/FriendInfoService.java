@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface FriendInfoService {
     List<Member> getMemberFriend(Member member);
+    List<Member> getMemberFollower(Member member);
     void followingFriend(Member member, Member following);
     void acceptFollowerToFriend(Member member, Member follower);
     void declineFriend(Member member, Member follower);

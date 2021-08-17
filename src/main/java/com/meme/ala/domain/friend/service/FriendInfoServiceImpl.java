@@ -8,6 +8,7 @@ import com.meme.ala.domain.friend.model.entity.FriendRelation;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.member.repository.MemberRepository;
+import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     private final FriendInfoRepository friendInfoRepository;
     private final MemberRepository memberRepository;
     private final FriendService friendService;
+    private final MemberService memberService;
 
     @Override
     @Transactional
@@ -34,21 +36,30 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     @Override
     @Transactional(readOnly = true)
     public List<Member> getMemberFriend(Member member) {
-        FriendInfo friendInfo = friendInfoRepository.findById(member.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        FriendInfo friendInfo = getFriendInfo(member);
 
         return friendInfo
                 .getFriends()
                 .stream()
-                .map((id) -> memberRepository.findById(id)
-                                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND)))
+                .map(id -> memberService.findByMemberId(id))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Member> getMemberFollower(Member member) {
+        FriendInfo friendInfo = getFriendInfo(member);
+
+        return friendInfo
+                .getMyAcceptancePendingList()
+                .stream()
+                .map(id -> memberService.findByMemberId(id))
                 .collect(Collectors.toList());
     }
 
     @Override
     public FriendRelation getRelation(Member member, Member person) {
-        FriendInfo memberFriendInfo = friendInfoRepository.findById(member.getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        FriendInfo memberFriendInfo = getFriendInfo(member);
 
         return memberFriendInfo.getRelation(person.getId());
     }

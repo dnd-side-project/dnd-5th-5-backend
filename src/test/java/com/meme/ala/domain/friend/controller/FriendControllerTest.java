@@ -42,7 +42,6 @@ public class FriendControllerTest extends AbstractControllerTest {
 
         List<Member> friends = Arrays.asList(EntityFactory.testMember());
 
-        given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
         given(friendInfoService.getMemberFriend(any(Member.class))).willReturn(friends);
 
         mockMvc.perform(get("/api/v1/friend"))
@@ -59,6 +58,33 @@ public class FriendControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data[*].nickname").description("친구 닉네임"),
                                 fieldWithPath("data[*].statusMessage").description("친구 상태메시지"),
                                 fieldWithPath("data[*].imgUrl").description("친구 이미지 사진 URL"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @AlaWithAccount("test@gmail.com")
+    @Test
+    public void 사용자_팔로워_목록_조회_테스트() throws Exception{
+
+        List<Member> friends = Arrays.asList(EntityFactory.testMember());
+
+        given(friendInfoService.getMemberFollower(any(Member.class))).willReturn(friends);
+
+        mockMvc.perform(get("/api/v1/friend/info/followers"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(READ_MEMBER_FOLLOWERS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].nickname").value("testNickname"))
+                .andDo(print())
+                .andDo(document("api/v1/friend/info/followers",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("설명"),
+                                fieldWithPath("data[*].nickname").description("팔로워 닉네임"),
+                                fieldWithPath("data[*].statusMessage").description("팔로워 상태메시지"),
+                                fieldWithPath("data[*].imgUrl").description("팔로워 이미지 사진 URL"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));
