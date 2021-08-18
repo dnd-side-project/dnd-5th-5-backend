@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id "org.asciidoctor.convert" version "1.5.9.2"
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.meme'
@@ -76,4 +77,18 @@ task copyDocument(type: Copy) {
 
     from file("build/asciidoc/html5/")
     into file("src/main/resources/static/docs")
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+//gradlew clean test jacocoTestReport
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
 }
