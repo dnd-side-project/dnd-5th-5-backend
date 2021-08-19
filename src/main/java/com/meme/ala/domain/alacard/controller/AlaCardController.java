@@ -8,10 +8,7 @@ import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.request.AlaCardSaveDto;
 import com.meme.ala.domain.alacard.model.dto.request.SubmitWordDto;
-import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
-import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
-import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
-import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
+import com.meme.ala.domain.alacard.model.dto.response.*;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -94,7 +91,7 @@ public class AlaCardController {
     }
 
     @GetMapping("/background")
-    public ResponseEntity<ResponseDto<Map<String, List<String>>>> background() {
+    public ResponseEntity<ResponseDto<Map<String, List<BackgroundDtoInSetting>>>> background() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, alaCardService.getBackgroundThumbCategory()));
     }

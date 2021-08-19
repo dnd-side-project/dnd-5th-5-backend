@@ -6,6 +6,7 @@ import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDtoInSetting;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
@@ -136,17 +137,23 @@ public class AlaCardServiceImpl implements AlaCardService {
     }
 
     @Override
-    public Map<String, List<String>> getBackgroundThumbCategory() {
-        Map<String, List<String>> backgroundMap = new HashMap<>();
+    public Map<String, List<BackgroundDtoInSetting>> getBackgroundThumbCategory() {
+        Map<String, List<BackgroundDtoInSetting>> backgroundMap = new HashMap<>();
         List<Background> backgrounds = backgroundRepository.findAll();
 
         for (Background background : backgrounds) {
             String key = background.getCategory();
-            String value = background.getImgUrl().replace("/static/", "/thumb/");
+
+            BackgroundDtoInSetting value = BackgroundDtoInSetting.builder()
+                                                                .thumbnailImgUrl(background.getThumbnailImgUrl())
+                                                                .backgroundImgUrl(background.getImgUrl())
+                                                                .fontColor(background.getFontColor())
+                                                                .build();
+
             if (backgroundMap.containsKey(key)) {
                 backgroundMap.get(key).add(value);
             } else {
-                List<String> newList = new ArrayList<>();
+                List<BackgroundDtoInSetting> newList = new ArrayList<>();
                 newList.add(value);
                 backgroundMap.put(key, newList);
             }
