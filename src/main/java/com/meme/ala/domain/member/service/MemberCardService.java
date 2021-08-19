@@ -19,4 +19,6 @@ public interface MemberCardService {
     List<SelectionWordDto> getWordList(String cookieId);
 
     void saveSetting(Member member, AlaCardSettingDto alaCardSettingDto);
+
+    void assignSpecialCard(Member member, int num);
 }

@@ -131,4 +131,38 @@ public class MemberCardServiceImpl implements MemberCardService {
         }
         memberRepository.save(member);
     }
+
+    @Override
+    @Transactional
+    public void assignSpecialCard(Member member, int num) {
+        List<AlaCard> memberAlaCardList = getAlaCardListFromMember(member);
+        List<AlaCard> alaCardList = alaCardRepository.findAllBySpecial(true);
+        int assignSize = Math.min(num, alaCardList.size());
+
+        List<AlaCardSetting> alaCardSettingList = alaCardService.getBackgrounds().stream()
+                .map(background -> AlaCardSetting.builder()
+                        .background(background)
+                        .isOpen(true)
+                        .build())
+                .collect(Collectors.toList());
+
+        Collections.shuffle(alaCardList);
+        Collections.shuffle(alaCardSettingList);
+
+        List<AlaCard> selectedAlaCardList =
+                alaCardList.stream()
+                        .filter(alaCard -> !alaCard.getSpecial())
+                        .filter(alaCard -> !memberAlaCardList.contains(alaCard))
+                        .limit(assignSize)
+                        .collect(Collectors.toList());
+
+        for (int i = 0; i < assignSize; i++) {
+            member.getAlaCardSettingPairList()
+                    .add(AlaCardSettingPair.builder()
+                            .alaCard(selectedAlaCardList.get(i))
+                            .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size()))
+                            .build());
+        }
+        memberRepository.save(member);
+    }
 }
