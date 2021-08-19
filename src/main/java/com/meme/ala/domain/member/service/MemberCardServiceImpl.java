@@ -151,7 +151,6 @@ public class MemberCardServiceImpl implements MemberCardService {
 
         List<AlaCard> selectedAlaCardList =
                 alaCardList.stream()
-                        .filter(alaCard -> !alaCard.getSpecial())
                         .filter(alaCard -> !memberAlaCardList.contains(alaCard))
                         .limit(assignSize)
                         .collect(Collectors.toList());
