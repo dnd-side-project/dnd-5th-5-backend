@@ -2,6 +2,7 @@ package com.meme.ala.domain.alacard.service;
 
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.BackgroundDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDtoInSetting;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.SentenceWord;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
@@ -23,5 +24,5 @@ public interface AlaCardService {
 
     List<Background> getBackgrounds();
 
-    Map<String, List<String>> getBackgroundThumbCategory();
+    Map<String, List<BackgroundDtoInSetting>> getBackgroundThumbCategory();
 }

@@ -20,4 +20,10 @@ public class Background {
     private String category;
 
     private String fontColor;
+
+    public String getThumbnailImgUrl(){
+        return getImgUrl().replace("/static/", "/thumb/");
+    }
+
+
 }

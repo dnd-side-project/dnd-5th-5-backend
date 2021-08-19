@@ -9,6 +9,8 @@ import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardDto;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
+import com.meme.ala.domain.alacard.model.dto.response.BackgroundDtoInSetting;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
@@ -188,16 +190,26 @@ public class AlaCardControllerTest extends AbstractControllerTest {
     @DisplayName("배경 리스트와 카테고리를 제공하는 테스트")
     @Test
     public void 배경_리스트와_카테고리를_제공하는_테스트() throws Exception {
-        Map<String, List<String>> sampleMap = new HashMap<>();
-        sampleMap.put("Gradient", Arrays.asList(s3Url + "/static/test.svg", s3Url + "/static/test2.svg", s3Url + "/static/test.svg", s3Url + "/static/test3.svg"));
-        sampleMap.put("Photo", Arrays.asList(s3Url + "/static/test4.svg", s3Url + "/static/test5.svg", s3Url + "/static/test6.svg", s3Url + "/static/test7.svg"));
-        sampleMap.put("Solid", Arrays.asList());
+        Background background = EntityFactory.testBackground();
+
+        background.setImgUrl(s3Url + "/static/test.svg");
+
+        BackgroundDtoInSetting dto = BackgroundDtoInSetting.builder()
+                .thumbnailImgUrl(background.getThumbnailImgUrl())
+                .backgroundImgUrl(background.getImgUrl())
+                .fontColor(background.getFontColor())
+                .build();
+
+        Map<String, List<BackgroundDtoInSetting>> sampleMap = new HashMap<>();
+        sampleMap.put("Gradient", Arrays.asList(dto));
+        sampleMap.put("Photo", Arrays.asList(dto));
+        sampleMap.put("Solid", Arrays.asList(dto));
 
         given(alaCardService.getBackgroundThumbCategory()).willReturn(sampleMap);
 
         mockMvc.perform(get("/api/v1/alacard/background"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.Gradient[0]").value(s3Url + "/static/test.svg"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.Gradient[0].fontColor").value(background.getFontColor()))
                 .andDo(print())
                 .andDo(document("api/v1/alacard/background",
                         getDocumentRequest(),
@@ -206,9 +218,15 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),
                                 fieldWithPath("data").description("배경들"),
-                                fieldWithPath("data.Gradient").description("Gradient URL들"),
-                                fieldWithPath("data.Photo").description("Photo URL들"),
-                                fieldWithPath("data.Solid").description("Solid URL들"),
+                                fieldWithPath("data.Gradient[*].thumbnailImgUrl").description("Gradient 썸네일 이미지 URL"),
+                                fieldWithPath("data.Gradient[*].backgroundImgUrl").description("Gradient 이미지 URL"),
+                                fieldWithPath("data.Gradient[*].fontColor").description("Gradient 폰트 컬러"),
+                                fieldWithPath("data.Photo[*].thumbnailImgUrl").description("Photo 썸네일 이미지 URL"),
+                                fieldWithPath("data.Photo[*].backgroundImgUrl").description("Photo 이미지 URL"),
+                                fieldWithPath("data.Photo[*].fontColor").description("Photo 폰트 컬러"),
+                                fieldWithPath("data.Solid[*].thumbnailImgUrl").description("Solid 썸네일 이미지 URL"),
+                                fieldWithPath("data.Solid[*].backgroundImgUrl").description("Solid 이미지 URL"),
+                                fieldWithPath("data.Solid[*].fontColor").description("Solid 폰트 컬러"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));

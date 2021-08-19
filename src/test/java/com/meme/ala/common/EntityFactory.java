@@ -16,6 +16,7 @@ import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -121,6 +122,12 @@ public class EntityFactory {
                 .data("testNoticeData")
                 .createdAt(LocalDateTime.of(2021,1,2,18,18,50))
                 .category(AlarmCategory.NOTICE_ALARM)
+                .build();
+    }
+
+    public static Background testBackground() {
+        return Background.builder()
+                .fontColor("FFEEFF")
                 .build();
     }
 }
