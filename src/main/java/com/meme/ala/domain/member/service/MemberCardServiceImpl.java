@@ -2,6 +2,7 @@ package com.meme.ala.domain.member.service;
 
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
@@ -22,6 +23,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,12 +40,14 @@ public class MemberCardServiceImpl implements MemberCardService {
     private final TemporalWordListRepository temporalWordListRepository;
     private final MemberService memberService;
     private final AlaCardService alaCardService;
+    private final AggregationService aggregationService;
 
     @Override
     @Transactional
     public void assignCard(Member member, int num) {
         List<AlaCard> memberAlaCardList = getAlaCardListFromMember(member);
         List<AlaCard> alaCardList = getAlaCardList();
+        List<AlaCardSettingPair> newAlaCardList = new ArrayList<>();
 
         List<AlaCardSetting> alaCardSettingList = alaCardService.getBackgrounds().stream()
                 .map(background -> AlaCardSetting.builder()
@@ -63,13 +67,15 @@ public class MemberCardServiceImpl implements MemberCardService {
                         .collect(Collectors.toList());
 
         for (int i = 0; i < num; i++) {
-            member.getAlaCardSettingPairList()
+            newAlaCardList
                     .add(AlaCardSettingPair.builder()
                             .alaCard(selectedAlaCardList.get(i))
                             .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size()))
                             .build());
         }
+        member.getAlaCardSettingPairList().addAll(newAlaCardList);
         memberRepository.save(member);
+        aggregationService.initAggregation(member, newAlaCardList);
     }
 
     @Cacheable
@@ -137,6 +143,7 @@ public class MemberCardServiceImpl implements MemberCardService {
     public void assignSpecialCard(Member member, int num) {
         List<AlaCard> memberAlaCardList = getAlaCardListFromMember(member);
         List<AlaCard> alaCardList = alaCardRepository.findAllBySpecial(true);
+        List<AlaCardSettingPair> newAlaCardList = new ArrayList<>();
         int assignSize = Math.min(num, alaCardList.size());
 
         List<AlaCardSetting> alaCardSettingList = alaCardService.getBackgrounds().stream()
@@ -156,12 +163,14 @@ public class MemberCardServiceImpl implements MemberCardService {
                         .collect(Collectors.toList());
 
         for (int i = 0; i < assignSize; i++) {
-            member.getAlaCardSettingPairList()
+            newAlaCardList
                     .add(AlaCardSettingPair.builder()
                             .alaCard(selectedAlaCardList.get(i))
                             .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size()))
                             .build());
         }
+        member.getAlaCardSettingPairList().addAll(newAlaCardList);
         memberRepository.save(member);
+        aggregationService.initAggregation(member, newAlaCardList);
     }
 }
