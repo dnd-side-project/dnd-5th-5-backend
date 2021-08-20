@@ -37,6 +37,20 @@ include::{snippets}/api/v1/oauth/jwt/naver/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/oauth/jwt/naver/response-fields.adoc[]
 
+== GET /api/v1/oauth/jwt/naver
+
+.request
+include::{snippets}/api/v1/oauth/jwt/get/naver/http-request.adoc[]
+
+.request parameters
+include::{snippets}/api/v1/oauth/jwt/get/naver/request-parameters.adoc[]
+
+.response
+include::{snippets}/api/v1/oauth/jwt/get/naver/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/oauth/jwt/get/naver/response-fields.adoc[]
+
 = 사용자
 
 == GET /api/v1/member/me
