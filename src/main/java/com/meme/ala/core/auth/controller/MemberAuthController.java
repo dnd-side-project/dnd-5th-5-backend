@@ -5,8 +5,8 @@ import com.meme.ala.common.message.ResponseMessage;
 import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.auth.oauth.service.OAuthService;
+import com.meme.ala.domain.member.model.dto.JwtVO;
 import com.meme.ala.domain.member.service.MemberService;
-import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,9 +46,9 @@ public class MemberAuthController {
 
     @GetMapping("/jwt/naver")
     public ResponseEntity<ResponseDto<String>> jwtNaverCreate(@RequestParam(required = false) String access_token) {
-        Pair<String, String> resultPair = memberService.tokenTojwt(access_token);
+        JwtVO result = memberService.tokenTojwt(access_token);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ResponseDto.of(HttpStatus.OK, resultPair.getKey(), resultPair.getValue()));
+                .body(ResponseDto.of(HttpStatus.OK, result.getMessage(), result.getJwt()));
     }
 }

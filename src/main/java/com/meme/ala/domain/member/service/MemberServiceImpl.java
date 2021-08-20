@@ -9,12 +9,12 @@ import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.member.model.dto.JwtVO;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import com.meme.ala.domain.member.repository.MemberRepository;
-import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Pair<String, String> tokenTojwt(String accessToken) {
+    public JwtVO tokenTojwt(String accessToken) {
         OAuthUserInfo authUserInfo = NaverOauthUtil.naverTokenToNaverUser(accessToken);
         String message;
         if (!existsEmail(authUserInfo.getEmail())) {
@@ -115,7 +115,6 @@ public class MemberServiceImpl implements MemberService {
         } else
             message = ResponseMessage.LOGIN;
         String jwt = jwtProvider.createToken(authUserInfo.getEmail());
-        Pair<String, String> result = new Pair<>(message, jwt);
-        return result;
+        return new JwtVO(message, jwt);
     }
 }

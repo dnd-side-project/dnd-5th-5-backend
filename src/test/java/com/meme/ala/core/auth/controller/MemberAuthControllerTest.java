@@ -8,8 +8,8 @@ import com.meme.ala.core.auth.oauth.model.GoogleUser;
 import com.meme.ala.core.auth.oauth.model.NaverUser;
 import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.core.auth.oauth.service.OAuthService;
+import com.meme.ala.domain.member.model.dto.JwtVO;
 import com.meme.ala.domain.member.service.MemberService;
-import javafx.util.Pair;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +152,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
         Map<String, Object> data = objectMapper.readValue(sampleRequestBody, Map.class);
 
-        when(memberService.tokenTojwt(any())).thenReturn(new Pair<>(OAuthProvider.NAVER, "dummy token"));
+        when(memberService.tokenTojwt(any())).thenReturn(new JwtVO(OAuthProvider.NAVER, "dummy token"));
 
         mockMvc.perform(get("/api/v1/oauth/jwt/naver")
                 .param("access_token", sampleAccessToken))
