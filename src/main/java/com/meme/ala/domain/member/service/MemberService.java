@@ -4,7 +4,6 @@ import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.domain.member.model.dto.JwtVO;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
-import javafx.util.Pair;
 import org.bson.types.ObjectId;
 
 public interface MemberService {
