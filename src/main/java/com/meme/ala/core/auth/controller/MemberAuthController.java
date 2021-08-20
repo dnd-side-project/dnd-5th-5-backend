@@ -6,6 +6,7 @@ import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.auth.oauth.service.OAuthService;
 import com.meme.ala.domain.member.service.MemberService;
+import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class MemberAuthController {
 
         OAuthUserInfo authUserInfo = oAuthService.getMemberByProvider(data, provider);
 
-        if(!memberService.existsEmail(authUserInfo.getEmail())){
+        if (!memberService.existsEmail(authUserInfo.getEmail())) {
             oAuthMap.put("message", ResponseMessage.JOIN);
             memberService.join(authUserInfo, provider);
         } else
@@ -41,5 +42,13 @@ public class MemberAuthController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, oAuthMap.get("message"), oAuthMap.get("jwt")));
+    }
+
+    @GetMapping("/jwt/naver")
+    public ResponseEntity<ResponseDto<String>> jwtNaverCreate(@RequestParam(required = false) String access_token) {
+        Pair<String, String> resultPair = memberService.tokenTojwt(access_token);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseDto.of(HttpStatus.OK, resultPair.getKey(), resultPair.getValue()));
     }
 }

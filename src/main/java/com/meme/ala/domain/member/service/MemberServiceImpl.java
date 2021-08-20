@@ -1,6 +1,9 @@
 package com.meme.ala.domain.member.service;
 
+import com.meme.ala.common.message.ResponseMessage;
+import com.meme.ala.common.utils.NaverOauthUtil;
 import com.meme.ala.core.annotation.PublishEvent;
+import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
@@ -11,6 +14,7 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import com.meme.ala.domain.member.repository.MemberRepository;
+import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
     private String frontUrl;
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final JwtProvider jwtProvider;
 
     @Override
     @Transactional(readOnly = true)
@@ -98,5 +103,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String shareMyPageLink(String nickname) {
         return frontUrl + "mypage/" + nickname;
+    }
+
+    @Override
+    public Pair<String, String> tokenTojwt(String accessToken) {
+        OAuthUserInfo authUserInfo = NaverOauthUtil.naverTokenToNaverUser(accessToken);
+        String message;
+        if (!existsEmail(authUserInfo.getEmail())) {
+            message = ResponseMessage.JOIN;
+            join(authUserInfo, OAuthProvider.NAVER);
+        } else
+            message = ResponseMessage.LOGIN;
+        String jwt = jwtProvider.createToken(authUserInfo.getEmail());
+        Pair<String, String> result = new Pair<>(message, jwt);
+        return result;
     }
 }

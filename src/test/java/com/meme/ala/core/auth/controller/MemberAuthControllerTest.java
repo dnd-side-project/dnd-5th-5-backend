@@ -2,14 +2,14 @@ package com.meme.ala.core.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meme.ala.common.AbstractControllerTest;
-import com.meme.ala.common.message.ResponseMessage;
+import com.meme.ala.common.utils.NaverOauthUtil;
 import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.model.GoogleUser;
 import com.meme.ala.core.auth.oauth.model.NaverUser;
 import com.meme.ala.core.auth.oauth.model.OAuthProvider;
-import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.auth.oauth.service.OAuthService;
 import com.meme.ala.domain.member.service.MemberService;
+import javafx.util.Pair;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
-import static org.assertj.core.api.BDDAssumptions.given;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +43,9 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
     @MockBean
     private JwtProvider jwtProvider;
+
+    @MockBean
+    private NaverOauthUtil naverOauthUtil;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -127,6 +130,40 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                                 fieldWithPath("profile_image").description("사용자 프로필 링크"),
                                 fieldWithPath("email").description("사용자 이메일"),
                                 fieldWithPath("name").description("사용자 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("기존 사용자: LOGIN / 신규 사용자: JOIN"),
+                                fieldWithPath("data").description("JWT 값"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
+    @Test
+    public void 네이버_OAuth_GET_유닛테스트() throws Exception {
+        String sampleAccessToken = "AAAAO9t3lY18fHzDi0xlDmoRPNNndkqUfYN7zSMAP17vAYOwxyKIHpKzeN6VxRSG7cfvA8hytclT2nydGBd8qiLCJKM";
+        String sampleRequestBody =
+                "  {\n" +
+                        "    \"id\": \"afdasfdadsf\",\n" +
+                        "    \"profile_image\": \"https://user-images.githubusercontent.com/46064193/125324764-2bc8e200-e37b-11eb-8d07-9ac29d0d1b1a.png\",\n" +
+                        "    \"email\": \"test@gmail.com\",\n" +
+                        "    \"name\": \"Jongmin Jung\"}";
+
+        Map<String, Object> data = objectMapper.readValue(sampleRequestBody, Map.class);
+
+        when(memberService.tokenTojwt(any())).thenReturn(new Pair<>(OAuthProvider.NAVER, "dummy token"));
+
+        mockMvc.perform(get("/api/v1/oauth/jwt/naver")
+                .param("access_token", sampleAccessToken))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("dummy token"))
+                .andDo(print())
+                .andDo(document("api/v1/oauth/jwt/get/naver",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("access_token").description("네이버 액세스 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
