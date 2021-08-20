@@ -9,6 +9,7 @@ import com.meme.ala.core.auth.oauth.model.NaverUser;
 import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.core.auth.oauth.service.OAuthService;
 import com.meme.ala.domain.member.model.dto.JwtVO;
+import com.meme.ala.domain.member.service.MemberAuthService;
 import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
     private JwtProvider jwtProvider;
 
     @MockBean
-    private NaverOauthUtil naverOauthUtil;
+    private MemberAuthService memberAuthService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -152,7 +153,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
         Map<String, Object> data = objectMapper.readValue(sampleRequestBody, Map.class);
 
-        when(memberService.tokenTojwt(any())).thenReturn(new JwtVO(OAuthProvider.NAVER, "dummy token"));
+        when(memberAuthService.tokenTojwt(any())).thenReturn(new JwtVO(OAuthProvider.NAVER, "dummy token"));
 
         mockMvc.perform(get("/api/v1/oauth/jwt/naver")
                 .param("access_token", sampleAccessToken))

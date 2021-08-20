@@ -24,6 +24,4 @@ public interface MemberService {
     String shareSelectLink(String nickname);
 
     String shareMyPageLink(String nickname);
-
-    JwtVO tokenTojwt(String accessToken);
 }

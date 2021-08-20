@@ -6,6 +6,7 @@ import com.meme.ala.core.auth.jwt.JwtProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.auth.oauth.service.OAuthService;
 import com.meme.ala.domain.member.model.dto.JwtVO;
+import com.meme.ala.domain.member.service.MemberAuthService;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 public class MemberAuthController {
     private final MemberService memberService;
+    private final MemberAuthService memberAuthService;
     private final OAuthService oAuthService;
     private final JwtProvider jwtProvider;
 
@@ -46,7 +48,7 @@ public class MemberAuthController {
 
     @GetMapping("/jwt/naver")
     public ResponseEntity<ResponseDto<String>> jwtNaverCreate(@RequestParam(required = false) String access_token) {
-        JwtVO result = memberService.tokenTojwt(access_token);
+        JwtVO result = memberAuthService.tokenTojwt(access_token);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, result.getMessage(), result.getJwt()));
