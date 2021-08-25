@@ -10,10 +10,12 @@ import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,11 +40,18 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     public List<Member> getMemberFriend(Member member) {
         FriendInfo friendInfo = getFriendInfo(member);
 
-        return friendInfo
-                .getFriends()
-                .stream()
-                .map(id -> memberService.findByMemberId(id))
-                .collect(Collectors.toList());
+        List<Member> friendList = new LinkedList<>();
+
+        for(ObjectId friendId : friendInfo.getFriends()){
+            try {
+                Member friend = memberService.findByMemberId(friendId);
+                friendList.add(friend);
+            } catch (EntityNotFoundException e){
+                continue;
+            }
+        }
+
+        return friendList;
     }
 
     @Override
@@ -50,11 +59,18 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     public List<Member> getMemberFollower(Member member) {
         FriendInfo friendInfo = getFriendInfo(member);
 
-        return friendInfo
-                .getMyAcceptancePendingList()
-                .stream()
-                .map(id -> memberService.findByMemberId(id))
-                .collect(Collectors.toList());
+        List<Member> followerList = new LinkedList<>();
+
+        for(ObjectId followerId : friendInfo.getMyAcceptancePendingList()){
+            try {
+                Member friend = memberService.findByMemberId(followerId);
+                followerList.add(friend);
+            } catch (EntityNotFoundException e){
+                continue;
+            }
+        }
+
+        return followerList;
     }
 
     @Override
@@ -134,9 +150,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
         friendInfoRepository.saveAll(Arrays.asList(memberFriendInfo, friendFriendInfo));
     }
 
-    private FriendInfo getFriendInfo(Member member){
+    @Override
+    public FriendInfo getFriendInfo(Member member){
         return friendInfoRepository.findById(member.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
+
 
 }

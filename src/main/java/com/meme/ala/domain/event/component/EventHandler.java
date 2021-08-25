@@ -5,12 +5,15 @@ import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.aggregation.model.entity.UserCount;
 import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
+import com.meme.ala.domain.event.model.entity.DeleteEvent;
 import com.meme.ala.domain.event.model.entity.InitEvent;
 import com.meme.ala.domain.event.model.entity.SubmitEvent;
+import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.service.FriendInfoService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberCardService;
+import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -28,6 +31,7 @@ public class EventHandler {
     private final MemberCardService memberCardService;
     private final MemberRepository memberRepository;
     private final UserCountRepository userCountRepository;
+    private final MemberService memberService;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -49,5 +53,17 @@ public class EventHandler {
             userCount.setCount(userCount.getCount() + 1);
             userCountRepository.save(userCount);
         }
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void deleteMember(DeleteEvent event) {
+        Member deletedMember = event.getDeletedMember();
+        /**
+         * Todo
+         * 삭제 관련 로직 처리
+         * 1.친구관계
+         */
+
     }
 }

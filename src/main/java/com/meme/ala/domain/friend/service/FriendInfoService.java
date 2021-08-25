@@ -1,5 +1,6 @@
 package com.meme.ala.domain.friend.service;
 
+import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.model.entity.FriendRelation;
 import com.meme.ala.domain.member.model.entity.Member;
 
@@ -15,4 +16,5 @@ public interface FriendInfoService {
     void unFriend(Member member, Member friend);
     void initFriendInfo(Member member);
     FriendRelation getRelation(Member member, Member person);
+    FriendInfo getFriendInfo(Member member);
 }

@@ -83,11 +83,14 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByIdAndMemberSetting_IsDeleted(memberId, false).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
+    @PublishEvent
     @Override
     @Transactional
-    public void deleteMember(Member member) {
+    public Member deleteMember(Member member) {
         member.getMemberSetting().setIsDeleted(true);
         memberRepository.save(member);
+
+        return member;
     }
 
     @Override

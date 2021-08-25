@@ -46,12 +46,6 @@ public class MemberController {
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, memberService.existsNickname(nickname)));
     }
 
-    /**
-     * TODO: Member 관련 API 전부 변경이 필요함 -> isActive 체크
-     * 1. 친구관계
-     * 2. 카드 선택
-     * 3. 사용자의 정보를 가져올 때?
-     */
     @DeleteMapping
     public ResponseEntity<ResponseDto<String>> deleteMemberByNickname(@CurrentUser Member member) {
         memberService.deleteMember(member);
