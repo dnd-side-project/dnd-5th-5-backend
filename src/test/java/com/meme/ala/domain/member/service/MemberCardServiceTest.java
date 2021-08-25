@@ -1,6 +1,7 @@
 package com.meme.ala.domain.member.service;
 
 import com.meme.ala.common.EntityFactory;
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.repository.AlaCardRepository;
 import com.meme.ala.domain.alacard.service.AlaCardService;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -34,6 +36,8 @@ public class MemberCardServiceTest {
     private MemberCardService memberCardService;
     @MockBean
     private AlaCardService alaCardService;
+    @MockBean
+    private AggregationService aggregationService;
     @Value("${member.alacardnum}")
     private int defaultCardNum;
 
@@ -49,6 +53,7 @@ public class MemberCardServiceTest {
         when(memberRepository.existsMemberByMemberSettingNickname(any(String.class))).thenReturn(false);
         when(alaCardRepository.findAll()).thenReturn(alaCardList);
         when(alaCardService.getBackgrounds()).thenReturn(Arrays.asList(EntityFactory.testAlaCardSetting().getBackground()));
+        doNothing().when(aggregationService).initAggregation(any(Member.class),any(List.class));
 
 
         Member testMember = Member.builder().build();

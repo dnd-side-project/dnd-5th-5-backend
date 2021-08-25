@@ -110,4 +110,12 @@ public class AlaCardController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
     }
+
+    @GetMapping("/specialCard")
+    public ResponseEntity<ResponseDto> assignSpecialCard(@RequestParam String nickname, @RequestParam int size) {
+        Member member = memberService.findByNickname(nickname);
+        memberCardService.assignSpecialCard(member, size);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(ResponseDto.of(HttpStatus.NO_CONTENT, ResponseMessage.SUCCESS));
+    }
 }

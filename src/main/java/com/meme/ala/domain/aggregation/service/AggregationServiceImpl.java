@@ -35,13 +35,15 @@ public class AggregationServiceImpl implements AggregationService {
 
     @Override
     @Transactional
-    public void initAggregation(Member member) {
-        List<WordCount> wordCountList = member.getAlaCardSettingPairList().stream()
+    public void initAggregation(Member member, List<AlaCardSettingPair> alaCardSettingPairList) {
+        Aggregation aggregation = aggregationRepository.findByMemberId(member.getId())
+                .orElse(Aggregation.builder().memberId(member.getId()).wordCountList(new ArrayList<>()).build());
+        List<WordCount> wordCountList = alaCardSettingPairList.stream()
                 .map(this::toNestedWordCountList)
                 .flatMap(Collection::stream)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
-        Aggregation aggregation = Aggregation.builder().memberId(member.getId()).wordCountList(wordCountList).build();
+        aggregation.getWordCountList().addAll(wordCountList);
         aggregationRepository.save(aggregation);
     }
 
