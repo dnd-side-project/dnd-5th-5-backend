@@ -85,8 +85,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void deleteMemberByNickname(String nickname) {
-        memberRepository.deleteMemberByMemberSettingNickname(nickname);
+    public void deleteMember(Member member) {
+        member.getMemberSetting().setIsDeleted(true);
+        memberRepository.save(member);
     }
 
     @Override

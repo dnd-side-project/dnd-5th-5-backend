@@ -15,8 +15,6 @@ public interface MemberRepository extends MongoRepository<Member, ObjectId> {
 
     Optional<Member> findByMemberSettingNicknameAndMemberSetting_IsDeleted(String nickname, boolean flag);
 
-    void deleteMemberByMemberSettingNickname(String nickname);
-
     boolean existsMemberByEmailAndMemberSetting_IsDeleted(String email, boolean flag);
 
     Optional<Member> findByIdAndMemberSetting_IsDeleted(ObjectId id, boolean flag);

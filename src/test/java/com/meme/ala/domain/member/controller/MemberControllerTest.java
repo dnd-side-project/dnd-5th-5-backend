@@ -5,6 +5,7 @@ import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
+import com.meme.ala.domain.member.service.MemberService;
 import org.junit.jupiter.api.*;
 import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// TODO: memberService를 MockBean으로 주입해야 함
 public class MemberControllerTest extends AbstractControllerTest {
     @MockBean
     private MemberRepository memberRepository;
@@ -160,22 +162,20 @@ public class MemberControllerTest extends AbstractControllerTest {
                         )
                 ));
     }
-
-    @DisplayName("사용자 닉네임으로 삭제 테스트")
+    
+    @AlaWithAccount("test")
+    @DisplayName("사용자 삭제 테스트")
     @Test
-    public void 사용자_닉네임_삭제_테스트() throws Exception{
-        doNothing().when(memberRepository).deleteMemberByMemberSettingNickname("testNickname");
+    public void 사용자_삭제_테스트() throws Exception{
+        given(memberRepository.save(any(Member.class))).willReturn(EntityFactory.testMember());
 
-        mockMvc.perform(get("/api/v1/member/delete?nickname=testNickname"))
+        mockMvc.perform(delete("/api/v1/member"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("deleted"))
                 .andDo(print())
-                .andDo(document("api/v1/member/delete",
+                .andDo(document("api/v1/member",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        requestParameters(
-                                parameterWithName("nickname").description("닉네임")
-                        ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("설명"),

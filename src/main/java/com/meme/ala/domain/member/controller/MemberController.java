@@ -52,9 +52,9 @@ public class MemberController {
      * 2. 카드 선택
      * 3. 사용자의 정보를 가져올 때?
      */
-    @DeleteMapping()
+    @DeleteMapping
     public ResponseEntity<ResponseDto<String>> deleteMemberByNickname(@CurrentUser Member member) {
-        memberService.deleteMemberByNickname(member.getMemberSetting().getNickname());
+        memberService.deleteMember(member);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.DELETED));
     }
