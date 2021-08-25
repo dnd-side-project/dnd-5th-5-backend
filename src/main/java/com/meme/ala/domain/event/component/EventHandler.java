@@ -32,7 +32,7 @@ public class EventHandler {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void initMember(InitEvent event) {
-        Member member = memberRepository.findByEmail(event.getEmail())
+        Member member = memberRepository.findByEmailAndMemberSetting_IsDeleted(event.getEmail(), false)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
         memberCardService.assignCard(member, defaultCardNum);
         aggregationService.initAggregation(member);

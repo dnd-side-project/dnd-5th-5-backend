@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true)
     public boolean existsEmail(String email) {
-        return memberRepository.existsMemberByEmail(email);
+        return memberRepository.existsMemberByEmailAndMemberSetting_IsDeleted(email, false);
     }
 
     @Override
@@ -69,18 +69,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true)
     public boolean existsNickname(String nickname) {
-        return memberRepository.existsMemberByMemberSettingNickname(nickname);
+        return memberRepository.existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted(nickname, false);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Member findByNickname(String nickname) {
-        return memberRepository.findByMemberSettingNickname(nickname).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        return memberRepository.findByMemberSettingNicknameAndMemberSetting_IsDeleted(nickname, false).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
     @Override
     public Member findByMemberId(ObjectId memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+        return memberRepository.findByIdAndMemberSetting_IsDeleted(memberId, false).orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
     @Override

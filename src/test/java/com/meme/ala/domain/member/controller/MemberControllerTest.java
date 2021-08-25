@@ -18,6 +18,7 @@ import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -65,7 +66,7 @@ public class MemberControllerTest extends AbstractControllerTest {
     @DisplayName("사용자 세팅 정보를 읽어오는 테스트")
     @Test
     public void 사용자_세팅_정보를_읽기_유닛테스트() throws Exception{
-        given(memberRepository.findByMemberSettingNickname(any(String.class))).willReturn(Optional.of(EntityFactory.testMember()));
+        given(memberRepository.findByMemberSettingNicknameAndMemberSetting_IsDeleted(any(String.class), eq(false))).willReturn(Optional.of(EntityFactory.testMember()));
 
         mockMvc.perform(get("/api/v1/member").param("nickname", "testNickname"))
                 .andExpect(status().isOk())
@@ -139,7 +140,7 @@ public class MemberControllerTest extends AbstractControllerTest {
     @DisplayName("사용자 닉네임 중복 처리 테스트")
     @Test
     public void 사용자_닉네임_중복_처리_테스트() throws Exception{
-        when(memberRepository.existsMemberByMemberSettingNickname("testNickname")).thenReturn(true);
+        when(memberRepository.existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted("testNickname", false)).thenReturn(true);
 
         mockMvc.perform(get("/api/v1/member/exists?nickname=testNickname"))
                 .andExpect(status().isOk())
