@@ -7,10 +7,6 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,7 +45,7 @@ class FriendInfoServiceTest {
 
         FriendInfo followingFriendInfo = EntityFactory.testFriendInfo();
 
-        given(memberRepository.findByMemberSettingNickname(eq(following.getMemberSetting().getNickname()))).willReturn(Optional.of(following));
+        given(memberRepository.findByMemberSettingNicknameAndMemberSetting_IsDeleted(eq(following.getMemberSetting().getNickname()), eq(false))).willReturn(Optional.of(following));
         given(friendInfoRepository.findById(eq(following.getId()))).willReturn(Optional.of(followingFriendInfo));
         given(friendInfoRepository.findById(eq(member.getId()))).willReturn(Optional.of(memberFriendInfo));
 
@@ -75,7 +71,7 @@ class FriendInfoServiceTest {
         followerFriendInfo.setFriends(new LinkedList<>());
         followerFriendInfo.setMyAcceptancePendingList(new LinkedList<>());
 
-        given(memberRepository.findByMemberSettingNickname(eq(follower.getMemberSetting().getNickname()))).willReturn(Optional.of(follower));
+        given(memberRepository.findByMemberSettingNicknameAndMemberSetting_IsDeleted(eq(follower.getMemberSetting().getNickname()), eq(false))).willReturn(Optional.of(follower));
         given(friendInfoRepository.findById(eq(member.getId()))).willReturn(Optional.of(memberFriendInfo));
         given(friendInfoRepository.findById(eq(follower.getId()))).willReturn(Optional.of(followerFriendInfo));
 

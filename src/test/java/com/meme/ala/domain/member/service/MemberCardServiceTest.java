@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -46,7 +47,7 @@ public class MemberCardServiceTest {
             alaCardList.add(alaCard);
         }
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
-        when(memberRepository.existsMemberByMemberSettingNickname(any(String.class))).thenReturn(false);
+        when(memberRepository.existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted(any(String.class), eq(false))).thenReturn(false);
         when(alaCardRepository.findAll()).thenReturn(alaCardList);
         when(alaCardService.getBackgrounds()).thenReturn(Arrays.asList(EntityFactory.testAlaCardSetting().getBackground()));
 

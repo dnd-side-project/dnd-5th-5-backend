@@ -19,7 +19,7 @@ public interface MemberService {
 
     Member findByMemberId(ObjectId memberId);
 
-    void deleteMemberByNickname(String nickname);
+    Member deleteMember(Member member);
 
     String shareSelectLink(String nickname);
 

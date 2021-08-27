@@ -25,7 +25,7 @@ public class MemberServiceTest {
         Member testMember= EntityFactory.testMember();
 
         given(memberRepository
-                .existsMemberByMemberSettingNickname(testMember.getMemberSetting().getNickname()))
+                .existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted(testMember.getMemberSetting().getNickname(),false))
                 .willReturn(true);
 
         assertThat(memberService.existsNickname(testMember.getMemberSetting().getNickname())).isTrue();

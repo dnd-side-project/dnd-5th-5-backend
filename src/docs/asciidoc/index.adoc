@@ -106,13 +106,10 @@ include::{snippets}/api/v1/member/exists/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/member/exists/response-fields.adoc[]
 
-== GET /api/v1/member/delete
+== DELETE /api/v1/member
 
 .request
 include::{snippets}/api/v1/member/delete/http-request.adoc[]
-
-.request parameters
-include::{snippets}/api/v1/member/delete/request-parameters.adoc[]
 
 .response
 include::{snippets}/api/v1/member/delete/http-response.adoc[]

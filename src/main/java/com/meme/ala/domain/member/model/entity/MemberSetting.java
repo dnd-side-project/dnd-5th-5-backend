@@ -25,5 +25,5 @@ public class MemberSetting {
     private Boolean isOpen = true;
 
     @Builder.Default
-    private Boolean isDeleted = true;
+    private Boolean isDeleted = false;
 }
