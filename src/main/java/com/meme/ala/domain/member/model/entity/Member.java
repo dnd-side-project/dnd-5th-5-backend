@@ -1,6 +1,8 @@
 package com.meme.ala.domain.member.model.entity;
 
 import com.meme.ala.core.auth.jwt.Authority;
+import com.meme.ala.domain.alacard.model.entity.AlaCard;
+import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -38,4 +41,22 @@ public class Member {
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public List<AlaCard> getAlaCardList() {
+        return this.getAlaCardSettingPairList()
+                    .stream()
+                    .map(AlaCardSettingPair::getAlaCard)
+                    .collect(Collectors.toList());
+    }
+
+    public void assignAlaCardSettingPairList(List<AlaCard> selectedAlaCardList, List<AlaCardSetting> alaCardSettingList) {
+        for (int i = 0; i < selectedAlaCardList.size(); i++) {
+            this.getAlaCardSettingPairList()
+                    .add(AlaCardSettingPair.builder()
+                                            .alaCard(selectedAlaCardList.get(i))
+                                            .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size())) /// TODO: 물어보기
+                                            .build()
+                    );
+        }
+    }
 }

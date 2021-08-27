@@ -18,6 +18,7 @@ import com.meme.ala.domain.alacard.repository.BackgroundRepository;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -176,5 +177,11 @@ public class AlaCardServiceImpl implements AlaCardService {
         } else {
             return formSentence + middleCategory.getSentenceComponent().getJosa();
         }
+    }
+
+    @Cacheable
+    @Transactional(readOnly = true)
+    public List<AlaCard> getAlaCardList() {
+        return alaCardRepository.findAll();
     }
 }
