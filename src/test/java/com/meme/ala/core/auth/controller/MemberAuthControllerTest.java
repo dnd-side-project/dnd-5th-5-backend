@@ -70,7 +70,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
         when(oAuthService.getMemberByProvider(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.GOOGLE)).thenReturn(new GoogleUser(data));
 
-        when(memberService.existsEmail(any())).thenReturn(Boolean.TRUE);
+        when(memberService.existsProviderId(any())).thenReturn(Boolean.TRUE);
 
         when(jwtProvider.createToken(any())).thenReturn("dummy token");
 
@@ -113,7 +113,7 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
 
         when(oAuthService.getMemberByProvider(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.NAVER)).thenReturn(new NaverUser(data));
 
-        when(memberService.existsEmail(any())).thenReturn(Boolean.TRUE);
+        when(memberService.existsProviderId(any())).thenReturn(Boolean.TRUE);
 
         when(jwtProvider.createToken(any())).thenReturn("dummy token");
 

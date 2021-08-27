@@ -18,12 +18,12 @@ public class MemberAuthService {
     public JwtVO tokenTojwt(String accessToken) {
         OAuthUserInfo authUserInfo = NaverOauthUtil.naverTokenToNaverUser(accessToken);
         String message;
-        if (!memberService.existsEmail(authUserInfo.getEmail())) {
+        if (!memberService.existsProviderId(authUserInfo.getProviderId())) {
             message = ResponseMessage.JOIN;
             memberService.join(authUserInfo, OAuthProvider.NAVER);
         } else
             message = ResponseMessage.LOGIN;
-        String jwt = jwtProvider.createToken(authUserInfo.getEmail());
+        String jwt = jwtProvider.createToken(authUserInfo.getProviderId());
         return new JwtVO(message, jwt);
     }
 }

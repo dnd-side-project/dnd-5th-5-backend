@@ -15,9 +15,9 @@ public class JwtTokenProviderTest {
 
     @Test
     public void Jwt_Create_테스트(){
-        String email="test@gmail.com";
-        String token=jwtTokenProvider.createToken(email);
-        assertThat(jwtTokenProvider.getUserEmail(token),is(email));
+        String providerId="1234654";
+        String token=jwtTokenProvider.createToken(providerId);
+        assertThat(jwtTokenProvider.getUserProviderId(token),is(providerId));
         assertTrue(jwtTokenProvider.validateToken(token));
     }
 }

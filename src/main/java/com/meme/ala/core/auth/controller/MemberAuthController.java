@@ -33,13 +33,13 @@ public class MemberAuthController {
 
         OAuthUserInfo authUserInfo = oAuthService.getMemberByProvider(data, provider);
 
-        if (!memberService.existsEmail(authUserInfo.getEmail())) {
+        if (!memberService.existsProviderId(authUserInfo.getProviderId())) {
             oAuthMap.put("message", ResponseMessage.JOIN);
             memberService.join(authUserInfo, provider);
         } else
             oAuthMap.put("message", ResponseMessage.LOGIN);
 
-        oAuthMap.put("jwt", jwtProvider.createToken(authUserInfo.getEmail()));
+        oAuthMap.put("jwt", jwtProvider.createToken(authUserInfo.getProviderId()));
 
         return ResponseEntity
                 .status(HttpStatus.OK)

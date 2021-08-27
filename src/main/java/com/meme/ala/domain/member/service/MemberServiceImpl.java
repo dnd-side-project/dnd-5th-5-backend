@@ -1,10 +1,8 @@
 package com.meme.ala.domain.member.service;
 
 import com.meme.ala.core.annotation.PublishEvent;
-import com.meme.ala.core.auth.oauth.model.OAuthProvider;
 import com.meme.ala.core.auth.oauth.model.OAuthUserInfo;
 import com.meme.ala.core.error.ErrorCode;
-import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.member.model.dto.MemberPrincipalDto;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -27,8 +25,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existsEmail(String email) {
-        return memberRepository.existsMemberByEmailAndMemberSetting_IsDeleted(email, false);
+    public boolean existsProviderId(String providerId) {
+        return memberRepository.existsMemberByProviderIdAndMemberSetting_IsDeleted(providerId, false);
     }
 
     @Override
@@ -43,20 +41,14 @@ public class MemberServiceImpl implements MemberService {
         }
         Member newMember = Member.builder()
                 .email(authUserInfo.getEmail())
+                .providerId(authUserInfo.getProviderId())
                 .memberSetting(
                         MemberSetting.builder()
                                 .nickname("ala_" + newNumber)
                                 .build())
                 .build();
-        if (provider.equals(OAuthProvider.GOOGLE)) {
-            newMember.setGoogleId(authUserInfo.getProviderId());
-        } else if (provider.equals(OAuthProvider.NAVER)) {
-            newMember.setNaverId(authUserInfo.getProviderId());
-        } else {
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
         memberRepository.save(newMember);
-        return authUserInfo.getEmail();
+        return authUserInfo.getProviderId();
     }
 
     @Override
