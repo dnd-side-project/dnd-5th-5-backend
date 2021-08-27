@@ -47,8 +47,7 @@ public class MemberCardServiceTest {
             alaCardList.add(alaCard);
         }
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
-        when(memberRepository.existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted(any(String.class), eq(false))).thenReturn(false);
-        when(alaCardRepository.findAll()).thenReturn(alaCardList);
+        when(alaCardService.getAlaCardList()).thenReturn(alaCardList);
         when(alaCardService.getBackgrounds()).thenReturn(Arrays.asList(EntityFactory.testAlaCardSetting().getBackground()));
 
 

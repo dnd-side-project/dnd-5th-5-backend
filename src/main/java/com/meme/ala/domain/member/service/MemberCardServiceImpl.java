@@ -18,64 +18,35 @@ import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class MemberCardServiceImpl implements MemberCardService {
     private final AlaCardSaveMapper alaCardSaveMapper;
     private final AlaCardSettingMapper alaCardSettingMapper;
-
     private final MemberRepository memberRepository;
-    private final AlaCardRepository alaCardRepository;
     private final BackgroundRepository backgroundRepository;
     private final TemporalWordListRepository temporalWordListRepository;
     private final MemberService memberService;
-    private final AlaCardService alaCardService;
+    private final MemberCardSettingService memberCardSettingService;
 
     @Override
     @Transactional
     public void assignCard(Member member, int num) {
-        List<AlaCard> memberAlaCardList = getAlaCardListFromMember(member);
-        List<AlaCard> alaCardList = getAlaCardList();
+        List<AlaCard> memberAlaCardList = member.getAlaCardList();
 
-        List<AlaCardSetting> alaCardSettingList = alaCardService.getBackgrounds().stream()
-                .map(background -> AlaCardSetting.builder()
-                        .background(background)
-                        .isOpen(true)
-                        .build())
-                .collect(Collectors.toList());
+        List<AlaCard> selectedAlaCardList = memberCardSettingService.selectAlaCardList(memberAlaCardList, num);
 
-        Collections.shuffle(alaCardList);
-        Collections.shuffle(alaCardSettingList);
+        List<AlaCardSetting> alaCardSettingList = memberCardSettingService.initAlaCardSettingList();
 
-        List<AlaCard> selectedAlaCardList =
-                alaCardList.stream()
-                        .filter(alaCard -> !alaCard.getSpecial())
-                        .filter(alaCard -> !memberAlaCardList.contains(alaCard))
-                        .limit(num)
-                        .collect(Collectors.toList());
+        member.assignAlaCardSettingPairList(selectedAlaCardList, alaCardSettingList);
 
-        for (int i = 0; i < num; i++) {
-            member.getAlaCardSettingPairList()
-                    .add(AlaCardSettingPair.builder()
-                            .alaCard(selectedAlaCardList.get(i))
-                            .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size()))
-                            .build());
-        }
         memberRepository.save(member);
-    }
-
-    @Cacheable
-    @Transactional(readOnly = true)
-    public List<AlaCard> getAlaCardList() {
-        return alaCardRepository.findAll();
     }
 
     @Override
@@ -83,7 +54,7 @@ public class MemberCardServiceImpl implements MemberCardService {
     public void setTemporalWordList(String cookieId, String nickname, Boolean shuffle) {
         Member member = memberService.findByNickname(nickname);
 
-        List<AlaCard> alaCardList = getAlaCardListFromMember(member);
+        List<AlaCard> alaCardList = member.getAlaCardList();
 
         List<SelectionWordDto> wordDtoList = alaCardSaveMapper.alaCardListToSelectionWordDtoList(alaCardList);
 
@@ -94,11 +65,7 @@ public class MemberCardServiceImpl implements MemberCardService {
         temporalWordListRepository.save(temporalWordList);
     }
 
-    public List<AlaCard> getAlaCardListFromMember(Member member) {
-        return member.getAlaCardSettingPairList()
-                .stream().map(AlaCardSettingPair::getAlaCard)
-                .collect(Collectors.toList());
-    }
+
 
     @Override
     @Transactional(readOnly = true)
