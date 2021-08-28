@@ -1,5 +1,6 @@
 package com.meme.ala.domain.quest.service;
 
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberCardService;
 import com.meme.ala.domain.quest.model.entity.EvaluationQuest;
@@ -12,12 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class QuestConditionServiceImpl implements QuestConditionService{
     private final MemberCardService memberCardService;
+    private final AggregationService aggregationService;
 
     @Override
     @Transactional
     public void checkEvaluation(Member member, EvaluationQuest quest){
         if(quest.getStatus() == QuestCondition.EVALUATION.getCondition()) {
             memberCardService.assignCard(member, 1);
+            aggregationService.addAggregation(member);
+
             // TODO : 메시징 알림 로직
         }
     }

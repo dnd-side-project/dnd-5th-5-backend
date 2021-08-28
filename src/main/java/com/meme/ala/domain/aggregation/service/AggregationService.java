@@ -16,4 +16,6 @@ public interface AggregationService {
     public void submitWordList(Member member, Aggregation aggregation, List<String> wordIdList) throws UnsupportedEncodingException;
 
     public Integer getUserCount();
+
+    void addAggregation(Member member);
 }
