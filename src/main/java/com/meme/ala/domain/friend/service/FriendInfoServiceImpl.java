@@ -37,7 +37,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Member> getMemberFriend(Member member) {
+    public List<Member> getMemberFriend(Member member) { //ToDo: 성능 개선 가능함 repository단에서 개선해보기
         FriendInfo friendInfo = getFriendInfo(member);
 
         List<Member> friendList = new LinkedList<>();

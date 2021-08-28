@@ -2,13 +2,16 @@ package com.meme.ala.domain.event.component;
 
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.UserCount;
+import com.meme.ala.domain.aggregation.repository.AggregationRepository;
 import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.event.model.entity.DeleteEvent;
 import com.meme.ala.domain.event.model.entity.InitEvent;
 import com.meme.ala.domain.event.model.entity.QuestEvent;
 import com.meme.ala.domain.event.model.entity.SubmitEvent;
+import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.service.FriendInfoService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class EventHandler {
@@ -30,6 +35,7 @@ public class EventHandler {
     private int defaultCardNum;
     private final FriendInfoService friendInfoService;
     private final AggregationService aggregationService;
+    private final AggregationRepository aggregationRepository;
     private final MemberCardService memberCardService;
     private final MemberRepository memberRepository;
     private final UserCountRepository userCountRepository;
@@ -62,17 +68,31 @@ public class EventHandler {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void deleteMember(DeleteEvent event) {
         Member deletedMember = event.getDeletedMember();
-        /**
-         * Todo
-         * 삭제 관련 로직 처리
-         * 1.친구관계
-         */
+
+        Aggregation deletedAggregation = aggregationService.findByMember(deletedMember);
+        aggregationRepository.delete(deletedAggregation);
+
+        List<Member> friendList = friendInfoService.getMemberFriend(deletedMember);
+        friendList.forEach(member -> flushFriendInfo(member, deletedMember));
+    }
+
+    private void flushFriendInfo(Member targetMember, Member deletedMember) {
+        FriendInfo friendInfo = friendInfoService.getFriendInfo(targetMember);
+        friendInfo
+                .getFriends()
+                .removeIf(f -> f == deletedMember.getId());
+        friendInfo
+                .getFriendAcceptancePendingList()
+                .removeIf(f -> f == deletedMember.getId());
+        friendInfo
+                .getMyAcceptancePendingList()
+                .removeIf(f -> f == deletedMember.getId());
     }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void questCheck(QuestEvent event){
-        switch(event.getCategory()){
+    public void questCheck(QuestEvent event) {
+        switch (event.getCategory()) {
             case EVALUATION:
                 EvaluationQuest quest = questStatusService.updateEvaluation(event);
                 questConditionService.checkEvaluation(event.getMember(), quest);
