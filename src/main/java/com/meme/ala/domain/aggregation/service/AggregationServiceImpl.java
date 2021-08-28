@@ -1,8 +1,10 @@
 package com.meme.ala.domain.aggregation.service;
 
 import com.meme.ala.core.annotation.PublishEvent;
+import com.meme.ala.core.annotation.QuestCheck;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
+import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.UserCount;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
@@ -69,6 +71,7 @@ public class AggregationServiceImpl implements AggregationService {
     }
 
     @Override
+    @QuestCheck
     @PublishEvent
     @Transactional
     public void submitWordList(Member member, Aggregation aggregation, List<String> wordIdList) throws UnsupportedEncodingException {
@@ -110,5 +113,23 @@ public class AggregationServiceImpl implements AggregationService {
             }
         }
         return wordMap;
+    }
+
+    @Override
+    @Transactional
+    public void addAggregation(Member member) {
+        List<AlaCardSettingPair> pair = member.getAlaCardSettingPairList();
+
+        List<WordCount> wordCountList = toNestedWordCountList(pair.get(pair.size() - 1))
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        Aggregation aggregation = aggregationRepository.findByMemberId(member.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        aggregation.getWordCountList().addAll(wordCountList);
+
+        aggregationRepository.save(aggregation);
     }
 }

@@ -7,13 +7,15 @@ import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.event.model.entity.DeleteEvent;
 import com.meme.ala.domain.event.model.entity.InitEvent;
+import com.meme.ala.domain.event.model.entity.QuestEvent;
 import com.meme.ala.domain.event.model.entity.SubmitEvent;
-import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.service.FriendInfoService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberCardService;
-import com.meme.ala.domain.member.service.MemberService;
+import com.meme.ala.domain.quest.model.entity.EvaluationQuest;
+import com.meme.ala.domain.quest.service.QuestConditionService;
+import com.meme.ala.domain.quest.service.QuestStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -31,7 +33,8 @@ public class EventHandler {
     private final MemberCardService memberCardService;
     private final MemberRepository memberRepository;
     private final UserCountRepository userCountRepository;
-    private final MemberService memberService;
+    private final QuestStatusService questStatusService;
+    private final QuestConditionService questConditionService;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -64,6 +67,16 @@ public class EventHandler {
          * 삭제 관련 로직 처리
          * 1.친구관계
          */
+    }
 
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void questCheck(QuestEvent event){
+        switch(event.getCategory()){
+            case EVALUATION:
+                EvaluationQuest quest = questStatusService.updateEvaluation(event);
+                questConditionService.checkEvaluation(event.getMember(), quest);
+                break;
+        }
     }
 }

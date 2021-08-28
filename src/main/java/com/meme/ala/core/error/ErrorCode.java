@@ -33,7 +33,12 @@ public enum ErrorCode {
     // AlaCard
     INVALID_COOKIE(400, "A001", "Invalid Cookie"),
     BACKGROUND_NOT_FOUND(400, "A002", "Background Not Found"),
-    ALACARD_NOT_FOUND(400, "A003", "AlaCard Not Found");
+    ALACARD_NOT_FOUND(400, "A003", "AlaCard Not Found"),
+
+    // Quest
+    QUEST_NOT_FOUND(400, "Q001", "Quest Not Found"),
+
+    ;
 
     private final String code;
     private final String message;
