@@ -75,6 +75,7 @@ public class EventHandler {
         switch(event.getCategory()){
             case EVALUATION:
                 EvaluationQuest quest = questStatusService.updateEvaluation(event);
+                questConditionService.checkEvaluation(event.getMember(), quest);
                 break;
         }
     }
