@@ -28,11 +28,11 @@ public class JwtProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String email) {
+    public String createToken(String providerId) {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + tokenValidTime);
         Claims claims = Jwts.claims().setSubject("alajwt");
-        claims.put("email", email);
+        claims.put("providerId", providerId);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -42,16 +42,16 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserEmail(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserProviderId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    public String getUserEmail(String token) {
+    public String getUserProviderId(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody()
-                .get("email", String.class);
+                .get("providerId", String.class);
     }
 
     public String resolveToken(HttpServletRequest request) {

@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class InitEvent {
-    private String email;
+    private String providerId;
 }

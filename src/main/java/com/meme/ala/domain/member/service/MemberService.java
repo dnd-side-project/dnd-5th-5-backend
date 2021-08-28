@@ -7,7 +7,7 @@ import com.meme.ala.domain.member.model.entity.Member;
 import org.bson.types.ObjectId;
 
 public interface MemberService {
-    boolean existsEmail(String email);
+    boolean existsProviderId(String providerId);
 
     String join(OAuthUserInfo authUserInfo, String provider);
 

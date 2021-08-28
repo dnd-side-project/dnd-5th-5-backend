@@ -27,9 +27,7 @@ public class Member {
 
     private String email;
 
-    private String googleId;
-
-    private String naverId;
+    private String providerId;
 
     private MemberSetting memberSetting;
 
@@ -54,7 +52,7 @@ public class Member {
             this.getAlaCardSettingPairList()
                     .add(AlaCardSettingPair.builder()
                                             .alaCard(selectedAlaCardList.get(i))
-                                            .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size())) /// TODO: 물어보기
+                                            .alaCardSetting(alaCardSettingList.get(i % alaCardSettingList.size()))
                                             .build()
                     );
         }

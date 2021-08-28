@@ -9,13 +9,13 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends MongoRepository<Member, ObjectId> {
-    Optional<Member> findByEmailAndMemberSetting_IsDeleted(String email, boolean flag);
+    Optional<Member> findByProviderIdAndMemberSetting_IsDeleted(String providerId, boolean flag);
 
     boolean existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted(String nickname, boolean flag);
 
     Optional<Member> findByMemberSettingNicknameAndMemberSetting_IsDeleted(String nickname, boolean flag);
 
-    boolean existsMemberByEmailAndMemberSetting_IsDeleted(String email, boolean flag);
+    boolean existsMemberByProviderIdAndMemberSetting_IsDeleted(String providerId, boolean flag);
 
     Optional<Member> findByIdAndMemberSetting_IsDeleted(ObjectId id, boolean flag);
 
