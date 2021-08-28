@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum QuestCondition {
-    EVALUATION(3)
+    EVALUATION(30)
     ;
 
     private int condition;
