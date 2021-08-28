@@ -179,7 +179,7 @@ public class AlaCardServiceImpl implements AlaCardService {
         }
     }
 
-    @Cacheable
+//    @Cacheable TODO: 캐시어블 기능 알아볼 것
     @Transactional(readOnly = true)
     public List<AlaCard> getAlaCardList() {
         return alaCardRepository.findAll();
