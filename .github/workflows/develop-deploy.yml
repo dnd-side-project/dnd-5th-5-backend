@@ -11,7 +11,7 @@ on:
         description: 'Test scenario tags'
   push:
     branches:
-      - develop # ToDo: 완전 배포 시 main으로 수정
+      - develop
 
 
 jobs:
@@ -109,5 +109,5 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://memealabucket/$GITHUB_SHA.zip
         working-directory: ./build/libs
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name meme_ala --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name meme_ala_security_group --s3-location bucket=memealabucket,bundleType=zip,key=$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name ala-develop --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name ala-develop-group --s3-location bucket=memealabucket,bundleType=zip,key=$GITHUB_SHA.zip
 
