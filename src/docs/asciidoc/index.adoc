@@ -23,6 +23,20 @@ include::{snippets}/api/v1/oauth/jwt/google/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/oauth/jwt/google/response-fields.adoc[]
 
+== POST /api/v1/oauth/jwt/kakao
+
+.request
+include::{snippets}/api/v1/oauth/jwt/kakao/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/oauth/jwt/kakao/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/oauth/jwt/kakao/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/oauth/jwt/kakao/response-fields.adoc[]
+
 == POST /api/v1/oauth/jwt/naver
 
 .request
