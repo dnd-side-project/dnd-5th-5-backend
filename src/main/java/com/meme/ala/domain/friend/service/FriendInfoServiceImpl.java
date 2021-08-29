@@ -5,8 +5,8 @@ import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.model.entity.FriendRelation;
-import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
+import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -29,7 +28,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void initFriendInfo(Member member){
+    public void initFriendInfo(Member member) {
         FriendInfo friendInfo = FriendInfo.builder().memberId(member.getId()).build();
 
         friendInfoRepository.save(friendInfo);
@@ -42,11 +41,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
         List<Member> friendList = new LinkedList<>();
 
-        for(ObjectId friendId : friendInfo.getFriends()){
+        for (ObjectId friendId : friendInfo.getFriends()) {
             try {
                 Member friend = memberService.findByMemberId(friendId);
                 friendList.add(friend);
-            } catch (EntityNotFoundException e){
+            } catch (EntityNotFoundException e) {
                 continue;
             }
         }
@@ -56,16 +55,51 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Member> getMemberAllFriendInfo(Member member) {
+        FriendInfo friendInfo = getFriendInfo(member);
+
+        List<Member> friendList = new LinkedList<>();
+
+        for (ObjectId friendId : friendInfo.getFriends()) {
+            try {
+                Member friend = memberService.findByMemberId(friendId);
+                friendList.add(friend);
+            } catch (EntityNotFoundException e) {
+                continue;
+            }
+        }
+        for (ObjectId friendId : friendInfo.getFriendAcceptancePendingList()) {
+            try {
+                Member friend = memberService.findByMemberId(friendId);
+                friendList.add(friend);
+            } catch (EntityNotFoundException e) {
+                continue;
+            }
+        }
+        for (ObjectId friendId : friendInfo.getMyAcceptancePendingList()) {
+            try {
+                Member friend = memberService.findByMemberId(friendId);
+                friendList.add(friend);
+            } catch (EntityNotFoundException e) {
+                continue;
+            }
+        }
+        return friendList;
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Member> getMemberFollower(Member member) {
         FriendInfo friendInfo = getFriendInfo(member);
 
         List<Member> followerList = new LinkedList<>();
 
-        for(ObjectId followerId : friendInfo.getMyAcceptancePendingList()){
+        for (ObjectId followerId : friendInfo.getMyAcceptancePendingList()) {
             try {
                 Member friend = memberService.findByMemberId(followerId);
                 followerList.add(friend);
-            } catch (EntityNotFoundException e){
+            } catch (EntityNotFoundException e) {
                 continue;
             }
         }
@@ -82,11 +116,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void followingFriend(Member member, Member following){
+    public void followingFriend(Member member, Member following) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followingFriendInfo = getFriendInfo(following);
 
-        if(memberFriendInfo.getRelation(following.getId()) != FriendRelation.DEFAULT)
+        if (memberFriendInfo.getRelation(following.getId()) != FriendRelation.DEFAULT)
             throw new BusinessException(ErrorCode.NOT_DEFAULT);
 
         friendService.follow(memberFriendInfo, followingFriendInfo);
@@ -96,11 +130,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void acceptFollowerToFriend(Member member, Member follower){
+    public void acceptFollowerToFriend(Member member, Member follower) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followerFriendInfo = getFriendInfo(follower);
 
-        if(memberFriendInfo.getRelation(follower.getId()) != FriendRelation.FOLLOWER)
+        if (memberFriendInfo.getRelation(follower.getId()) != FriendRelation.FOLLOWER)
             throw new BusinessException(ErrorCode.NOT_FOLLOWER);
 
         friendService.accept(memberFriendInfo, followerFriendInfo);
@@ -110,11 +144,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void declineFriend(Member member, Member follower){
+    public void declineFriend(Member member, Member follower) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followerFriendInfo = getFriendInfo(follower);
 
-        if(memberFriendInfo.getRelation(follower.getId()) != FriendRelation.FOLLOWER)
+        if (memberFriendInfo.getRelation(follower.getId()) != FriendRelation.FOLLOWER)
             throw new BusinessException(ErrorCode.NOT_FOLLOWER);
 
         friendService.decline(memberFriendInfo, followerFriendInfo);
@@ -124,11 +158,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void cancelFollowing(Member member, Member following){
+    public void cancelFollowing(Member member, Member following) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followingFriendInfo = getFriendInfo(following);
 
-        if(memberFriendInfo.getRelation(following.getId()) != FriendRelation.FOLLOWING)
+        if (memberFriendInfo.getRelation(following.getId()) != FriendRelation.FOLLOWING)
             throw new BusinessException(ErrorCode.NOT_FOLLOWING);
 
         friendService.cancelFollowing(memberFriendInfo, followingFriendInfo);
@@ -138,11 +172,11 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
-    public void unFriend(Member member, Member friend){
+    public void unFriend(Member member, Member friend) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo friendFriendInfo = getFriendInfo(friend);
 
-        if(memberFriendInfo.getRelation(friend.getId()) != FriendRelation.FRIEND)
+        if (memberFriendInfo.getRelation(friend.getId()) != FriendRelation.FRIEND)
             throw new BusinessException(ErrorCode.NOT_FRIEND);
 
         friendService.unFriend(memberFriendInfo, friendFriendInfo);
@@ -151,10 +185,24 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     }
 
     @Override
-    public FriendInfo getFriendInfo(Member member){
+    public FriendInfo getFriendInfo(Member member) {
         return friendInfoRepository.findById(member.getId())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
     }
 
-
+    @Transactional
+    @Override
+    public void flushFriendInfo(Member targetMember, Member deletedMember) {
+        FriendInfo friendInfo = getFriendInfo(targetMember);
+        friendInfo
+                .getFriends()
+                .removeIf(f -> f.equals(deletedMember.getId()));
+        friendInfo
+                .getFriendAcceptancePendingList()
+                .removeIf(f -> f.equals(deletedMember.getId()));
+        friendInfo
+                .getMyAcceptancePendingList()
+                .removeIf(f -> f.equals(deletedMember.getId()));
+        friendInfoRepository.save(friendInfo);
+    }
 }

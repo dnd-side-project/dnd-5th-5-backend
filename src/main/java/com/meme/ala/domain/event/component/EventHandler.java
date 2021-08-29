@@ -11,8 +11,6 @@ import com.meme.ala.domain.event.model.entity.DeleteEvent;
 import com.meme.ala.domain.event.model.entity.InitEvent;
 import com.meme.ala.domain.event.model.entity.QuestEvent;
 import com.meme.ala.domain.event.model.entity.SubmitEvent;
-import com.meme.ala.domain.friend.model.entity.FriendInfo;
-import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.friend.service.FriendInfoService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
@@ -24,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -36,7 +33,6 @@ public class EventHandler {
     @Value("${member.alacardnum}")
     private int defaultCardNum;
     private final FriendInfoService friendInfoService;
-    private final FriendInfoRepository friendInfoRepository;
     private final AggregationService aggregationService;
     private final AggregationRepository aggregationRepository;
     private final MemberCardService memberCardService;
@@ -75,23 +71,8 @@ public class EventHandler {
         Aggregation deletedAggregation = aggregationService.findByMember(deletedMember);
         aggregationRepository.delete(deletedAggregation);
 
-        List<Member> friendList = friendInfoService.getMemberFriend(deletedMember);
-        friendList.forEach(member -> flushFriendInfo(member, deletedMember));
-    }
-
-    @Transactional
-    public void flushFriendInfo(Member targetMember, Member deletedMember) {
-        FriendInfo friendInfo = friendInfoService.getFriendInfo(targetMember);
-        friendInfo
-                .getFriends()
-                .removeIf(f -> f == deletedMember.getId());
-        friendInfo
-                .getFriendAcceptancePendingList()
-                .removeIf(f -> f == deletedMember.getId());
-        friendInfo
-                .getMyAcceptancePendingList()
-                .removeIf(f -> f == deletedMember.getId());
-        friendInfoRepository.save(friendInfo);
+        List<Member> friendInfoList = friendInfoService.getMemberAllFriendInfo(deletedMember);
+        friendInfoList.forEach(member -> friendInfoService.flushFriendInfo(member, deletedMember));
     }
 
     @Async

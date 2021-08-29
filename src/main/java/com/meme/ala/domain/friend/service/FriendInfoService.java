@@ -17,4 +17,6 @@ public interface FriendInfoService {
     void initFriendInfo(Member member);
     FriendRelation getRelation(Member member, Member person);
     FriendInfo getFriendInfo(Member member);
+    void flushFriendInfo(Member targetMember, Member deletedMember);
+    List<Member> getMemberAllFriendInfo(Member member);
 }
