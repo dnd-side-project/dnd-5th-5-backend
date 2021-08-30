@@ -35,9 +35,13 @@ public class MemberServiceImpl implements MemberService {
     public String join(OAuthUserInfo authUserInfo, String provider) {
         int newNumber = 0;
         if (memberRepository.count() != 0) {
-            Member lastMember = memberRepository.findTop1ByMemberSettingNicknameRegexOrderByCreatedAtDesc("ala_[0-9]+");
-            String lastNumber = lastMember.getMemberSetting().getNickname().split("_")[1];
-            newNumber = Integer.parseInt(lastNumber) + 1;
+            try {
+                Member lastMember = memberRepository.findTop1ByMemberSettingNicknameRegexOrderByCreatedAtDesc("ala_[0-9]+");
+                String lastNumber = lastMember.getMemberSetting().getNickname().split("_")[1];
+                newNumber = Integer.parseInt(lastNumber) + 1;
+            } catch (Exception e) {
+                newNumber = 0;
+            }
         }
         Member newMember = Member.builder()
                 .email(authUserInfo.getEmail())
