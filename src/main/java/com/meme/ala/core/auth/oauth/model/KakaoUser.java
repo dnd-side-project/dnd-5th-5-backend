@@ -2,21 +2,21 @@ package com.meme.ala.core.auth.oauth.model;
 
 import java.util.Map;
 
-public class NaverUser implements OAuthUserInfo {
+public class KakaoUser implements OAuthUserInfo {
     private Map<String, Object> attribute;
 
-    public NaverUser(Map<String, Object> attribute) {
+    public KakaoUser(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 
     @Override
     public String getProviderId() {
-        return "n_" + attribute.get("id");
+        return "k_" + attribute.get("kakaoId");
     }
 
     @Override
     public String getProvider() {
-        return OAuthProvider.NAVER;
+        return OAuthProvider.KAKAO;
     }
 
     @Override
