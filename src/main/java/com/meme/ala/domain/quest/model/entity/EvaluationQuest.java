@@ -18,5 +18,10 @@ public class EvaluationQuest extends Quest {
 
     @Builder.Default
     private int status = 0;
+
+    @Override
+    public boolean isAchieved(QuestCondition condition) {
+        return status == condition.getCondition();
+    }
 }
 
