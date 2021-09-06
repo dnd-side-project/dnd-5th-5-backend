@@ -11,11 +11,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @SuperBuilder
 @NoArgsConstructor
 @Document(collection = "QUEST")
-public class Quest {
+public abstract class Quest {
     @Id
     private ObjectId id;
 
     private ObjectId memberId;
 
     private QuestCategory category;
+
+    public abstract boolean isAchieved(QuestCondition condition);
 }

@@ -1,6 +1,7 @@
 package com.meme.ala.domain.alacard.service;
 
 import com.meme.ala.common.utils.AmazonS3ImageUtil;
+import com.meme.ala.core.annotation.QuestCheck;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.service.AggregationService;

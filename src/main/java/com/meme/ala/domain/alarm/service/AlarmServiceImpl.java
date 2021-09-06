@@ -29,6 +29,12 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
+    @Transactional
+    public void saveAllAlarm(List<Alarm> alarmList) {
+        alarmRepository.saveAll(alarmList);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<AlarmDto> getAlarms(Member member) {
         return alarmRepository.findAllByMemberIdOrderByCreatedAtDesc(member.getId())
