@@ -10,7 +10,6 @@ import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alarm.component.AlarmFactory;
 import com.meme.ala.domain.alarm.model.entity.FriendAlarm;
 import com.meme.ala.domain.alarm.model.entity.NoticeAlarm;
-import com.meme.ala.domain.alarm.repository.AlarmRepository;
 import com.meme.ala.domain.alarm.service.AlarmService;
 import com.meme.ala.domain.event.model.entity.*;
 import com.meme.ala.domain.friend.model.entity.FriendRelation;
@@ -19,10 +18,12 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
 import com.meme.ala.domain.member.service.MemberCardService;
 import com.meme.ala.domain.quest.model.entity.EvaluationQuest;
+import com.meme.ala.domain.quest.model.entity.QuestCondition;
 import com.meme.ala.domain.quest.service.QuestConditionService;
 import com.meme.ala.domain.quest.service.QuestStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -45,6 +46,7 @@ public class EventHandler {
     private final QuestStatusService questStatusService;
     private final QuestConditionService questConditionService;
     private final AlarmService alarmService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -86,7 +88,10 @@ public class EventHandler {
         switch (event.getCategory()) {
             case EVALUATION:
                 EvaluationQuest quest = questStatusService.updateEvaluation(event);
-                questConditionService.checkEvaluation(event.getMember(), quest);
+                if (quest.isAchieved(QuestCondition.EVALUATION)) {
+                    memberCardService.obtainCard(event.getMember());
+                    eventPublisher.publishEvent(new NoticeEvent(event.getMember(), QuestCondition.EVALUATION));
+                }
                 break;
         }
     }
@@ -95,14 +100,14 @@ public class EventHandler {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publishFriendEvent(FriendEvent event) {
 
-        if(friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FOLLOWING){
+        if (friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FOLLOWING) {
 
             FriendAlarm followerAlarm = AlarmFactory.initFriendFollowerAlarm(event.getMember1().getId(), event.getMember2().getId());
             FriendAlarm followingAlarm = AlarmFactory.initFriendFollowingAlarm(event.getMember2().getId(), event.getMember1().getId());
 
-           alarmService.saveAllAlarm(Arrays.asList(followerAlarm, followingAlarm));
+            alarmService.saveAllAlarm(Arrays.asList(followerAlarm, followingAlarm));
 
-        } else if(friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FRIEND) {
+        } else if (friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FRIEND) {
 
             FriendAlarm member1Alarm = AlarmFactory.initFriendAlarm(event.getMember1().getId(), event.getMember2().getId());
             FriendAlarm member2Alarm = AlarmFactory.initFriendAlarm(event.getMember2().getId(), event.getMember1().getId());

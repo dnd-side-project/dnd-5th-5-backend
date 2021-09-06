@@ -1,8 +1,8 @@
 package com.meme.ala.domain.member.service;
 
-import com.meme.ala.core.annotation.QuestCheck;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;
 import com.meme.ala.domain.alacard.model.dto.response.SelectionWordDto;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
@@ -11,10 +11,8 @@ import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.Background;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSaveMapper;
 import com.meme.ala.domain.alacard.model.mapper.AlaCardSettingMapper;
-import com.meme.ala.domain.alacard.repository.AlaCardRepository;
 import com.meme.ala.domain.alacard.repository.BackgroundRepository;
 import com.meme.ala.domain.alacard.repository.TemporalWordListRepository;
-import com.meme.ala.domain.alacard.service.AlaCardService;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
@@ -35,6 +33,7 @@ public class MemberCardServiceImpl implements MemberCardService {
     private final TemporalWordListRepository temporalWordListRepository;
     private final MemberService memberService;
     private final MemberCardSettingService memberCardSettingService;
+    private final AggregationService aggregationService;
 
     @Override
     @Transactional
@@ -67,7 +66,6 @@ public class MemberCardServiceImpl implements MemberCardService {
     }
 
 
-
     @Override
     @Transactional(readOnly = true)
     public List<SelectionWordDto> getWordList(String cookieId) {
@@ -98,5 +96,12 @@ public class MemberCardServiceImpl implements MemberCardService {
             }
         }
         memberRepository.save(member);
+    }
+
+    @Override
+    @Transactional
+    public void obtainCard(Member member) {
+        assignCard(member, 1);
+        aggregationService.addAggregation(member);
     }
 }
