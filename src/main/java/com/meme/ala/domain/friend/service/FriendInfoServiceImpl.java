@@ -1,8 +1,10 @@
 package com.meme.ala.domain.friend.service;
 
+import com.meme.ala.core.annotation.Notification;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
+import com.meme.ala.domain.alarm.model.entity.AlarmCategory;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.model.entity.FriendRelation;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
@@ -115,6 +117,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     }
 
     @Override
+    @Notification(category = AlarmCategory.FRIEND_ALARM)
     @Transactional
     public void followingFriend(Member member, Member following) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
@@ -129,6 +132,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
     }
 
     @Override
+    @Notification(category = AlarmCategory.FRIEND_ALARM)
     @Transactional
     public void acceptFollowerToFriend(Member member, Member follower) {
         FriendInfo memberFriendInfo = getFriendInfo(member);

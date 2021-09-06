@@ -7,10 +7,12 @@ import com.meme.ala.domain.aggregation.model.entity.UserCount;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
 import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
-import com.meme.ala.domain.event.model.entity.DeleteEvent;
-import com.meme.ala.domain.event.model.entity.InitEvent;
-import com.meme.ala.domain.event.model.entity.QuestEvent;
-import com.meme.ala.domain.event.model.entity.SubmitEvent;
+import com.meme.ala.domain.alarm.component.AlarmFactory;
+import com.meme.ala.domain.alarm.model.entity.FriendAlarm;
+import com.meme.ala.domain.alarm.repository.AlarmRepository;
+import com.meme.ala.domain.alarm.service.AlarmService;
+import com.meme.ala.domain.event.model.entity.*;
+import com.meme.ala.domain.friend.model.entity.FriendRelation;
 import com.meme.ala.domain.friend.service.FriendInfoService;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -40,6 +43,7 @@ public class EventHandler {
     private final UserCountRepository userCountRepository;
     private final QuestStatusService questStatusService;
     private final QuestConditionService questConditionService;
+    private final AlarmService alarmService;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -83,6 +87,27 @@ public class EventHandler {
                 EvaluationQuest quest = questStatusService.updateEvaluation(event);
                 questConditionService.checkEvaluation(event.getMember(), quest);
                 break;
+        }
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void publishFriendEvent(FriendEvent event) {
+
+        if(friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FOLLOWING){
+
+            FriendAlarm followerAlarm = AlarmFactory.initFriendFollowerAlarm(event.getMember1().getId(), event.getMember2().getId());
+            FriendAlarm followingAlarm = AlarmFactory.initFriendFollowingAlarm(event.getMember2().getId(), event.getMember1().getId());
+
+           alarmService.saveAllAlarm(Arrays.asList(followerAlarm, followingAlarm));
+
+        } else if(friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FRIEND) {
+
+            FriendAlarm member1Alarm = AlarmFactory.initFriendAlarm(event.getMember1().getId(), event.getMember2().getId());
+            FriendAlarm member2Alarm = AlarmFactory.initFriendAlarm(event.getMember2().getId(), event.getMember1().getId());
+
+            alarmService.saveAllAlarm(Arrays.asList(member1Alarm, member2Alarm));
+
         }
     }
 }

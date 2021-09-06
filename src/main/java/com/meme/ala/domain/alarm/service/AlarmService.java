@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface AlarmService {
     void saveAlarm(Alarm alarm);
+    void saveAllAlarm(List<Alarm> alarmList);
 
     List<AlarmDto> getAlarms(Member member);
 }
