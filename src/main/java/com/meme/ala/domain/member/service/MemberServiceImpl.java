@@ -9,11 +9,14 @@ import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.model.entity.MemberSetting;
 import com.meme.ala.domain.member.model.mapper.MemberMapper;
 import com.meme.ala.domain.member.repository.MemberRepository;
+import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
         int newNumber = 0;
         if (memberRepository.count() != 0) {
             try {
-                Member lastMember = memberRepository.findTop1ByMemberSettingNicknameRegexOrderByCreatedAtDesc("ala_[0-9]+");
+                Member lastMember = memberRepository.findTop1ByMemberSettingNicknameRegexOrderByCreatedAtDesc("ala_[0-9]+$");
                 String lastNumber = lastMember.getMemberSetting().getNickname().split("_")[1];
                 newNumber = Integer.parseInt(lastNumber) + 1;
             } catch (Exception e) {
@@ -51,7 +54,12 @@ public class MemberServiceImpl implements MemberService {
                                 .nickname("ala_" + newNumber)
                                 .build())
                 .build();
-        memberRepository.save(newMember);
+        try {
+            memberRepository.save(newMember);
+        } catch (DuplicateKeyException e) {
+            Random ran = new Random();
+            newMember.getMemberSetting().setNickname("ala_" + newNumber + "_" + ran.nextInt() % 1000);
+        }
         return authUserInfo.getProviderId();
     }
 

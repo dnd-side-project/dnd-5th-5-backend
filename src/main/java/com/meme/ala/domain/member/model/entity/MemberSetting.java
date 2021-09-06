@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 public class MemberSetting {
+    @Indexed(unique = true)
     private String nickname;
 
     @Builder.Default
