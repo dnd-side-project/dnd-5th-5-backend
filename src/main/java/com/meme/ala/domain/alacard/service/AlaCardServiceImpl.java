@@ -46,7 +46,6 @@ public class AlaCardServiceImpl implements AlaCardService {
 
     @Override
     @Transactional(readOnly = true)
-    @QuestCheck
     public List<AlaCardDto> getAlaCardDtoList(Member member) {
         List<AlaCardSettingPair> alaCardSettingPairList = member.getAlaCardSettingPairList();
         return alaCardSettingPairList.stream()
