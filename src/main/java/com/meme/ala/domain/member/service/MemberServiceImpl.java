@@ -54,13 +54,15 @@ public class MemberServiceImpl implements MemberService {
                                 .nickname("ala_" + newNumber)
                                 .build())
                 .build();
-        try {
-            memberRepository.save(newMember);
-        } catch (DuplicateKeyException e) {
-            Random ran = new Random();
-            newMember.getMemberSetting().setNickname("ala_" + newNumber + "_" + ran.nextInt() % 1000);
+        while (true) {
+            try {
+                memberRepository.save(newMember);
+                return authUserInfo.getProviderId();
+            } catch (DuplicateKeyException e) {
+                Random ran = new Random();
+                newMember.getMemberSetting().setNickname("ala_" + newNumber + "_" + ran.nextInt() % 1000);
+            }
         }
-        return authUserInfo.getProviderId();
     }
 
     @Override
