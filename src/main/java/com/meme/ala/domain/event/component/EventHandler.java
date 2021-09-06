@@ -9,6 +9,7 @@ import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.aggregation.service.AggregationService;
 import com.meme.ala.domain.alarm.component.AlarmFactory;
 import com.meme.ala.domain.alarm.model.entity.FriendAlarm;
+import com.meme.ala.domain.alarm.model.entity.NoticeAlarm;
 import com.meme.ala.domain.alarm.repository.AlarmRepository;
 import com.meme.ala.domain.alarm.service.AlarmService;
 import com.meme.ala.domain.event.model.entity.*;
@@ -109,5 +110,13 @@ public class EventHandler {
             alarmService.saveAllAlarm(Arrays.asList(member1Alarm, member2Alarm));
 
         }
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void publishNoticeEvent(NoticeEvent event) {
+        NoticeAlarm noticeAlarm = AlarmFactory.initNoticeAlarm(event.getMember().getId(), event.getCondition());
+
+        alarmService.saveAlarm(noticeAlarm);
     }
 }

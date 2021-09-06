@@ -1,5 +1,6 @@
 package com.meme.ala.domain.member.service;
 
+import com.meme.ala.core.annotation.QuestCheck;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.alacard.model.dto.response.AlaCardSettingDto;

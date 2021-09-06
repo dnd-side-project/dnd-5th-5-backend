@@ -26,8 +26,8 @@ public class NotificationAspect implements ApplicationEventPublisherAware {
     public void pointcut(Notification notification) {
     }
 
-    @AfterReturning(pointcut = "pointcut(notification)", returning = "returnObj")
-    public void afterReturning(JoinPoint joinPoint, Notification notification, Object returnObj){
+    @AfterReturning(pointcut = "pointcut(notification)")
+    public void afterReturning(JoinPoint joinPoint, Notification notification){
         Member member = null;
 
         switch (notification.category()){
