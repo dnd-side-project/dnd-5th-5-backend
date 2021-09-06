@@ -92,7 +92,7 @@ public class AlaCardServiceImpl implements AlaCardService {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < alaCard.getMiddleCategoryList().size(); i++) {
             MiddleCategory middleCategory = alaCard.getMiddleCategoryList().get(i);
-            stringBuilder.append(middleCategory.getForm());
+            stringBuilder.append(middleCategory.getParsedForm("???"));
             if (i != alaCard.getMiddleCategoryList().size() - 1)
                 stringBuilder.append(middleCategory.getSentenceComponent().getJosa());
             else
@@ -171,8 +171,7 @@ public class AlaCardServiceImpl implements AlaCardService {
     }
 
     private String toMiddleSentence(MiddleCategory middleCategory, String wordName, int idx, int size) {
-        String formSentence = middleCategory.getForm()
-                .replace("???", wordName);
+        String formSentence = middleCategory.getParsedForm(wordName);
         if (idx == size - 1) {
             return formSentence + middleCategory.getSentenceComponent().getEomi();
         } else {
