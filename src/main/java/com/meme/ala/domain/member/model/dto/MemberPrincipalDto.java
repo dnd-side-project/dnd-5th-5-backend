@@ -1,5 +1,6 @@
 package com.meme.ala.domain.member.model.dto;
 
+import com.meme.ala.core.auth.oauth.model.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,4 +16,5 @@ public class MemberPrincipalDto {
     private String statusMessage;
     private String imgUrl;
     private Boolean isOpen;
+    private Provider provider;
 }

@@ -1,6 +1,7 @@
 package com.meme.ala.domain.member.model.entity;
 
 import com.meme.ala.core.auth.jwt.Authority;
+import com.meme.ala.core.auth.oauth.model.Provider;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
 import com.meme.ala.domain.alacard.model.entity.cardSetting.AlaCardSetting;
 import lombok.AllArgsConstructor;
@@ -56,5 +57,9 @@ public class Member {
                                             .build()
                     );
         }
+    }
+
+    public Provider getProvider(){
+        return Provider.getProvider(this.providerId.substring(0, 1));
     }
 }

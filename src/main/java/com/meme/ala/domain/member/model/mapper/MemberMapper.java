@@ -14,6 +14,7 @@ public interface MemberMapper {
     @Mapping(target = "statusMessage", source = "memberSetting.statusMessage")
     @Mapping(target = "imgUrl", source = "memberSetting.imgUrl")
     @Mapping(target = "isOpen", source = "memberSetting.isOpen")
+    @Mapping(target = "provider", expression = "java(member.getProvider())")
     MemberPrincipalDto toPrincipalDto(Member member);
 
     void updateMemberSettingFromDto(MemberPrincipalDto dto, @MappingTarget MemberSetting memberSetting);

@@ -59,6 +59,7 @@ public class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data.statusMessage").description("사용자 상태메시지"),
                                 fieldWithPath("data.imgUrl").description("사용자 이미지 사진 URL"),
                                 fieldWithPath("data.isOpen").description("사용자 공개 여부"),
+                                fieldWithPath("data.provider").description("사용자 provider"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));
@@ -89,6 +90,7 @@ public class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data.statusMessage").description("사용자 상태메시지"),
                                 fieldWithPath("data.imgUrl").description("사용자 이미지 사진 URL"),
                                 fieldWithPath("data.isOpen").description("사용자 공개 여부"),
+                                fieldWithPath("data.provider").description("사용자 provider"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));
@@ -134,6 +136,7 @@ public class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("data.statusMessage").description("사용자 상태메시지"),
                                 fieldWithPath("data.imgUrl").description("사용자 이미지 사진 URL"),
                                 fieldWithPath("data.isOpen").description("사용자 계정 공개 여부"),
+                                fieldWithPath("data.provider").description("사용자 provider"),
                                 fieldWithPath("timestamp").description("타임스탬프")
                         )
                 ));
