@@ -56,6 +56,7 @@ public class EventHandler {
         memberCardService.assignCard(member, defaultCardNum);
         aggregationService.initAggregation(member);
         friendInfoService.initFriendInfo(member);
+        alarmService.saveAlarm(AlarmFactory.initMemberSignUpAlarm(member));
     }
 
     @Async

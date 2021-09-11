@@ -3,6 +3,7 @@ package com.meme.ala.domain.alarm.component;
 import com.meme.ala.domain.alarm.model.entity.AlarmCategory;
 import com.meme.ala.domain.alarm.model.entity.FriendAlarm;
 import com.meme.ala.domain.alarm.model.entity.NoticeAlarm;
+import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.quest.model.entity.QuestCategory;
 import com.meme.ala.domain.quest.model.entity.QuestCondition;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,15 @@ public class AlarmFactory {
                 .memberId(memberId)
                 .category(AlarmCategory.NOTICE_ALARM)
                 .data(condition.getInfo() + " 달성 완료! 알라카드 한 장을 드릴게요!")
+                .build();
+    }
+
+    public static NoticeAlarm initMemberSignUpAlarm(Member member){
+        return NoticeAlarm.builder()
+                .memberId(member.getId())
+                .category(AlarmCategory.NOTICE_ALARM)
+                .data(member.getMemberSetting().getNickname() + "님 안녕하세요! 알라 서비스 사용법을 보러 가실래요?")
+                .redirectUrl("https://dnd-5.notion.site/c6c7e1c536f145b2b3643951212e715a")
                 .build();
     }
 
