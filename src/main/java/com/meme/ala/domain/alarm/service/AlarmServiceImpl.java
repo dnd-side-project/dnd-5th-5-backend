@@ -1,5 +1,7 @@
 package com.meme.ala.domain.alarm.service;
 
+import com.meme.ala.core.error.ErrorCode;
+import com.meme.ala.core.error.exception.EntityNotFoundException;
 import com.meme.ala.domain.alarm.model.dto.AlarmDto;
 import com.meme.ala.domain.alarm.model.entity.Alarm;
 import com.meme.ala.domain.alarm.model.entity.FriendAlarm;
@@ -9,6 +11,7 @@ import com.meme.ala.domain.alarm.repository.AlarmRepository;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +55,14 @@ public class AlarmServiceImpl implements AlarmService {
                 return alarmMapper.noticeAlarmToDto(noticeAlarm);
         }
         return AlarmDto.builder().build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void deleteAlarm(ObjectId memberId, ObjectId friendId){
+        FriendAlarm alarm = alarmRepository.findAlarmByMemberIdAndFriendId(memberId, friendId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND));
+
+        alarmRepository.delete(alarm);
     }
 }

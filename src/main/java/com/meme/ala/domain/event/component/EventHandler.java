@@ -109,6 +109,9 @@ public class EventHandler {
 
         } else if (friendInfoService.getRelation(event.getMember1(), event.getMember2()) == FriendRelation.FRIEND) {
 
+            alarmService.deleteAlarm(event.getMember1().getId(), event.getMember2().getId());
+            alarmService.deleteAlarm(event.getMember2().getId(), event.getMember1().getId());
+
             FriendAlarm member1Alarm = AlarmFactory.initFriendAlarm(event.getMember1().getId(), event.getMember2().getId());
             FriendAlarm member2Alarm = AlarmFactory.initFriendAlarm(event.getMember2().getId(), event.getMember1().getId());
 
