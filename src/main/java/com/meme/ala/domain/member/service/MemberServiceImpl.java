@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -94,6 +95,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Member deleteMember(Member member) {
         member.getMemberSetting().setIsDeleted(true);
+        member.getMemberSetting().setNickname(UUID.randomUUID().toString());
         memberRepository.save(member);
 
         return member;
