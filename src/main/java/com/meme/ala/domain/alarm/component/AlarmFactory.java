@@ -58,7 +58,7 @@ public class AlarmFactory {
                 .memberId(member.getId())
                 .category(AlarmCategory.NOTICE_ALARM)
                 .data("반가워요! 알라 서비스 사용법을 보러 가실래요?")
-                .redirectUrl("https://dnd-5.notion.site/c6c7e1c536f145b2b3643951212e715a")
+                .redirectUrl("https://dnd-5.notion.site/ala-8ec976aea5f842abb925b611e16d9545")
                 .build();
     }
 
