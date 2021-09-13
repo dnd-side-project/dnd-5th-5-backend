@@ -34,9 +34,8 @@ public class MemberAuthController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.USER_NOT_JOINED, ResponseMessage.USER_NOT_JOINED));
-        } else
-            oAuthMap.put("message", ResponseMessage.LOGIN);
-
+        }
+        oAuthMap.put("message", ResponseMessage.LOGIN);
         oAuthMap.put("jwt", jwtProvider.createToken(authUserInfo.getProviderId()));
 
         return ResponseEntity
