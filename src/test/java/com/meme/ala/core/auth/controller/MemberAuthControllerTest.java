@@ -137,6 +137,49 @@ public class MemberAuthControllerTest extends AbstractControllerTest {
                 ));
     }
 
+    @DisplayName("카카오 OAuth 이미 가입 테스트")
+    @Test
+    public void 카카오_OAuth_이미가입_유닛테스트() throws Exception {
+        String sampleRequestBody =
+                "{\n" +
+                        "  \"profileObj\": {\n" +
+                        "    \"kakaoId\": \"1155\",\n" +
+                        "    \"imageUrl\": \"https://user-images.githubusercontent.com/46064193/125324764-2bc8e200-e37b-11eb-8d07-9ac29d0d1b1a.png\",\n" +
+                        "    \"email\": \"test@gmail.com\",\n" +
+                        "    \"name\": \"Jongmin Jung\"\n" +
+                        "  }\n" +
+                        "}";
+
+        Map<String, Object> data = objectMapper.readValue(sampleRequestBody, Map.class);
+
+        when(oAuthService.getMemberByProvider(new ObjectMapper().readValue(sampleRequestBody, Map.class), OAuthProvider.KAKAO)).thenReturn(new KakaoUser(data));
+
+        when(memberService.existsProviderId(any())).thenReturn(Boolean.FALSE);
+
+        mockMvc.perform(post("/api/v1/oauth/jwt/kakao")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(sampleRequestBody))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("회원 가입이 필요합니다"))
+                .andDo(print())
+                .andDo(document("api/v1/oauth/jwt/kakao/notjoin",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("profileObj.kakaoId").description("Identifier"),
+                                fieldWithPath("profileObj.imageUrl").description("사용자 프로필 링크"),
+                                fieldWithPath("profileObj.email").description("사용자 이메일"),
+                                fieldWithPath("profileObj.name").description("사용자 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("가입되지 않음"),
+                                fieldWithPath("data").description("가입되지 않음"),
+                                fieldWithPath("timestamp").description("타임스탬프")
+                        )
+                ));
+    }
+
     @Test
     public void 네이버_OAuth_로그인_유닛테스트() throws Exception {
         String sampleRequestBody =
