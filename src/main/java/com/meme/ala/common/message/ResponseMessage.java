@@ -11,6 +11,7 @@ public class ResponseMessage {
     public static final String UPDATE = "update";
     public static final String DELETED = "deleted";
     public static final String SUBMITTED = "submitted";
+    public static final String USER_NOT_JOINED = "회원 가입이 필요합니다";
 
     // friend
     public static final String READ_MEMBER_FRIENDS = "사용자 친구 목록을 조회합니다.";

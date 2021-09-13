@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @PublishEvent
     @Transactional
-    public String join(OAuthUserInfo authUserInfo, String provider) {
+    public String join(OAuthUserInfo authUserInfo, String provider, String nickname) {
         int newNumber = 0;
         if (memberRepository.count() != 0) {
             try {
