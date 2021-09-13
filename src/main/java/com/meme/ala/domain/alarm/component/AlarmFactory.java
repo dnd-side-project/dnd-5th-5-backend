@@ -57,7 +57,7 @@ public class AlarmFactory {
         return NoticeAlarm.builder()
                 .memberId(member.getId())
                 .category(AlarmCategory.NOTICE_ALARM)
-                .data(member.getMemberSetting().getNickname() + "님 안녕하세요! 알라 서비스 사용법을 보러 가실래요?")
+                .data("반가워요! 알라 서비스 사용법을 보러 가실래요?")
                 .redirectUrl("https://dnd-5.notion.site/c6c7e1c536f145b2b3643951212e715a")
                 .build();
     }
