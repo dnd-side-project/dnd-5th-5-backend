@@ -77,17 +77,31 @@ public class AggregationServiceImpl implements AggregationService {
     public void submitWordList(Member member, Aggregation aggregation, List<String> wordIdList) throws UnsupportedEncodingException {
         Map<String, LinkedList<String>> dtoMap = dtoListToMapByMiddleCategory(wordIdList);
         for (Map.Entry<String, LinkedList<String>> entry : dtoMap.entrySet()) {
-            String middleCategory = entry.getKey();
-            List<String> wordNameList = entry.getValue();
-            List<WordCount> aggregationList = aggregation.getWordCountList();
-            for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
-                if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory) &&
-                        wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
+            applyToAggregation(entry, aggregation);
+        }
+        aggregationRepository.save(aggregation);
+    }
+
+    private void applyToAggregation(Map.Entry<String, LinkedList<String>> submitWordEntry, Aggregation aggregation) {
+        List<WordCount> aggregationList = aggregation.getWordCountList();
+        String middleCategory = submitWordEntry.getKey();
+        List<String> wordNameList = submitWordEntry.getValue();
+        for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
+            if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory)) {
+                if (wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
                     aggregationList.get(i).setCount(aggregationList.get(i).getCount() + 1);
+                } else {
+                    WordCount wordCount = WordCount.builder()
+                            .count(0)
+                            .word(aggregationList.get(i).getWord())
+                            .cardId(aggregationList.get(i).getCardId())
+                            .middleCategoryName(middleCategory)
+                            .build();
+                    aggregation.getWordCountList().add(wordCount);
+                    aggregationRepository.save(aggregation);
                 }
             }
         }
-        aggregationRepository.save(aggregation);
     }
 
     @Override
