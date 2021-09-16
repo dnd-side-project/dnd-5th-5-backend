@@ -100,7 +100,7 @@ public class AggregationServiceImpl implements AggregationService {
         }
         for (String wordName : wordNameList) {
             WordCount wordCount = WordCount.builder()
-                    .count(0)
+                    .count(1)
                     .word(Word.builder().wordName(wordName).build())
                     .cardId(cardId)
                     .middleCategoryName(middleCategory)
