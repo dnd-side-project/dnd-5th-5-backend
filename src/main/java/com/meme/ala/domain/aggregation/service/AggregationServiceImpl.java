@@ -11,6 +11,7 @@ import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
 import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
+import com.meme.ala.domain.alacard.model.entity.Word;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -86,21 +87,25 @@ public class AggregationServiceImpl implements AggregationService {
         List<WordCount> aggregationList = aggregation.getWordCountList();
         String middleCategory = submitWordEntry.getKey();
         List<String> wordNameList = submitWordEntry.getValue();
+        ObjectId cardId = null;
         for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
             if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory)) {
+                cardId = aggregationList.get(i).getCardId();
                 if (wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
+                    String wordName = aggregationList.get(i).getWord().getWordName();
                     aggregationList.get(i).setCount(aggregationList.get(i).getCount() + 1);
-                } else {
-                    WordCount wordCount = WordCount.builder()
-                            .count(0)
-                            .word(aggregationList.get(i).getWord())
-                            .cardId(aggregationList.get(i).getCardId())
-                            .middleCategoryName(middleCategory)
-                            .build();
-                    aggregation.getWordCountList().add(wordCount);
-                    aggregationRepository.save(aggregation);
+                    wordNameList.removeIf(n -> n.equals(wordName));
                 }
             }
+        }
+        for (String wordName : wordNameList) {
+            WordCount wordCount = WordCount.builder()
+                    .count(0)
+                    .word(Word.builder().wordName(wordName).build())
+                    .cardId(cardId)
+                    .middleCategoryName(middleCategory)
+                    .build();
+            aggregation.getWordCountList().add(wordCount);
         }
     }
 
