@@ -36,6 +36,7 @@ class AggregationServiceImplTest {
     void submitWordList() throws UnsupportedEncodingException {
         // 사용자의 aggregation을 읽어들여, 제공받은 키워드 리스트를 +1 해야한다.
         // 만약 기존 aggregation에 존재하지 않는다면, 새로 추가해야 한다.
+
         Aggregation aggregation = EntityFactory.testAggregation();
 
         AlaCard alaCard = EntityFactory.testAlaCard();
