@@ -71,7 +71,7 @@ public class AlaCardController {
     public ResponseEntity<ResponseDto<String>> submitWordList(@RequestParam String nickname, @RequestBody SubmitWordDto submitWordDto) throws UnsupportedEncodingException {
         Member member = memberService.findByNickname(nickname);
         Aggregation aggregation = aggregationService.findByMember(member);
-        aggregationService.submitWordList(member, aggregation, submitWordDto.getIdList());
+        aggregationService.submitWordList(aggregation, submitWordDto.getIdList());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseDto.of(HttpStatus.OK, ResponseMessage.SUCCESS, ResponseMessage.SUBMITTED));
     }
