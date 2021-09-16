@@ -11,6 +11,7 @@ import com.meme.ala.domain.aggregation.model.entity.WordCount;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
 import com.meme.ala.domain.aggregation.repository.UserCountRepository;
 import com.meme.ala.domain.alacard.model.entity.MiddleCategory;
+import com.meme.ala.domain.alacard.model.entity.Word;
 import com.meme.ala.domain.member.model.entity.AlaCardSettingPair;
 import com.meme.ala.domain.member.model.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -77,17 +78,35 @@ public class AggregationServiceImpl implements AggregationService {
     public void submitWordList(Member member, Aggregation aggregation, List<String> wordIdList) throws UnsupportedEncodingException {
         Map<String, LinkedList<String>> dtoMap = dtoListToMapByMiddleCategory(wordIdList);
         for (Map.Entry<String, LinkedList<String>> entry : dtoMap.entrySet()) {
-            String middleCategory = entry.getKey();
-            List<String> wordNameList = entry.getValue();
-            List<WordCount> aggregationList = aggregation.getWordCountList();
-            for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
-                if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory) &&
-                        wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
+            applyToAggregation(entry, aggregation);
+        }
+        aggregationRepository.save(aggregation);
+    }
+
+    private void applyToAggregation(Map.Entry<String, LinkedList<String>> submitWordEntry, Aggregation aggregation) {
+        List<WordCount> aggregationList = aggregation.getWordCountList();
+        String middleCategory = submitWordEntry.getKey();
+        List<String> wordNameList = submitWordEntry.getValue();
+        ObjectId cardId = null;
+        for (int i = 0; i < aggregation.getWordCountList().size(); i++) {
+            if (aggregationList.get(i).getMiddleCategoryName().equals(middleCategory)) {
+                cardId = aggregationList.get(i).getCardId();
+                if (wordNameList.contains(aggregationList.get(i).getWord().getWordName())) {
+                    String wordName = aggregationList.get(i).getWord().getWordName();
                     aggregationList.get(i).setCount(aggregationList.get(i).getCount() + 1);
+                    wordNameList.removeIf(n -> n.equals(wordName));
                 }
             }
         }
-        aggregationRepository.save(aggregation);
+        for (String wordName : wordNameList) {
+            WordCount wordCount = WordCount.builder()
+                    .count(0)
+                    .word(Word.builder().wordName(wordName).build())
+                    .cardId(cardId)
+                    .middleCategoryName(middleCategory)
+                    .build();
+            aggregation.getWordCountList().add(wordCount);
+        }
     }
 
     @Override
