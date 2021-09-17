@@ -112,7 +112,7 @@ public class EntityFactory {
 
     public static Aggregation testAggregation() {
         return Aggregation.builder()
-                .wordCountList(Arrays.asList(EntityFactory.testWordCount()))
+                .wordCountList(new LinkedList<>(Arrays.asList(EntityFactory.testWordCount())))
                 .build();
     }
 

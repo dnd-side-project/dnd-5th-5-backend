@@ -137,7 +137,7 @@ public class AlaCardControllerTest extends AbstractControllerTest {
                         "  ]\n" +
                         "}";
 
-        doNothing().when(aggregationService).submitWordList(any(Member.class), any(Aggregation.class), any(List.class));
+        doNothing().when(aggregationService).submitWordList(any(Aggregation.class), any(List.class));
         given(memberService.findByNickname(any(String.class))).willReturn(EntityFactory.testMember());
         given(aggregationService.findByMember(any(Member.class))).willReturn(EntityFactory.testAggregation());
 
