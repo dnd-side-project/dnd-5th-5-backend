@@ -1,11 +1,11 @@
 package com.meme.ala.domain.friend.service;
 
+import com.meme.ala.core.annotation.FlushFriendAlarm;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FriendServiceImpl implements FriendService{
+public class FriendServiceImpl implements FriendService {
     @Override
     public void follow(FriendInfo a, FriendInfo b) {
         b.getMyAcceptancePendingList().add(a.getMemberId());
@@ -13,6 +13,7 @@ public class FriendServiceImpl implements FriendService{
     }
 
     @Override
+    @FlushFriendAlarm
     public void accept(FriendInfo a, FriendInfo b) {
         a.getMyAcceptancePendingList().remove(b.getMemberId());
         b.getFriendAcceptancePendingList().remove(a.getMemberId());
@@ -22,12 +23,14 @@ public class FriendServiceImpl implements FriendService{
     }
 
     @Override
+    @FlushFriendAlarm
     public void decline(FriendInfo a, FriendInfo b) {
         a.getMyAcceptancePendingList().remove(b.getMemberId());
         b.getFriendAcceptancePendingList().remove(a.getMemberId());
     }
 
     @Override
+    @FlushFriendAlarm
     public void cancelFollowing(FriendInfo a, FriendInfo b) {
         b.getMyAcceptancePendingList().remove(a.getMemberId());
         a.getFriendAcceptancePendingList().remove(b.getMemberId());
