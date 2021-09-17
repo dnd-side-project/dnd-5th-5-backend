@@ -1,6 +1,7 @@
 package com.meme.ala.domain.aggregation.service;
 
 import com.meme.ala.common.EntityFactory;
+import com.meme.ala.domain.aggregation.component.AlacardTokenizer;
 import com.meme.ala.domain.aggregation.model.entity.Aggregation;
 import com.meme.ala.domain.aggregation.repository.AggregationRepository;
 import com.meme.ala.domain.alacard.model.entity.AlaCard;
@@ -12,7 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.UnsupportedEncodingException;
@@ -24,12 +29,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = AlacardTokenizer.class)
 class AggregationServiceImplTest {
     @InjectMocks
     private AggregationServiceImpl aggregationService;
 
     @Mock
     private AggregationRepository aggregationRepository;
+
+    @Spy
+    private AlacardTokenizer alacardTokenizer;
 
     @DisplayName("키워드 Aggregation")
     @Test
