@@ -200,6 +200,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Transactional
     @Override
+    @FlushFriendAlarm
     public void flushFriendInfo(Member targetMember, Member deletedMember) {
         FriendInfo friendInfo = getFriendInfo(targetMember);
         friendInfo
