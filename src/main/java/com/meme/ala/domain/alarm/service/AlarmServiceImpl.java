@@ -43,7 +43,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Transactional(readOnly = true)
     public List<AlarmDto> getAlarms(Member member) {
         return alarmRepository.findAllByMemberIdOrderByCreatedAtDesc(member.getId())
-                .stream().map(this::transformAlarm).collect(Collectors.toList());
+                .stream().map(this::transformAlarm).filter(e -> !e.getString().isEmpty()).collect(Collectors.toList());
     }
 
     private AlarmDto transformAlarm(Alarm alarm) {
