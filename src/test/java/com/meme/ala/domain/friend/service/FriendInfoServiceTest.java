@@ -3,6 +3,7 @@ package com.meme.ala.domain.friend.service;
 import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.annotation.FlushFriendAlarm;
 import com.meme.ala.core.aop.FriendAspect;
+import com.meme.ala.domain.alarm.service.AlarmService;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.member.model.entity.Member;
@@ -39,9 +40,8 @@ class FriendInfoServiceTest {
     @MockBean
     private MemberRepository memberRepository;
 
-    @Spy
-    @InjectMocks
-    private FriendAspect friendAspect;
+    @MockBean
+    private AlarmService alarmService;
 
     @Test
     void followFriend() {
@@ -87,7 +87,6 @@ class FriendInfoServiceTest {
         given(memberRepository.findByMemberSettingNicknameAndMemberSetting_IsDeleted(eq(follower.getMemberSetting().getNickname()), eq(false))).willReturn(Optional.of(follower));
         given(friendInfoRepository.findById(eq(member.getId()))).willReturn(Optional.of(memberFriendInfo));
         given(friendInfoRepository.findById(eq(follower.getId()))).willReturn(Optional.of(followerFriendInfo));
-        doNothing().when(friendAspect).afterReturning(any(JoinPoint.class), any(FlushFriendAlarm.class));
 
         friendInfoService.acceptFollowerToFriend(member, follower);
 
