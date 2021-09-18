@@ -1,12 +1,20 @@
 package com.meme.ala.domain.friend.service;
 
 import com.meme.ala.common.EntityFactory;
+import com.meme.ala.core.annotation.FlushFriendAlarm;
+import com.meme.ala.core.aop.FriendAspect;
+import com.meme.ala.domain.alarm.service.AlarmService;
 import com.meme.ala.domain.friend.model.entity.FriendInfo;
 import com.meme.ala.domain.friend.repository.FriendInfoRepository;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Before;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,8 +23,10 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
 class FriendInfoServiceTest {
@@ -29,6 +39,9 @@ class FriendInfoServiceTest {
 
     @MockBean
     private MemberRepository memberRepository;
+
+    @MockBean
+    private AlarmService alarmService;
 
     @Test
     void followFriend() {
