@@ -13,7 +13,6 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    @FlushFriendAlarm
     public void accept(FriendInfo a, FriendInfo b) {
         a.getMyAcceptancePendingList().remove(b.getMemberId());
         b.getFriendAcceptancePendingList().remove(a.getMemberId());
@@ -23,14 +22,12 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    @FlushFriendAlarm
     public void decline(FriendInfo a, FriendInfo b) {
         a.getMyAcceptancePendingList().remove(b.getMemberId());
         b.getFriendAcceptancePendingList().remove(a.getMemberId());
     }
 
     @Override
-    @FlushFriendAlarm
     public void cancelFollowing(FriendInfo a, FriendInfo b) {
         b.getMyAcceptancePendingList().remove(a.getMemberId());
         a.getFriendAcceptancePendingList().remove(b.getMemberId());

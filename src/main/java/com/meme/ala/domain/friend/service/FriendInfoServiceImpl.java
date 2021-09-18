@@ -1,5 +1,6 @@
 package com.meme.ala.domain.friend.service;
 
+import com.meme.ala.core.annotation.FlushFriendAlarm;
 import com.meme.ala.core.annotation.Notification;
 import com.meme.ala.core.error.ErrorCode;
 import com.meme.ala.core.error.exception.BusinessException;
@@ -148,6 +149,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
+    @FlushFriendAlarm
     public void declineFriend(Member member, Member follower) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followerFriendInfo = getFriendInfo(follower);
@@ -162,6 +164,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
+    @FlushFriendAlarm
     public void cancelFollowing(Member member, Member following) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo followingFriendInfo = getFriendInfo(following);
@@ -176,6 +179,7 @@ public class FriendInfoServiceImpl implements FriendInfoService {
 
     @Override
     @Transactional
+    @FlushFriendAlarm
     public void unFriend(Member member, Member friend) {
         FriendInfo memberFriendInfo = getFriendInfo(member);
         FriendInfo friendFriendInfo = getFriendInfo(friend);
