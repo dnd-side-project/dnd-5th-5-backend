@@ -11,6 +11,7 @@ import com.meme.ala.domain.alarm.repository.AlarmRepository;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AlarmServiceImpl implements AlarmService {
@@ -48,8 +50,13 @@ public class AlarmServiceImpl implements AlarmService {
         switch (alarm.getCategory()) {
             case FRIEND_ALARM:
                 FriendAlarm friendAlarm = (FriendAlarm) alarm;
-                Member friend = memberService.findByMemberId(friendAlarm.getFriendId());
-                return alarmMapper.friendAlarmToDto(friendAlarm, friend);
+                try {
+                    Member friend = memberService.findByMemberId(friendAlarm.getFriendId());
+                    return alarmMapper.friendAlarmToDto(friendAlarm, friend);
+                } catch (EntityNotFoundException e){
+                    // Todo: 삭제된 id 이므로 해당 알람 삭제하기
+                    log.error("삭제된 ID: ", friendAlarm.getFriendId());
+                }
             case NOTICE_ALARM:
                 NoticeAlarm noticeAlarm = (NoticeAlarm) alarm;
                 return alarmMapper.noticeAlarmToDto(noticeAlarm);
