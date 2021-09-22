@@ -1,4 +1,4 @@
-name: Build and Deploy to AWS EC2
+name: OPERATION EC2
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
         description: 'Test scenario tags'
   push:
     branches:
-      - develop # ToDo: 완전 배포 시 main으로 수정
+      - main
 
 
 jobs:

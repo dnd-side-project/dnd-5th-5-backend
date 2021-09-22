@@ -1,4 +1,4 @@
-name: Build and Deploy to AWS EC2
+name: DEVELOP SERVER
 
 on:
   workflow_dispatch:
