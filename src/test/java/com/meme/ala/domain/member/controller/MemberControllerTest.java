@@ -5,8 +5,8 @@ import com.meme.ala.common.EntityFactory;
 import com.meme.ala.core.config.AlaWithAccount;
 import com.meme.ala.domain.member.model.entity.Member;
 import com.meme.ala.domain.member.repository.MemberRepository;
-import com.meme.ala.domain.member.service.MemberService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,11 +17,9 @@ import java.util.Optional;
 
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentRequest;
 import static com.meme.ala.core.config.ApiDocumentUtils.getDocumentResponse;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -42,7 +40,7 @@ public class MemberControllerTest extends AbstractControllerTest {
     @AlaWithAccount("test@gmail.com")
     @DisplayName("내 세팅 정보를 읽어오는 테스트")
     @Test
-    public void 내_세팅_정보를_읽기_유닛테스트() throws Exception{
+    public void 내_세팅_정보를_읽기_유닛테스트() throws Exception {
         mockMvc.perform(get("/api/v1/member/me"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("testNickname"))
@@ -68,14 +66,14 @@ public class MemberControllerTest extends AbstractControllerTest {
     @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자 세팅 정보를 읽어오는 테스트")
     @Test
-    public void 사용자_세팅_정보를_읽기_유닛테스트() throws Exception{
+    public void 사용자_세팅_정보를_읽기_유닛테스트() throws Exception {
         given(memberRepository.findByMemberSettingNicknameAndMemberSetting_IsDeleted(any(String.class), eq(false))).willReturn(Optional.of(EntityFactory.testMember()));
 
         mockMvc.perform(get("/api/v1/member").param("nickname", "testNickname"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("testNickname"))
                 .andDo(print())
-                .andDo(document("api/v1/member",
+                .andDo(document("api/v1/member/get",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestParameters(
@@ -99,8 +97,8 @@ public class MemberControllerTest extends AbstractControllerTest {
     @AlaWithAccount("test@gmail.com")
     @DisplayName("사용자 세팅 정보 업데이트 테스트")
     @Test
-    public void 사용자_세팅_정보_업데이트_테스트() throws Exception{
-        String sampleRequestBody=
+    public void 사용자_세팅_정보_업데이트_테스트() throws Exception {
+        String sampleRequestBody =
                 "  {\n" +
                         "    \"nickname\": \"alala\", \n" +
                         "    \"statusMessage\": \"update status message\", \n" +
@@ -110,9 +108,9 @@ public class MemberControllerTest extends AbstractControllerTest {
         when(memberRepository.save(any(Member.class))).then(AdditionalAnswers.returnsFirstArg());
 
         mockMvc.perform(patch("/api/v1/member/me")
-                        .content(sampleRequestBody)
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
+                .content(sampleRequestBody)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.nickname").value("alala"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.statusMessage").value("update status message"))
@@ -144,7 +142,7 @@ public class MemberControllerTest extends AbstractControllerTest {
 
     @DisplayName("사용자 닉네임 중복 처리 테스트")
     @Test
-    public void 사용자_닉네임_중복_처리_테스트() throws Exception{
+    public void 사용자_닉네임_중복_처리_테스트() throws Exception {
         when(memberRepository.existsMemberByMemberSettingNicknameAndMemberSetting_IsDeleted("testNickname", false)).thenReturn(true);
 
         mockMvc.perform(get("/api/v1/member/exists?nickname=testNickname"))
@@ -165,18 +163,18 @@ public class MemberControllerTest extends AbstractControllerTest {
                         )
                 ));
     }
-    
+
     @AlaWithAccount("test")
     @DisplayName("사용자 삭제 테스트")
     @Test
-    public void 사용자_삭제_테스트() throws Exception{
+    public void 사용자_삭제_테스트() throws Exception {
         given(memberRepository.save(any(Member.class))).willReturn(EntityFactory.testMember());
 
         mockMvc.perform(delete("/api/v1/member"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").value("deleted"))
                 .andDo(print())
-                .andDo(document("api/v1/member",
+                .andDo(document("api/v1/member/delete",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         responseFields(
@@ -190,10 +188,10 @@ public class MemberControllerTest extends AbstractControllerTest {
 
     @DisplayName("사용자 닉네임으로 셀렉뷰 공유 링크")
     @Test
-    public void 사용자_닉네임으로_셀렉뷰_공유_링크() throws Exception{
+    public void 사용자_닉네임으로_셀렉뷰_공유_링크() throws Exception {
         mockMvc.perform(get("/api/v1/member/sharelink?nickname=testNickname"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(frontUrl+"select/"+"testNickname"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(frontUrl + "select/" + "testNickname"))
                 .andDo(print())
                 .andDo(document("api/v1/member/sharelink",
                         getDocumentRequest(),
@@ -212,10 +210,10 @@ public class MemberControllerTest extends AbstractControllerTest {
 
     @DisplayName("사용자 닉네임으로 마이페이지 공유 링크")
     @Test
-    public void 사용자_닉네임으로_마이페이지_공유_링크() throws Exception{
+    public void 사용자_닉네임으로_마이페이지_공유_링크() throws Exception {
         mockMvc.perform(get("/api/v1/member/mypagelink?nickname=testNickname"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(frontUrl+"mypage/"+"testNickname"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").value(frontUrl + "mypage/" + "testNickname"))
                 .andDo(print())
                 .andDo(document("api/v1/member/mypagelink",
                         getDocumentRequest(),

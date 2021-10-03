@@ -23,7 +23,7 @@ include::{snippets}/api/v1/oauth/jwt/google/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/oauth/jwt/google/response-fields.adoc[]
 
-== POST /api/v1/oauth/jwt/kakao
+== POST /api/v1/oauth/jwt/kakao - 로그인
 
 .request
 include::{snippets}/api/v1/oauth/jwt/kakao/http-request.adoc[]
@@ -36,6 +36,20 @@ include::{snippets}/api/v1/oauth/jwt/kakao/http-response.adoc[]
 
 .response fields
 include::{snippets}/api/v1/oauth/jwt/kakao/response-fields.adoc[]
+
+== POST /api/v1/oauth/jwt/kakao - 가입필요
+
+.request
+include::{snippets}/api/v1/oauth/jwt/kakao/notjoin/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/oauth/jwt/kakao/notjoin/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/oauth/jwt/kakao/notjoin/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/oauth/jwt/kakao/notjoin/response-fields.adoc[]
 
 == POST /api/v1/oauth/jwt/naver
 
@@ -65,6 +79,20 @@ include::{snippets}/api/v1/oauth/jwt/get/naver/http-response.adoc[]
 .response fields
 include::{snippets}/api/v1/oauth/jwt/get/naver/response-fields.adoc[]
 
+== POST /api/v1/oauth/join/kakao
+
+.request
+include::{snippets}/api/v1/oauth/join/kakao/http-request.adoc[]
+
+.request fields
+include::{snippets}/api/v1/oauth/join/kakao/request-fields.adoc[]
+
+.response
+include::{snippets}/api/v1/oauth/join/kakao/http-response.adoc[]
+
+.response fields
+include::{snippets}/api/v1/oauth/join/kakao/response-fields.adoc[]
+
 = 사용자
 
 == GET /api/v1/member/me
@@ -81,16 +109,16 @@ include::{snippets}/api/v1/member/me/get/response-fields.adoc[]
 == GET /api/v1/member
 
 .request
-include::{snippets}/api/v1/member/http-request.adoc[]
+include::{snippets}/api/v1/member/get/http-request.adoc[]
 
 .request parameters
-include::{snippets}/api/v1/member/request-parameters.adoc[]
+include::{snippets}/api/v1/member/get/request-parameters.adoc[]
 
 .response
-include::{snippets}/api/v1/member/http-response.adoc[]
+include::{snippets}/api/v1/member/get/http-response.adoc[]
 
 .response fields
-include::{snippets}/api/v1/member/response-fields.adoc[]
+include::{snippets}/api/v1/member/get/response-fields.adoc[]
 
 == PATCH /api/v1/member/me
 

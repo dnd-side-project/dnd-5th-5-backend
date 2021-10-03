@@ -9,7 +9,7 @@ import org.bson.types.ObjectId;
 public interface MemberService {
     boolean existsProviderId(String providerId);
 
-    String join(OAuthUserInfo authUserInfo, String provider);
+    String join(OAuthUserInfo authUserInfo, String provider, String nickname);
 
     void updateMember(Member newMember, MemberPrincipalDto memberPrincipalDto);
 
